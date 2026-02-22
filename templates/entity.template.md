@@ -1,124 +1,86 @@
 ---
 # @type: entity
-# @description: Entidad del dominio con ciclo de vida
+# @description: Domain entity, role, or external system
 # @file-pattern: ^[A-Z].+\.md$
 # @path-pattern: domain/entities/
 
-aliases:                      # @type: array @optional @description: Nombres alternativos
+kind: entity                  # @required @enum: entity|role|system
+aliases:                      # @type: array @optional @description: Alternative names
   - Alias1
   - Alias2
-code:                         # @type: object @optional @description: Nombres técnicos para código
-  class: EntityName           # @optional @description: Nombre de la clase (PascalCase)
-  table: entity_names         # @optional @description: Nombre de la tabla (snake_case)
-tags:                         # @type: array @contains: entity @required
-  - entity
 ---
 
-# Nombre de la Entidad <!-- title-is-name -->
+# Entity Name <!-- title-is-name -->
 
-## Descripción <!-- required -->
+<!--
+  VARIANTES POR KIND:
 
-Descripción clara de qué representa esta entidad en el dominio. Incluye:
-- Propósito principal
-- Rol en el sistema
-- Características distintivas
+  kind: entity  → Entidad de dominio estándar (Reto, Sesión, Plan)
+  kind: role    → Rol/actor que interactúa con el sistema (Propietario, Usuario, Moderador)
+  kind: system  → Sistema externo en MAYÚSCULAS (ORACLE, SAP, STRIPE)
 
-## Atributos <!-- required -->
+  Para sistemas externos:
+  - El nombre del archivo y título SIEMPRE en MAYÚSCULAS: ORACLE.md, SAP.md
+  - En texto se referencia igual: [[ORACLE]], [[SAP]]
+-->
 
-| Atributo | Code | Tipo | Descripción |
-|----------|------|------|-------------|
-| `id` | `id` | uuid | Identificador único |
-| `nombre` | `name` | string | Nombre descriptivo |
-| `estado` | `status` | enum | Estado del ciclo de vida (ver abajo) |
-| `referencia_id` | `referenceId` | [[OtraEntidad]] | Relación con otra entidad |
-| `created_at` | `createdAt` | timestamp | Fecha de creación |
-| `updated_at` | `updatedAt` | timestamp | Fecha de última modificación |
+## Description <!-- required -->
 
-> **Nota**: La columna `Code` es opcional. Indica el nombre del atributo en código (camelCase).
+Clear description of what this entity represents in the domain. Include:
+- Main purpose and role in the system
+- Relationships with other entities (mentioned naturally in the text, not in a separate table)
+- Distinctive characteristics
 
-## Relaciones <!-- optional -->
+Relationships are expressed naturally: "Each X belongs to a [[User]]", "An X contains multiple [[OtherEntity|OtherEntities]]". The indexer will infer them automatically.
 
-| Relación | Code | Cardinalidad | Entidad | Descripción |
-|----------|------|--------------|---------|-------------|
-| `tiene` | `items` | 1:N | [[EntidadHija]] | Descripción de la relación |
-| `pertenece a` | `parent` | N:1 | [[EntidadPadre]] | Descripción de la relación |
-| `asociado con` | `related` | N:M | [[OtraEntidad]] | Descripción de la relación |
+### Examples <!-- optional -->
 
-> **Nota**: Esta sección puede ser opcional ya que podría reforzar contenido comentado anteriormente, ya que la relación entre entidades puede inferirse a través de la descripción o a través de los atributos.
+Concrete examples that help understand the entity in a real context.
 
+## Attributes <!-- required -->
 
-## Ciclo de Vida <!-- optional -->
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `id` | uuid | Unique identifier |
+| `name` | string | Descriptive name |
+| `status` | enum | Lifecycle status (see [[#States]]) |
+| `reference_id` | uuid | Related [[OtherEntity]] |
+| `created_at` | timestamp | Creation date |
+| `updated_at` | timestamp | Last modification date |
+
+## States <!-- optional, required-if: has lifecycle -->
+
+| State | ID | Description |
+|-------|----|-------------|
+| **State1** | `state1` | Initial state of the entity |
+| **State2** | `state2` | Intermediate state after action X |
+| **State3** | `state3` | Final state, immutable |
+
+### Transitions <!-- optional -->
+
+- **State1 → State2**: Condition or event that triggers the transition
+- **State2 → State3**: Another transition with its context
+
+## Lifecycle <!-- optional -->
 
 <!-- expects: mermaid:stateDiagram-v2 -->
 ```mermaid
 stateDiagram-v2
-    [*] --> Estado1: crear
+    [*] --> state1: create
 
-    Estado1 --> Estado1: editar
-    Estado1 --> Estado2: acción [guard]
+    state1 --> state1: edit
+    state1 --> state2: action [guard]
 
-    Estado2 --> Estado3: otra acción
-    Estado2 --> Estado1: revertir
+    state2 --> state3: another action
+    state2 --> state1: revert
 
-    Estado3 --> [*]
+    state3 --> [*]
 ```
 
-### Estados<!-- -->
+## Invariants <!-- optional -->
 
-| Estado      | Descripción                       | Condiciones de entrada      |
-| ----------- | --------------------------------- | --------------------------- |
-| **Estado1** | Descripción del estado inicial    | Condición para entrar       |
-| **Estado2** | Descripción del estado intermedio | Condición para transicionar |
-| **Estado3** | Estado final                      | Condición de finalización   |
-
-<details>
-<summary>Especificación ejecutable (YAML)</summary>
-
-<!-- expects: yaml -->
-```yaml
-id: SM-NombreEntidad@v1
-kind: state_machine
-entity: NombreEntidad
-
-states:
-  - id: estado1
-    initial: true
-    description: Estado inicial
-  - id: estado2
-    description: Estado intermedio
-  - id: estado3
-    final: true
-    description: Estado final
-
-transitions:
-  - id: crear
-    from: null
-    to: estado1
-    event: ENTIDAD_CREATED
-    produces: EVT-Entidad-Creada
-
-  - id: transicionar
-    from: estado1
-    to: estado2
-    event: ACCION_REALIZADA
-    guard: "condición booleana"
-    produces: EVT-Entidad-Transicionada
-
-invariants:
-  - "atributo_requerido !== null"
-  - "estado === 'final' implies inmutable"
-```
-
-</details>
-
-## Invariantes <!-- optional alias: Constraints -->
-
-- Regla que siempre debe cumplirse para esta entidad
-- Otra restricción de integridad
-- Regla de negocio asociada
-
-## Eventos <!-- optional -->
-
-- **Emite**: [[EVT-Entidad-Creada]], [[EVT-Entidad-Actualizada]]
-- **Consume**: [[EVT-Otro-Evento]] (si aplica)
-
+| ID | Constraint |
+|----|------------|
+| INV-ENTITY-001 | Natural language description of the constraint |
+| INV-ENTITY-002 | Another constraint that must always hold |
+| INV-ENTITY-003 | Business rule associated with the entity |

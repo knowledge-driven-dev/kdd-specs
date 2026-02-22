@@ -1,119 +1,118 @@
 ---
 # @type: use-case
-# @description: Caso de uso siguiendo formato Cockburn-lite
+# @description: Use case following Cockburn-lite format
 # @file-pattern: ^UC-\d{3}-.+\.md$
 # @path-pattern: behavior/use-cases/
 
 id: UC-NNN                    # @required @pattern: ^UC-\d{3}$
+kind: use-case                # @required @literal: use-case
 version: 1                    # @type: number @default: 1
 status: draft                 # @enum: draft|proposed|approved|deprecated @default: draft
-actor: Actor Principal        # @required @description: Actor principal del caso de uso
+actor: Primary Actor          # @required @description: Primary actor of the use case
 domain: six-hats              # @optional
-tags:                         # @type: array @contains: use-case
-  - use-case
 ---
 
-# UC-NNN: Título del Caso de Uso <!-- required pattern: ^UC-\d{3}:\s+.+ -->
+# UC-NNN: Use Case Title <!-- required pattern: ^UC-\d{3}:\s+.+ -->
 
-## Descripción <!-- required -->
+## Description <!-- required -->
 
-Descripción clara del caso de uso. Explica el objetivo principal y el valor que aporta.
+Clear description of the use case. Explain the main objective and the value it provides.
 
-## Actores <!-- required alias: Actor|Actors -->
+## Actors <!-- required -->
 
-- **Actor Principal**: [[Actor]] - Rol y motivación
-- **Actor Secundario**: Sistema/Otro actor (opcional)
+- **Primary Actor**: [[Actor]] - Role and motivation
+- **Secondary Actor**: System/Other actor (optional)
 
-## Disparadores <!-- optional alias: Trigger|Triggers -->
+## Triggers <!-- optional -->
 
-- Acción o evento que inicia el caso de uso
-- Puede haber múltiples disparadores
+- Action or event that initiates the use case
+- There may be multiple triggers
 
-## Precondiciones <!-- required alias: Preconditions -->
+## Preconditions <!-- required -->
 
-1. Condición que debe cumplirse antes de iniciar
-2. Estado inicial del sistema
+1. Condition that must be met before starting
+2. Initial state of the system
 
-## Flujo Principal (Happy Path) <!-- required alias: Flujo Principal|Happy Path|Main Flow -->
+## Main Flow (Happy Path) <!-- required -->
 
-1. El Actor realiza la primera acción
-2. El Sistema responde
-3. El Actor continúa...
-4. El Sistema **valida** los datos
-5. El Sistema **persiste** los cambios
-6. El Sistema **emite** evento [[EVT-Algo-Ocurrió]]
-7. El Sistema muestra confirmación al Actor
+1. The Actor performs the first action
+2. The System responds
+3. The Actor continues...
+4. The System **validates** the data
+5. The System **persists** the changes
+6. The System **emits** event [[EVT-Something-Happened]]
+7. The System shows confirmation to the Actor
 
-## Extensiones / Flujos Alternativos <!-- optional alias: Extensiones|Extensions|Alternative Flows -->
+## Extensions / Alternative Flows <!-- optional -->
 
-### Na. Descripción de la extensión
+### Na. Extension description
 
-1. Condición que dispara la extensión
-2. Pasos alternativos
-3. Retorno al flujo principal o fin
+1. Condition that triggers the extension
+2. Alternative steps
+3. Return to main flow or end
 
-### Nb. Otra extensión
+### Nb. Another extension
 
 1. ...
 
-## Garantías Mínimas <!-- optional alias: Minimal Guarantees -->
+## Minimal Guarantees <!-- optional -->
 
-- Garantía que se cumple incluso si el caso de uso falla
-- El sistema no queda en estado inconsistente
+- Guarantee that holds even if the use case fails
+- The system does not remain in an inconsistent state
 
-## Postcondiciones <!-- required alias: Postconditions -->
+## Postconditions <!-- required -->
 
-### En caso de éxito (Garantías de Éxito)
+### On Success (Success Guarantees)
 
-- Estado final del sistema tras éxito
-- Entidades creadas/modificadas
-- Eventos emitidos
+- Final state of the system after success
+- Entities created/modified
+- Events emitted
 
-**Detalle de entidades afectadas:**
+**Affected entities detail:**
 
-- Existe una [[Entidad]] con:
-  - `atributo`: valor esperado
-  - `estado`: nuevo estado
+- There exists an [[Entity]] with:
+  - `attribute`: expected value
+  - `status`: new status
 
-### En caso de fallo
+### On Failure
 
-- Estado si el caso de uso falla
-- Rollback aplicado
-- Logging realizado
+- State if the use case fails
+- Rollback applied
+- Logging performed
 
-## Reglas de Negocio Aplicables <!-- optional alias: Business Rules -->
+## Business Rules <!-- optional -->
 
-| Regla | Descripción |
+| Rule | Description |
+|------|-------------|
+| [[BR-XXX-001]] | Brief description |
+| [[BR-XXX-002]] | Brief description |
+
+## Non-Functional Requirements <!-- optional -->
+
+- **Performance**: Maximum response time
+- **Availability**: Offline behavior if applicable
+- **Accessibility**: Accessibility requirements
+
+## Test Scenarios <!-- optional -->
+
+| ID | Scenario | Expected Result |
+|----|----------|-----------------|
+| TC-NNN.1 | Scenario description | Expected result |
+| TC-NNN.2 | Another scenario | Expected result |
+
+## Events Emitted <!-- optional -->
+
+| Event | Description |
 |-------|-------------|
-| [[BR-XXX-001]] | Descripción breve |
-| [[BR-XXX-002]] | Descripción breve |
+| [[EVT-Something-Happened]] | When it is emitted |
 
-## Requisitos No Funcionales <!-- optional alias: NFRs -->
+## Related Requirements <!-- optional -->
 
-- **Rendimiento**: Tiempo máximo de respuesta
-- **Disponibilidad**: Comportamiento offline si aplica
-- **Accesibilidad**: Requisitos de accesibilidad
+- [[REQ-NNN.1]] - Description
+- [[REQ-NNN.2]] - Description
 
-## Escenarios de Prueba <!-- optional alias: Test Cases|Test Scenarios -->
+## Implementation Notes <!-- optional -->
 
-| ID | Escenario | Resultado Esperado |
-|----|-----------|-------------------|
-| TC-NNN.1 | Descripción del escenario | Resultado esperado |
-| TC-NNN.2 | Otro escenario | Resultado esperado |
-
-## Eventos Producidos <!-- optional alias: Events -->
-
-| Evento | Descripción |
-|--------|-------------|
-| [[EVT-Algo-Ocurrió]] | Cuándo se emite |
-
-## Requisitos Relacionados <!-- optional alias: Related Requirements -->
-
-- [[REQ-NNN.1]] - Descripción
-- [[REQ-NNN.2]] - Descripción
-
-## Notas de Implementación <!-- optional -->
-
-- Consideraciones técnicas
-- Dependencias
-- Sugerencias de implementación
+- Technical considerations
+- Dependencies
+- Implementation suggestions

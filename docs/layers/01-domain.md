@@ -1,4 +1,4 @@
-# Capa 02: Dominio
+# Capa 01: Domain (Dominio)
 
 ## El Corazón del Sistema: ¿Qué Conceptos Existen?
 
@@ -6,24 +6,26 @@
 
 ## Introducción
 
-La capa de Dominio responde a la pregunta: **¿Qué conceptos existen en nuestro universo de problema?**
+La capa de Domain responde a la pregunta: **¿Qué conceptos existen en nuestro universo de problema?**
 
-Aquí aplicamos los principios de **Domain-Driven Design (DDD)** para modelar el dominio de forma pura, sin contaminación de UI, bases de datos, ni tecnología específica. Es la capa más **estable** del sistema: las entidades del dominio cambian menos que el resto de la Aplicación.
+Aquí aplicamos los principios de **Domain-Driven Design (DDD)** para modelar el dominio de forma pura, sin contaminación de UI, bases de datos, ni tecnología específica. Es la capa más **estable** del sistema: las entidades del dominio cambian menos que cualquier otra cosa.
+
+> **Nota importante**: Esta capa es la **BASE** del sistema. No referencia otras capas, pero es referenciada por todas las demás.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                              │
-│   01-Problem    →   02-Domain   →   03-Capabilities   →   04-Interaction    │
+│   00-Requirements  →  01-Domain   →  02-Behavior     →  03-Experience       │
 │                                                                              │
-│   "¿Por qué        "¿QUÉ            "¿Qué puede          "¿Cómo lo          │
-│    existe?"        EXISTE?"          hacer?"               usan?"            │
+│   "¿Por qué           "¿QUÉ           "¿Qué puede         "¿Cómo lo         │
+│    existe?"           EXISTE?"         hacer?"              ven?"            │
 │                                                                              │
 │   ──────────────────────────────────────────────────────────────────────────│
 │                                                                              │
-│   Motivación       CONCEPTUAL       Funcional            Experiencial        │
-│   Contexto         ENTIDADES        (operaciones)        (personas)          │
-│   Objetivos        REGLAS                                                    │
-│                    EVENTOS                                                   │
+│   Motivación          CONCEPTUAL      Funcional           Experiencial       │
+│   Contexto            ENTIDADES       (operaciones)       (vistas)           │
+│   Objetivos           REGLAS                                                 │
+│                       EVENTOS                                                │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -54,9 +56,9 @@ Pero las **reglas de negocio** y las **entidades del dominio** permanecen:
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
+Por eso en KDD, el dominio es la **fuente de verdad** más valiosa. Si pierdes el código, puedes regenerarlo. Si pierdes el conocimiento del dominio, pierdes el sistema.
 
 ### El Lenguaje Ubicuo
-A esta capa la llamamos también la capa conceptual, la que explica en qué consiste la Aplicación y establece un mismo idioma para todos los integrantes del equipo. Normalmente es el punto de partida ya que no se puede comprender cómo construir la Aplicación si existe ambigüedad sobre los conceptos principales.
 
 Un principio fundamental de DDD que KDD adopta: **todos hablan el mismo idioma**.
 
@@ -76,7 +78,7 @@ Un principio fundamental de DDD que KDD adopta: **todos hablan el mismo idioma**
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-En KDD, los términos del dominio **siempre van con mayúscula inicial** en la documentación para enfatizar que estamos referenciando un concepto clave en la aplicación, y no está puesto casualmente:
+En KDD, los términos del dominio **siempre van con mayúscula inicial** en la documentación:
 
 ```markdown
 ✅ "El Usuario crea un Reto y configura las Personas Sintéticas"
@@ -85,7 +87,7 @@ En KDD, los términos del dominio **siempre van con mayúscula inicial** en la d
 
 ---
 
-## Los Artefactos de la Capa de Dominio
+## Los Artefactos de la Capa de Domain
 
 ### 1. Entidades (Entities)
 
@@ -102,9 +104,9 @@ Objetos con **identidad única** que persiste a lo largo del tiempo.
 
 ```markdown
 ---
-id: ENT-001
-title: Reto
-type: entity
+kind: entity
+aliases:
+  - Challenge
 status: approved
 ---
 
@@ -174,7 +176,12 @@ Objetos **sin identidad propia**, definidos completamente por sus atributos.
 #### Ejemplos Comunes
 
 ```markdown
-# Dinero (Money)
+---
+kind: value-object
+status: approved
+---
+
+# Money
 
 ## Descripción
 Representa una cantidad monetaria con su divisa.
@@ -198,6 +205,11 @@ Dos Money son iguales si tienen misma cantidad Y misma divisa.
 ```
 
 ```markdown
+---
+kind: value-object
+status: approved
+---
+
 # ColorSombrero
 
 ## Descripción
@@ -233,7 +245,12 @@ Es un enum, no puede tener valores fuera de los definidos.
 #### Ejemplo: Agregado Sesión
 
 ```markdown
-# Agregado: Sesión
+---
+kind: aggregate
+status: approved
+---
+
+# Sesión
 
 ## Raíz del Agregado
 [[Sesión]]
@@ -296,13 +313,27 @@ Es un enum, no puede tener valores fuera de los definidos.
 - **Contiene datos**: Todo lo necesario para entender qué pasó
 - **Desencadena reacciones**: Otros procesos escuchan y reaccionan
 
+#### Convención de Nomenclatura
+
+```
+EVT-{Entity}-{Action}
+```
+
+Donde:
+- `{Entity}` = Entidad que emite el evento (PascalCase)
+- `{Action}` = Acción en pasado (PascalCase)
+
+Ejemplos: `EVT-Reto-Creado`, `EVT-Sesion-Completada`, `EVT-Ronda-Iniciada`
+
 #### Estructura de un Evento
 
 ```markdown
 ---
-id: EVT-001
+id: EVT-Reto-Creado
+kind: event
 title: Reto Creado
-type: domain-event
+producer: Reto
+status: approved
 ---
 
 # EVT-Reto-Creado
@@ -332,7 +363,7 @@ data:
 | [[PROC-Onboarding]] | Verifica si es primer reto del usuario |
 
 ## Eventos Relacionados
-- Puede generar: [[EVT-Primer-Reto-Usuario]] (si es el primero)
+- Puede generar: [[EVT-Usuario-PrimerReto]] (si es el primero)
 - Precedido por: Ninguno (evento inicial)
 ```
 
@@ -340,24 +371,26 @@ data:
 
 ### 5. Reglas de Dominio (Business Rules)
 
-**Invariantes y restricciones** que el sistema debe cumplir siempre.
+**Invariantes y restricciones estructurales** que el sistema debe cumplir siempre.
 
 #### Tipos de Reglas
 
-| Tipo | Prefijo | Descripción | Ejemplo |
-|------|---------|-------------|---------|
-| Business Rule | BR- | Regla de negocio invariable | BR-RETO-002 |
-| Business Policy | BP- | Política configurable | BP-CREDITO-001 |
+| Tipo | Prefijo | Descripción | Ubicación |
+|------|---------|-------------|-----------|
+| Business Rule | `BR-{ENTITY}-NNN` | Restricción estructural invariable | `01-domain/rules/` |
+
+> **Nota**: Las **Business Policies** (BP-*) y **Cross-Policies** (XP-*) se ubican en `02-behavior/policies/` porque definen comportamientos condicionados, no restricciones estructurales. Ver [[02-behavior]].
 
 #### Estructura de una Regla
 
 ```markdown
 ---
 id: BR-RETO-002
+kind: business-rule
 title: Longitud de Título
-type: business-rule
 status: approved
 priority: high
+entity: Reto
 ---
 
 # BR-RETO-002: Longitud de Título de Reto
@@ -365,28 +398,24 @@ priority: high
 ## Declaración
 El título de un [[Reto]] debe tener entre 1 y 100 caracteres.
 
-## Justificación
+## Por qué existe
 - Mínimo 1: Evita retos sin identificación
 - Máximo 100: Mantiene títulos concisos y legibles en UI
 
-## Fórmula
-```
-valido = titulo.length >= 1 AND titulo.length <= 100
-```
-
-## Entidades Afectadas
-- [[Reto]]
-
-## Comandos que Validan
-- [[CMD-001-CreateChallenge]]
-- [[CMD-002-UpdateChallenge]]
-
-## Cuándo se Evalúa
+## Cuándo aplica
 - Al crear un Reto
 - Al modificar el título de un Reto
 
-## Mensaje de Error
+## Qué pasa si se incumple
 "El título debe tener entre 1 y 100 caracteres"
+
+## Parámetros (solo BP)
+N/A
+
+## Formalización (opcional)
+```
+valido = titulo.length >= 1 AND titulo.length <= 100
+```
 
 ## Ejemplos
 | Entrada | Resultado | Razón |
@@ -407,7 +436,7 @@ valido = titulo.length >= 1 AND titulo.length <= 100
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                              │
-│   DENTRO DE 02-DOMAIN                                                        │
+│   DENTRO DE 01-DOMAIN                                                        │
 │                                                                              │
 │   ┌──────────────┐                                                           │
 │   │   Entidad    │◄────── Las reglas restringen entidades                   │
@@ -435,30 +464,30 @@ valido = titulo.length >= 1 AND titulo.length <= 100
 
 ## Relación con Otras Capas
 
-El dominio es **conocido por** las capas posteriores, pero **no conoce** nada de ellas:
+El Domain es la **BASE** del sistema. Es referenciado por las capas superiores, pero **no conoce** nada de ellas:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                              │
-│   02-DOMAIN                                                                  │
+│   01-DOMAIN (BASE - no referencia otras capas)                               │
 │                                                                              │
 │   [[Reto]]                     │                                            │
 │   [[BR-RETO-002]]              │  ← El dominio es PURO                      │
 │   [[EVT-Reto-Creado]]          │    No sabe de Commands, UI, DB             │
 │                                │                                            │
-│        ↓ conocido por                                                        │
+│        ↑ referenciado por                                                    │
 │                                                                              │
-│   03-CAPABILITIES                                                            │
-│   ───────────────                                                            │
+│   02-CAPABILITIES (ORCHESTRATION)                                            │
+│   ───────────────────────────────                                            │
 │   [[CMD-001-CreateChallenge]]                                                │
 │     - Crea [[Reto]]                                                          │
 │     - Valida [[BR-RETO-002]]                                                 │
 │     - Emite [[EVT-Reto-Creado]]                                              │
 │                                                                              │
-│        ↓ conocido por                                                        │
+│        ↑ referenciado por                                                    │
 │                                                                              │
-│   04-INTERACTION                                                             │
-│   ──────────────                                                             │
+│   03-EXPERIENCE (PRESENTATION)                                               │
+│   ────────────────────────────                                               │
 │   [[UI-RetoEditor]]                                                          │
 │     - Muestra [[Reto]]                                                       │
 │     - Invoca CMD-001                                                         │
@@ -477,7 +506,7 @@ El dominio es **conocido por** las capas posteriores, pero **no conoce** nada de
 ## Estructura de Carpetas
 
 ```
-/specs/02-domain/
+/specs/01-domain/
 ├── /entities/
 │   ├── Reto.md
 │   ├── Sesión.md
@@ -486,7 +515,7 @@ El dominio es **conocido por** las capas posteriores, pero **no conoce** nada de
 │   ├── Contribución.md
 │   ├── Ronda.md
 │   ├── Análisis Final.md
-│   └── Money.md              # Value Object (mismo folder, distinto type)
+│   └── Money.md              # Value Object (mismo folder, distinto kind)
 │
 ├── /events/
 │   ├── EVT-Reto-Creado.md
@@ -499,8 +528,8 @@ El dominio es **conocido por** las capas posteriores, pero **no conoce** nada de
     ├── BR-RETO-002.md
     ├── BR-RETO-004.md
     ├── BR-PERSONA-001.md
-    ├── BR-SESION-001.md
-    └── BP-CREDITO-001.md     # Business Policy
+    └── BR-SESION-001.md
+    # Nota: Las BP-* están en 02-behavior/policies/
 ```
 
 ---
@@ -524,12 +553,13 @@ Al crear o revisar artefactos del dominio:
 - [ ] ¿Dos instancias iguales son intercambiables?
 
 ### Para Eventos
-- [ ] ¿Nombre en tiempo pasado?
+- [ ] ¿Nombre en formato `EVT-{Entity}-{Action}`?
 - [ ] ¿Payload contiene todo lo necesario?
 - [ ] ¿Están identificados los consumidores?
 - [ ] ¿Qué entidad lo produce?
 
 ### Para Reglas
+- [ ] ¿ID en formato `BR-{ENTITY}-NNN` o `BP-{TOPIC}-NNN`?
 - [ ] ¿Declaración clara y sin ambigüedad?
 - [ ] ¿Justificación de negocio documentada?
 - [ ] ¿Ejemplos de casos válidos e inválidos?
@@ -620,14 +650,15 @@ EVT-Reto-Creado  # Algo que YA ocurrió
 
 ## Resumen
 
-La capa de Dominio en KDD:
+La capa de Domain en KDD:
 
 1. **Es el corazón**: Contiene el conocimiento más valioso
-2. **Es estable**: Cambia menos que cualquier otra capa
-3. **Es pura**: No conoce frameworks, DB, ni UI
-4. **Define el lenguaje**: Términos compartidos por todos
-5. **Es verificable**: Las reglas tienen ejemplos y tests
-6. **Sobrevive al código**: El dominio perdura, el código se reescribe
+2. **Es la BASE**: No referencia otras capas, pero todas la referencian
+3. **Es estable**: Cambia menos que cualquier otra capa
+4. **Es pura**: No conoce frameworks, DB, ni UI
+5. **Define el lenguaje**: Términos compartidos por todos
+6. **Es verificable**: Las reglas tienen ejemplos y tests
+7. **Sobrevive al código**: El dominio perdura, el código se reescribe
 
 > **"El código es perecedero. El dominio es eterno. Invierte en documentar el dominio."**
 
@@ -638,10 +669,10 @@ La capa de Dominio en KDD:
 - [[entity.template]] - Template para entidades
 - [[rule.template]] - Template para reglas
 - [[event.template]] - Template para eventos
-- [[01-problem]] - La capa anterior: Problema
-- [[03-capabilities]] - La capa siguiente: Capacidades
+- [[00-requirements]] - La capa de input: Requirements
+- [[02-behavior]] - La capa siguiente: Behavior
 - [[Introducción a KDD]] - Visión general de KDD
 
 ---
 
-*Última actualización: 2024-12-14*
+*Última actualización: 2025-01*

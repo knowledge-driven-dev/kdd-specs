@@ -55,8 +55,18 @@ tags:                # @type: array
 |---------|------|-------------|
 | `use-case.template.md` | use-case | Casos de uso (Cockburn-lite) |
 | `requirement.template.md` | requirement | Requisitos EARS |
-| `entity.template.md` | entity | Entidades del dominio |
+| `entity.template.md` | entity | Entidades del dominio (ver variantes abajo) |
 | `event.template.md` | event | Eventos de dominio |
+
+### Variantes de entity.template.md
+
+La plantilla de entidad soporta múltiples `kind`:
+
+| Kind | Uso | Ejemplo | Convención de nombre |
+|------|-----|---------|---------------------|
+| `entity` | Entidad de dominio con ciclo de vida | Reto, Sesión, Plan | PascalCase: `Reto.md` |
+| `role` | Rol/actor que interactúa con el sistema | Propietario, Usuario, Moderador | PascalCase: `Propietario.md` |
+| `system` | Sistema externo / integración | ORACLE, SAP, STRIPE | MAYÚSCULAS: `ORACLE.md` |
 | `rule.template.md` | rule | Reglas de negocio |
 | `process.template.md` | process | Procesos (BPMN-lite) |
 | `command.template.md` | command | Comandos CQRS (modifican estado) |
@@ -66,3 +76,5 @@ tags:                # @type: array
 | `nfr.template.md` | nfr | Requisitos no funcionales |
 | `adr.template.md` | adr | Architecture Decision Records |
 | `idea.template.md` | idea | Ideas y propuestas |
+| `value-unit.template.md` | value-unit | Unidades de Valor (entregas end-to-end) |
+| `release.template.md` | release | Planes de release (agrupan Unidades de Valor) |

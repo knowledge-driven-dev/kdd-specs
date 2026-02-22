@@ -1,17 +1,15 @@
 ---
 # @type: query
-# @description: Query del sistema (CQRS - operación de solo lectura)
+# @description: System query (CQRS - read-only operation)
 # @file-pattern: ^QRY-\d{3}-.+\.md$
-# @path-pattern: capabilities/queries/
+# @path-pattern: behavior/queries/
 
 id: QRY-NNN                   # @required @pattern: ^QRY-\d{3}$
+kind: query                   # @required @literal: query
 title: Query Name             # @required
-type: query                   # @literal: query
 status: draft                 # @enum: draft|review|approved|deprecated @default: draft
 owner: "@team"                # @optional
-created: "2024-01-01"          # @optional
-tags:                         # @type: array
-  - query
+created: "2024-01-01"         # @optional
 ---
 
 # QRY-NNN: QueryName <!-- required pattern: ^QRY-\d{3}: -->

@@ -1,4 +1,4 @@
-# Capa 01: Problema
+# Capa 00: Requirements (Requisitos)
 
 ## El Fundamento de Todo: ¿Por Qué Existe Este Sistema?
 
@@ -6,22 +6,24 @@
 
 ## Introducción
 
-La capa de Problema es el **punto de partida** de toda especificación KDD. Responde a la pregunta más fundamental: **¿Por qué existe este sistema?**
+La capa de Requirements es el **punto de partida** de toda especificación KDD. Responde a la pregunta más fundamental: **¿Por qué existe este sistema?**
 
 Aquí no hablamos de código, ni de tecnología, ni siquiera de software. Hablamos de **problemas humanos**, de **contexto de negocio**, de **objetivos medibles**. Un sistema que no tiene claro su "por qué" es un sistema condenado a la deriva.
+
+> **Nota importante**: Esta capa es el **INPUT** que alimenta al diseño. Puede mencionar conceptos de dominio para dar contexto, pero está fuera del flujo de dependencias entre capas.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                              │
-│   01-Problem    →   02-Domain   →   03-Capabilities   →   04-Interaction    │
+│   00-Requirements  →  01-Domain  →  02-Behavior     →  03-Experience        │
 │                                                                              │
-│   "¿POR QUÉ       "¿Qué            "¿Qué puede          "¿Cómo lo          │
-│    EXISTE?"        existe?"          hacer?"               usan?"            │
+│   "¿POR QUÉ           "¿Qué          "¿Qué puede        "¿Cómo lo          │
+│    EXISTE?"            existe?"        hacer?"             ven?"             │
 │                                                                              │
 │   ──────────────────────────────────────────────────────────────────────────│
 │                                                                              │
-│   MOTIVACIÓN      Conceptual       Funcional            Experiencial        │
-│   CONTEXTO        (entidades)      (operaciones)        (personas)          │
+│   MOTIVACIÓN          Conceptual     Funcional          Experiencial        │
+│   CONTEXTO            (entidades)    (operaciones)      (vistas)            │
 │   OBJETIVOS                                                                  │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
@@ -56,14 +58,14 @@ KDD invierte esto:
 │         ↓                                   ↓                               │
 │   Features sin fin                 PRD claro y acotado                      │
 │         ↓                                   ↓                               │
-│   "¿Esto era lo que querían?"      Dominio → Capacidades → UI → Tests       │
+│   "¿Esto era lo que querían?"      Dominio → Capacidades → Experience       │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### El Problema como Ancla
 
-Cuando las cosas se complican (y siempre se complican), la capa de Problema es tu **ancla**:
+Cuando las cosas se complican (y siempre se complican), la capa de Requirements es tu **ancla**:
 
 - "¿Deberíamos añadir esta feature?" → ¿Resuelve el problema definido?
 - "¿Esta arquitectura es correcta?" → ¿Cumple los objetivos de negocio?
@@ -71,7 +73,7 @@ Cuando las cosas se complican (y siempre se complican), la capa de Problema es t
 
 ---
 
-## Los Artefactos de la Capa de Problema
+## Los Artefactos de la Capa de Requirements
 
 ### 1. PRD (Product Requirements Document)
 
@@ -169,7 +171,148 @@ pero su aplicación manual es:
 
 ---
 
-### 2. Contexto de Negocio
+### 2. Objectives (OBJ) - Objetivos de Usuario
+
+Los Objectives capturan los objetivos de alto nivel de los actores del sistema en formato User Story.
+
+#### Estructura de un Objective
+
+```yaml
+---
+id: OBJ-NNN
+kind: objective
+title: ObjectiveName
+actor: ActorName
+status: draft
+---
+```
+
+#### Secciones Requeridas
+
+| Sección | Requerida | Descripción |
+|---------|-----------|-------------|
+| `## Actor` | Sí | Quién tiene este objetivo |
+| `## Objetivo` | Sí | "Como X, quiero Y, para Z" |
+| `## Criterios de éxito` | Sí | Cómo sabe el usuario que lo logró |
+| `## Casos de uso relacionados` | No | Links a UC-* |
+
+#### Ejemplo
+
+---
+
+### 3. Unidades de Valor (UV)
+
+Las Unidades de Valor describen una **entrega end-to-end** que puede ser usada por el usuario y medida por el negocio. Son el puente entre objetivos y ejecución, y evitan planificar por componentes aislados.
+
+#### Características
+
+- **Verticales**: cruzan dominio → comportamiento → experiencia → verificación.
+- **Verificables**: tienen criterios de salida claros.
+- **Planificables**: se pueden estimar y priorizar.
+
+#### Estructura Recomendada
+
+```yaml
+---
+id: UV-NNN
+kind: value-unit
+title: Nombre de la unidad
+status: draft
+owner: PM/Lead
+---
+```
+
+#### Ejemplo
+
+```markdown
+# UV-001: Crear Reto
+
+## Objetivo
+Permitir que el Usuario cree un Reto en estado borrador.
+
+## Alcance (end-to-end)
+- [[UC-001-CrearReto]]
+- [[CMD-001-CreateChallenge]]
+- [[REQ-001-CrearReto]]
+- [[UI-RetoEditor]]
+
+## Criterios de salida
+- REQ-001 validado con feature.
+- UI-RetoEditor en storybook.
+- Comando implementado y probado.
+```
+
+---
+
+### 4. Release Plans (REL)
+
+Los Release Plans agrupan Unidades de Valor en entregas (MVP, v1, v1.1) con objetivos, dependencias y criterios de salida. Son el instrumento de planificación principal.
+
+#### Estructura Recomendada
+
+```yaml
+---
+id: REL-NNN
+kind: release
+title: Nombre del release
+status: draft
+owner: PM/Lead
+target_date: 2025-03-31
+---
+```
+
+#### Ejemplo
+
+```markdown
+# REL-001: MVP
+
+## Objetivo
+Validar creación de Retos y configuración de Personas.
+
+## Unidades de Valor
+- [[UV-001-CrearReto]]
+- [[UV-002-ConfigurarPersonas]]
+
+## Dependencias
+- [[ADR-0002-Elysia-Backend]]
+
+## Criterios de salida
+- 100% UV con trazabilidad completa.
+- Tests críticos en verde.
+```
+
+```markdown
+---
+id: OBJ-001
+kind: objective
+title: Analizar decisiones estructuradamente
+actor: Usuario
+status: approved
+---
+
+# OBJ-001: Analizar decisiones estructuradamente
+
+## Actor
+[[Usuario]] - Profesional que toma decisiones estratégicas
+
+## Objetivo
+Como Usuario, quiero analizar mis decisiones usando el método Six Hats,
+para obtener perspectivas diversas sin depender de otras personas.
+
+## Criterios de éxito
+- Puedo crear un Reto con mi problema a analizar
+- Recibo contribuciones desde 6 perspectivas diferentes
+- Obtengo un análisis final que sintetiza los hallazgos
+
+## Casos de uso relacionados
+- [[UC-001-CrearReto]]
+- [[UC-003-IniciarSesion]]
+- [[UC-005-VerAnalisis]]
+```
+
+---
+
+### 3. Contexto de Negocio
 
 Documento que captura el entorno en el que opera el sistema.
 
@@ -196,79 +339,87 @@ Documento que captura el entorno en el que opera el sistema.
 
 ---
 
-### 3. ADRs (Architecture Decision Records)
+### 4. ADRs (Architecture Decision Records)
 
-Los ADRs documentan decisiones importantes y su justificación.
+Los ADRs documentan decisiones importantes y su justificación. En esta capa se documentan decisiones de **negocio o estrategia**. Las decisiones puramente técnicas van en `05-architecture`.
 
 #### Estructura de un ADR
 
-```markdown
+```yaml
 ---
-id: ADR-001
-title: Elección de Backend Framework
+id: ADR-NNNN
+kind: adr
+title: Título de la Decisión
 status: accepted  # proposed | accepted | deprecated | superseded
 date: 2024-01-15
 deciders: ["@juan", "@maria"]
 ---
+```
 
-# ADR-001: Elección de Backend Framework
+#### Ejemplo
+
+```markdown
+---
+id: ADR-0001
+kind: adr
+title: Modelo de monetización por créditos
+status: accepted
+date: 2024-01-15
+deciders: ["@product", "@founder"]
+---
+
+# ADR-0001: Modelo de monetización por créditos
 
 ## Contexto
-Necesitamos elegir un framework para el backend de la aplicación.
-Requisitos: TypeScript, alta performance, developer experience.
+Necesitamos un modelo de monetización para Six Hats App que sea
+justo para usuarios ocasionales y escalable para power users.
 
 ## Opciones Consideradas
 
-### Opción A: Express.js
-- **Pros**: Maduro, gran ecosistema, mucha documentación
-- **Cons**: Verbose, sin tipos nativos, middleware hell
+### Opción A: Suscripción mensual fija
+- **Pros**: Ingresos predecibles, simple de implementar
+- **Cons**: Barrera alta para usuarios ocasionales
 
-### Opción B: Fastify
-- **Pros**: Rápido, buen soporte TypeScript, schema validation
-- **Cons**: Menos maduro, ecosistema más pequeño
+### Opción B: Pago por sesión
+- **Pros**: Paga solo lo que usas
+- **Cons**: Fricción en cada uso, impredecible
 
-### Opción C: Elysia
-- **Pros**: Diseñado para Bun, end-to-end type safety, muy rápido
-- **Cons**: Nuevo, ecosistema pequeño, menos documentación
+### Opción C: Sistema de créditos
+- **Pros**: Flexibilidad, permite paquetes, reduce fricción
+- **Cons**: Más complejo de implementar
 
 ## Decisión
-Elegimos **Elysia** porque:
-1. Estamos usando Bun como runtime, Elysia está optimizado para él
-2. Type safety end-to-end con Eden elimina errores de tipos
-3. Performance excepcional para el modelo de Personas Sintéticas
+Elegimos **Sistema de créditos** porque:
+1. Permite a usuarios probar con pocos créditos iniciales
+2. Los power users pueden comprar paquetes con descuento
+3. Facilita promociones y onboarding
 
 ## Consecuencias
 
 ### Positivas
-- DX superior con tipos compartidos frontend/backend
-- Mejor performance para llamadas a LLMs concurrentes
+- Mejor conversión de usuarios free a paid
+- Flexibilidad en pricing futuro
 
 ### Negativas
-- Curva de aprendizaje para nuevos desarrolladores
-- Menos recursos de aprendizaje disponibles
-
-### Riesgos
-- Framework joven, posibles breaking changes
-- Mitigación: fijar versiones, seguir changelog
+- Complejidad adicional en el sistema
+- Necesidad de comunicar claramente el valor de un crédito
 
 ## Referencias
-- [Elysia Documentation](https://elysiajs.com)
-- [Benchmark comparisons](https://...)
+- Benchmark de apps similares (Notion, Linear)
 ```
 
 #### Cuándo Crear un ADR
 
-- Elección de tecnología o framework
-- Decisión de arquitectura (monolito vs microservicios)
-- Cambio de proveedor o servicio externo
-- Adopción de un patrón o práctica
+- Elección de modelo de negocio
+- Decisión de mercado o posicionamiento
+- Cambio de estrategia de producto
 - Cualquier decisión que alguien preguntará "¿por qué hicimos esto?"
 
 ---
 
 ## El Lenguaje Ubicuo Nace Aquí
 
-Aunque los términos del dominio se definen formalmente en la capa 02-Domain, **comienzan a emerger en el PRD**.
+Aunque los términos del dominio se definen formalmente en la capa 01-Domain, **comienzan a emerger en el PRD**.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -279,13 +430,13 @@ Aunque los términos del dominio se definen formalmente en la capa 02-Domain, **
 │   - "Sombreros" (perspectivas)                                               │
 │   - "Retos" (problemas a analizar)                                           │
 │                                                                              │
-│   Estos términos se formalizan en 02-Domain como Entidades:                 │
+│   Estos términos se formalizan en 01-Domain como Entidades:                  │
 │   - [[Sesión]]                                                               │
 │   - [[Persona Sintética]]                                                    │
 │   - [[Sombrero]]                                                             │
 │   - [[Reto]]                                                                 │
 │                                                                              │
-│   El PRD es donde el vocabulario compartido NACE.                           │
+│   El PRD es donde el vocabulario compartido NACE.                            │
 │   El Domain es donde se DEFINE formalmente.                                  │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
@@ -295,32 +446,27 @@ Aunque los términos del dominio se definen formalmente en la capa 02-Domain, **
 
 ## Relación con Otras Capas
 
-La capa de Problema es **referenciada** por todas las demás, pero **no referencia** a ninguna:
+La capa de Requirements es el **INPUT** que alimenta al diseño. Está **fuera del flujo de dependencias**:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                              │
-│   01-Problem                                                                 │
+│   00-Requirements (INPUT - fuera del flujo de capas)                         │
 │       │                                                                      │
-│       │  define contexto para                                                │
+│       │  alimenta el diseño                                                  │
 │       ▼                                                                      │
-│   02-Domain ──────► "¿Por qué existe [[Reto]]?"                             │
-│       │              → Ver PRD: "Los equipos enfrentan decisiones..."       │
-│       │                                                                      │
-│       │  justifica                                                           │
-│       ▼                                                                      │
-│   03-Capabilities ► "¿Por qué CMD-GenerateAnalysis?"                        │
-│       │              → Ver PRD: "Métricas: tiempo promedio < 15 min"        │
-│       │                                                                      │
-│       │  guía                                                                │
-│       ▼                                                                      │
-│   04-Interaction ─► "¿Por qué este flujo de UX?"                            │
-│       │              → Ver PRD: "Usuarios: profesionales ocupados"          │
-│       │                                                                      │
-│       │  valida                                                              │
-│       ▼                                                                      │
-│   05-Verification ► "¿Qué criterios de aceptación?"                         │
-│                      → Ver PRD: "Métricas de éxito"                         │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │  04-Verification   (tests, criteria)                                │   │
+│   │      ↓ references                                                   │   │
+│   ├─────────────────────────────────────────────────────────────────────┤   │
+│   │  03-Experience     (views)                                          │   │
+│   │      ↓ references                                                   │   │
+│   ├─────────────────────────────────────────────────────────────────────┤   │
+│   │  02-Behavior       (UC, CMD, QRY, XP)                               │   │
+│   │      ↓ references                                                   │   │
+│   ├─────────────────────────────────────────────────────────────────────┤   │
+│   │  01-Domain         (entities, rules)   ← BASE                       │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -330,13 +476,15 @@ La capa de Problema es **referenciada** por todas las demás, pero **no referenc
 ## Estructura de Carpetas
 
 ```
-/specs/01-problem/
+/specs/00-requirements/
 ├── PRD.md                    # Documento principal del producto
 ├── context.md                # Contexto de negocio (opcional)
+├── /objectives/
+│   ├── OBJ-001-AnalisisEstructurado.md
+│   └── OBJ-002-PersonasSinteticas.md
 └── /decisions/
-    ├── ADR-001-Backend.md
-    ├── ADR-002-Database.md
-    └── ADR-003-Auth.md
+    ├── ADR-0001-ModeloCreditos.md
+    └── ADR-0002-EstrategiaGTM.md
 ```
 
 ---
@@ -351,7 +499,8 @@ Antes de avanzar a otras capas, asegúrate de tener:
 - [ ] **Métricas de éxito**: ¿Cómo medimos si funciona?
 - [ ] **Límites claros**: ¿Qué NO es este producto?
 - [ ] **Restricciones**: ¿Qué limitaciones tenemos?
-- [ ] **ADRs iniciales**: ¿Qué decisiones tecnológicas tomamos?
+- [ ] **Objectives (OBJ)**: ¿Qué quieren lograr los usuarios?
+- [ ] **ADRs iniciales**: ¿Qué decisiones de negocio tomamos?
 
 ---
 
@@ -409,10 +558,10 @@ Los equipos toman decisiones sesgadas porque...
 
 ```markdown
 # ❌ INCORRECTO
-"Usamos Elysia porque sí"
+"Usamos créditos porque sí"
 
 # ✅ CORRECTO
-ADR-001 con:
+ADR-0001 con:
 - Contexto
 - Opciones consideradas
 - Pros/cons de cada una
@@ -424,11 +573,11 @@ ADR-001 con:
 
 ## Cuándo Actualizar Esta Capa
 
-La capa de Problema **cambia poco** una vez establecida. Actualízala cuando:
+La capa de Requirements **cambia poco** una vez establecida. Actualízala cuando:
 
 1. **Pivot de producto**: El problema o los usuarios cambian fundamentalmente
 2. **Nuevos objetivos**: Los OKRs de la organización evolucionan
-3. **Decisiones arquitectónicas**: Nuevos ADRs por cambios significativos
+3. **Decisiones estratégicas**: Nuevos ADRs por cambios de negocio
 4. **Post-mortem**: Aprendizajes que cambian la visión
 
 > **Regla de oro**: Si cambias el PRD frecuentemente, probablemente no tenías claro el problema desde el inicio.
@@ -437,7 +586,7 @@ La capa de Problema **cambia poco** una vez establecida. Actualízala cuando:
 
 ## Resumen
 
-La capa de Problema en KDD:
+La capa de Requirements en KDD:
 
 1. **Es el fundamento**: Todo lo demás deriva de aquí
 2. **Es estable**: Cambia poco una vez definida
@@ -445,6 +594,7 @@ La capa de Problema en KDD:
 4. **Es medible**: Define métricas de éxito concretas
 5. **Es limitante**: Establece lo que NO es el producto
 6. **Documenta decisiones**: ADRs capturan el razonamiento
+7. **Captura objetivos**: OBJ define qué quieren lograr los usuarios
 
 > **"Un sistema sin un problema claro es una solución buscando un problema. KDD empieza por el problema."**
 
@@ -454,9 +604,10 @@ La capa de Problema en KDD:
 
 - [[prd.template]] - Template para PRD
 - [[adr.template]] - Template para ADRs
-- [[02-domain]] - La siguiente capa: Dominio
+- [[objective.template]] - Template para Objectives
+- [[01-domain]] - La siguiente capa: Dominio
 - [[Introducción a KDD]] - Visión general de KDD
 
 ---
 
-*Última actualización: 2024-12-14*
+*Última actualización: 2025-01*

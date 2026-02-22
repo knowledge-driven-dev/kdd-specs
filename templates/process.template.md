@@ -1,72 +1,70 @@
 ---
 # @type: process
-# @description: Proceso de negocio (BPMN-lite)
+# @description: Business process (BPMN-lite)
 # @file-pattern: ^(PRC|PROC)-\d{3}-.+\.md$
 # @path-pattern: behavior/processes/
 
 id: PRC-NNN                   # @optional @pattern: ^(PRC|PROC)-\d{3}$
-kind: process                 # @literal: process
+kind: process                 # @required @literal: process
 status: draft                 # @enum: draft|proposed|approved|deprecated @default: draft
 domain: six-hats              # @optional
-tags:                         # @type: array
-  - process
 ---
 
-# PRC-NNN: Nombre del Proceso <!-- required pattern: ^(PRC|PROC)-\d{3}: -->
+# PRC-NNN: Process Name <!-- required pattern: ^(PRC|PROC)-\d{3}: -->
 
-## Descripción <!-- optional -->
+## Description <!-- optional -->
 
-Descripción del proceso:
-- Objetivo del proceso
-- Actores involucrados
-- Resultado esperado
+Process description:
+- Process objective
+- Actors involved
+- Expected outcome
 
-## Diagrama <!-- required alias: "Diagrama de Proceso" -->
+## Diagram <!-- required -->
 
 <!-- expects: mermaid:flowchart -->
 ```mermaid
 flowchart TD
-    A[Inicio] --> B{¿Decisión?}
-    B -- Sí --> C[Tarea 1]
-    B -- No --> D[Tarea 2]
-    C --> E{¿Otra decisión?}
+    A[Start] --> B{Decision?}
+    B -- Yes --> C[Task 1]
+    B -- No --> D[Task 2]
+    C --> E{Another decision?}
     D --> E
-    E -- Continuar --> F[Tarea 3]
-    E -- Terminar --> G[Fin]
+    E -- Continue --> F[Task 3]
+    E -- Finish --> G[End]
     F --> G
 ```
 
-## Participantes <!-- optional alias: Actors|Roles -->
+## Participants <!-- optional alias: Actors|Roles -->
 
-| Rol | Responsabilidad |
-|-----|-----------------|
-| [[Usuario]] | Inicia el proceso |
-| Sistema | Ejecuta tareas automáticas |
-| [[OtroActor]] | Aprueba/valida |
+| Role | Responsibility |
+|------|----------------|
+| [[User]] | Initiates the process |
+| System | Executes automatic tasks |
+| [[OtherActor]] | Approves/validates |
 
-## Pasos <!-- optional alias: Steps -->
+## Steps <!-- optional -->
 
-| # | Paso | Actor | Entrada | Salida | Reglas |
-|---|------|-------|---------|--------|--------|
-| 1 | Descripción | Usuario | Datos iniciales | Resultado | [[BR-XXX-001]] |
-| 2 | Siguiente paso | Sistema | Resultado anterior | Nuevo estado | - |
-| 3 | Decisión | Usuario | Estado actual | Opción elegida | [[BR-XXX-002]] |
+| # | Step | Actor | Input | Output | Rules |
+|---|------|-------|-------|--------|-------|
+| 1 | Description | User | Initial data | Result | [[BR-XXX-001]] |
+| 2 | Next step | System | Previous result | New state | - |
+| 3 | Decision | User | Current state | Chosen option | [[BR-XXX-002]] |
 
-## Casos de Uso Involucrados <!-- optional -->
+## Related Use Cases <!-- optional -->
 
-- [[UC-NNN-Nombre]] - Paso 1
-- [[UC-MMM-Nombre]] - Pasos 2-3
+- [[UC-NNN-Name]] - Step 1
+- [[UC-MMM-Name]] - Steps 2-3
 
-## Eventos Emitidos <!-- optional -->
+## Events Emitted <!-- optional -->
 
-| Paso | Evento |
-|------|--------|
-| Al iniciar | [[EVT-Proceso-Iniciado]] |
-| En paso 2 | [[EVT-Tarea-Completada]] |
-| Al finalizar | [[EVT-Proceso-Completado]] |
+| Step | Event |
+|------|-------|
+| On start | [[EVT-Process-Started]] |
+| On step 2 | [[EVT-Task-Completed]] |
+| On finish | [[EVT-Process-Completed]] |
 
-## Puntos de Integración <!-- optional -->
+## Integration Points <!-- optional -->
 
-- **Servicios externos**: APIs que se invocan
-- **Notificaciones**: Emails, push, etc.
-- **Persistencia**: Qué se guarda y cuándo
+- **External services**: APIs that are invoked
+- **Notifications**: Emails, push, etc.
+- **Persistence**: What is saved and when

@@ -1,76 +1,76 @@
 ---
 # @type: nfr
-# @description: Requisito no funcional
+# @description: Non-functional requirement
 # @file-pattern: ^NFR-.+\.md$
 # @path-pattern: quality/
 
-id: NFR-Nombre                # @optional @pattern: ^NFR-.+
+id: NFR-Name                  # @optional @pattern: ^NFR-.+
 kind: nfr                     # @literal: nfr
 status: proposed              # @enum: draft|proposed|approved|deprecated @default: proposed
 category: performance         # @optional @enum: performance|availability|security|scalability|usability|maintainability
 ---
 
-# NFR: Nombre del Requisito <!-- required -->
+# NFR: Requirement Name <!-- required -->
 
-## Categoría <!-- optional -->
+## Category <!-- optional -->
 
 Performance | Availability | Security | Scalability | Usability | Maintainability | Observability
 
-## Objetivo <!-- required alias: Goal|Target -->
+## Goal <!-- required alias: Objective|Target -->
 
-Descripción clara del objetivo de calidad:
-- Qué se quiere lograr
-- Por qué es importante
-- Impacto si no se cumple
+Clear description of the quality goal:
+- What is to be achieved
+- Why it is important
+- Impact if not met
 
 ## SLI (Service Level Indicator) <!-- optional -->
 
-Métrica específica que se mide:
+Specific metric to be measured:
 
 ```
-nombre_metrica{labels}
+metric_name{labels}
 ```
 
-Ejemplos:
+Examples:
 - `http_request_duration_seconds{route="/api/endpoint", quantile="0.95"}`
 - `error_rate{service="api"}`
 - `availability_percentage{service="web"}`
 
 ## SLO (Service Level Objective) <!-- optional -->
 
-Objetivo concreto:
+Concrete objective:
 
-| Métrica | Objetivo | Ventana |
-|---------|----------|---------|
-| P95 latencia | < 500ms | 30 días |
-| Error rate | < 0.1% | 7 días |
-| Uptime | 99.9% | Mensual |
+| Metric | Target | Window |
+|--------|--------|--------|
+| P95 latency | < 500ms | 30 days |
+| Error rate | < 0.1% | 7 days |
+| Uptime | 99.9% | Monthly |
 
-## Estrategias <!-- optional alias: Strategies|Implementation -->
+## Strategies <!-- optional alias: Implementation -->
 
-Cómo se logrará el objetivo:
+How the objective will be achieved:
 
-- **Caching**: Estrategia de caché
-- **CDN**: Uso de CDN para assets
-- **Database**: Índices, queries optimizadas
-- **Architecture**: Patrones arquitectónicos
-- **Monitoring**: Alertas y dashboards
+- **Caching**: Caching strategy
+- **CDN**: CDN usage for assets
+- **Database**: Indexes, optimized queries
+- **Architecture**: Architectural patterns
+- **Monitoring**: Alerts and dashboards
 
-## Medición <!-- optional alias: Measurement -->
+## Measurement <!-- optional -->
 
-Cómo se mide y monitorea:
+How it is measured and monitored:
 
-- **Herramienta**: Prometheus, Datadog, etc.
-- **Dashboard**: Link al dashboard
-- **Alertas**: Condiciones de alerta
+- **Tool**: Prometheus, Datadog, etc.
+- **Dashboard**: Link to dashboard
+- **Alerts**: Alert conditions
 
-## Casos de Uso Afectados <!-- optional -->
+## Affected Use Cases <!-- optional -->
 
-- [[UC-NNN-Nombre]] - Cómo afecta
-- [[UC-MMM-Nombre]] - Cómo afecta
+- [[UC-NNN-Name]] - How it affects
+- [[UC-MMM-Name]] - How it affects
 
 ## Trade-offs <!-- optional -->
 
-Compromisos aceptados:
-- Trade-off 1: Descripción
-- Trade-off 2: Descripción
+Accepted trade-offs:
+- Trade-off 1: Description
+- Trade-off 2: Description

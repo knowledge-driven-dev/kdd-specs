@@ -1,175 +1,90 @@
 ---
-tags:
-  - ui/component
+kind: ui-component
 status: draft
-version: "1.0"
 links:
   entities: []
   use-cases: []
-  components: []      # Componentes hijos que usa
-  parent-views: []    # Vistas donde se usa este componente
-storybook:
-  category: "Components"
-  auto-generate: true
+  commands: []
 ---
 
-# {{nombre-del-componente}}
+# {{ComponentName}}
 
-## Descripción
+## Propósito
 
-<!--
-Describe qué es este componente y su propósito principal.
-Debe ser reutilizable y no contener lógica de negocio específica.
--->
+<!-- 1-3 líneas: qué problema resuelve este componente para el usuario -->
 
-## Props
+## Datos
 
-| Prop | Tipo | Requerido | Default | Descripción |
-|------|------|-----------|---------|-------------|
-| `prop1` | `string` | sí | - | Descripción de la prop |
-| `prop2` | `boolean` | no | `false` | Descripción de la prop |
+<!-- Qué información muestra. Lista simple, sin tipos TS -->
+
+- campo1 — descripción breve
+- campo2 — descripción breve
+- campoOpcional? — cuándo aparece
 
 ## Estructura
 
-<!--
-Representa la estructura interna del componente en ASCII.
-Indica las partes principales y su disposición.
--->
+<!-- UN wireframe que muestre la anatomía. Los estados van después -->
 
-```ascii
-┌─────────────────────────────────┐
-│  [Icono]  Contenido principal   │
-│           Contenido secundario  │
-└─────────────────────────────────┘
+```
+┌─────────────────────────────────────┐
+│ [Estado]                        [⭐] │
+│ ─────────────────────────────────── │
+│ Título del elemento                  │
+│                                      │
+│ 📊 métrica1  │  📊 métrica2          │
+│                                      │
+│ [Acción Principal]  [Editar]  [⋮]   │
+└─────────────────────────────────────┘
 ```
 
-## Estados
+## Acciones
 
-### Default
-Descripción del estado por defecto.
+<!-- Qué puede hacer el usuario. Formato: Acción → Consecuencia -->
 
-```ascii
-┌─────────────────┐
-│  Estado normal  │
-└─────────────────┘
+| Acción | Resultado | Navegación |
+|--------|-----------|------------|
+| Click en card | Abre detalle | → [[VIEW-Detalle]] |
+| Click en acción principal | Inicia proceso X | → [[VIEW-Proceso]] |
+| Click en menú (⋮) | Muestra opciones: Editar, Duplicar, Eliminar | — |
+| Eliminar | Requiere confirmación, ejecuta [[CMD-Delete]] | — |
+
+## Estados Funcionales
+
+<!-- Solo estados que cambian QUÉ se muestra, no cómo se ve -->
+
+### Por estado de la entidad
+
+<!-- Si el componente cambia según el estado del dato que muestra -->
+
+| Estado | Acción principal | Acciones disponibles |
+|--------|------------------|----------------------|
+| borrador | "Configurar" | editar, eliminar |
+| activo | "Continuar" | solo menú |
+| terminado | "Ver resultado" | duplicar |
+
+### Cargando
+
+```
+┌─────────────────────────────────────┐
+│ ░░░░░░░░                            │
+│ ░░░░░░░░░░░░░░░░░░░░                │
+│ ░░░░░  │  ░░░░░                     │
+└─────────────────────────────────────┘
 ```
 
-### Hover
-Descripción del estado hover.
+### Error / Vacío
 
-### Disabled
-Descripción del estado deshabilitado.
-
-### Loading
-Descripción del estado de carga (si aplica).
-
-### Error
-Descripción del estado de error (si aplica).
-
-## Interacciones
-
-<!--
-Documenta cada interacción del usuario con el componente.
-Cada interacción describe: trigger, precondiciones, resultado, feedback,
-y opcionalmente qué componente abre o a cuál navega.
-
-Campos disponibles:
-- **Trigger**: Qué acción del usuario dispara esto
-- **Precondición**: Condiciones que deben cumplirse (opcional)
-- **Resultado**: Qué ocurre como consecuencia
-- **Feedback**: Feedback visual al usuario (spinner, toast, etc.)
-- **Emite**: Evento de dominio emitido (opcional)
-- **Abre**: Componente/modal que se abre → Story destino (opcional)
-- **Navega a**: Vista/página destino → Story destino (opcional)
-- **Datos**: Datos pasados al componente destino (opcional)
--->
-
-### Click en botón principal
-
-- **Trigger**: Click en `[Botón]`
-- **Precondición**: `condición === true`
-- **Resultado**:
-  - Ejecuta acción X
-  - Actualiza estado Y
-- **Feedback**: Spinner mientras procesa
-- **Emite**: `EVT-Algo-Ocurrió`
-- **Abre**: `[[UI-ModalDestino]]` → `Default`
-- **Datos**: `{ id, contexto }`
-
-### Acción exitosa
-
-- **Trigger**: Operación completa con éxito
-- **Resultado**:
-  - Cierra modal/formulario actual
-  - Vuelve a vista anterior
-- **Feedback**: Toast "Operación completada"
-- **Navega a**: `[[UI-VistaOrigen]]` → `ConDatosActualizados`
-
-### Hover / Focus
-
-- **Trigger**: Mouse over / Tab focus
-- **Resultado**: Efecto visual de elevación
-- **Feedback**: `shadow-lg`, `border-primary`
-
-<!--
-La diferencia entre "Abre" y "Navega a":
-- Abre: Modal, drawer, popover (overlay sobre la vista actual)
-- Navega a: Cambio de ruta/página (reemplaza la vista actual)
--->
-
-## Accesibilidad
-
-- **Rol ARIA**: `role="button"` (ejemplo)
-- **Navegación por teclado**: Tab para navegar, Enter para activar
-- **Screen readers**: Asegurar que el label sea descriptivo
+<!-- Solo si aplica y cambia significativamente el layout -->
 
 ## Variantes
 
-### Tamaños
-- `sm`: Uso en espacios reducidos
-- `md`: Tamaño por defecto
-- `lg`: Uso destacado
+<!-- Solo si hay variantes funcionales, no de estilo -->
 
-### Estilos
-- `default`: Estilo principal
-- `outline`: Solo borde
-- `ghost`: Sin fondo
+- **Compacta** (móvil): Oculta acciones secundarias, solo menú
+- **Expandida**: Muestra métricas adicionales
 
-## Dependencias shadcn/ui
+## Conexiones
 
-<!--
-Lista los componentes de shadcn/ui que este componente utiliza o extiende.
--->
-
-- `Button` (si extiende Button)
-- `Input` (si extiende Input)
-
-## Ejemplos de Uso
-
-```tsx
-// Uso básico
-<MiComponente prop1="valor" />
-
-// Con todas las props
-<MiComponente
-  prop1="valor"
-  prop2={true}
-  variant="outline"
-  size="lg"
-/>
-```
-
-## Imagen de Referencia
-
-<!--
-Si tienes un diseño en Figma o un screenshot de referencia,
-colócalo aquí usando la sintaxis de Obsidian:
-![[nombre-imagen.png]]
--->
-
-## Notas de Implementación
-
-<!--
-Notas técnicas para quien implemente este componente.
-Por ejemplo: "Usar Radix UI Tooltip internamente"
--->
+- **Entidades**: [[Entidad1]], [[Entidad2]]
+- **Casos de uso**: [[UC-001]], [[UC-002]]
+- **Comandos**: [[CMD-Create]], [[CMD-Delete]]

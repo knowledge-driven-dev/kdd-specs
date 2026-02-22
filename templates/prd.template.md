@@ -1,108 +1,108 @@
 ---
 # @type: prd
-# @description: Product Requirements Document por epic
+# @description: Product Requirements Document per epic
 # @file-pattern: ^PRD-.+\.md$
-# @path-pattern: vision/prd/
+# @path-pattern: requirements/prd/
 
-id: PRD-Nombre                # @optional @pattern: ^PRD-.+
+id: PRD-Name                  # @optional @pattern: ^PRD-.+
 kind: prd                     # @literal: prd
 status: proposed              # @enum: draft|proposed|approved|deprecated @default: proposed
-owner: equipo                 # @optional @description: Equipo responsable
+owner: team                   # @optional @description: Responsible team
 stakeholders:                 # @type: array @optional
   - stakeholder1
   - stakeholder2
-related:                      # @type: array @optional @description: Artefactos relacionados
+related:                      # @type: array @optional @description: Related artifacts
   - UC-NNN
   - NFR-XXX
 success_metrics:              # @type: array @optional
-  - "Métrica 1"
+  - "Metric 1"
 release_criteria:             # @type: array @optional
-  - "Criterio 1"
+  - "Criterion 1"
 ---
 
-# PRD: Nombre del Epic <!-- required -->
+# PRD: Epic Name <!-- required -->
 
-## Problema / Oportunidad <!-- required alias: Problem|Opportunity -->
+## Problem / Opportunity <!-- required -->
 
-Descripción clara del problema que se resuelve o la oportunidad que se aprovecha.
+Clear description of the problem being solved or the opportunity being seized.
 
-- ¿Qué dolor tiene el usuario?
-- ¿Qué oportunidad de negocio existe?
-- ¿Por qué es importante ahora?
+- What pain does the user have?
+- What business opportunity exists?
+- Why is it important now?
 
-## Usuarios y Jobs-to-be-done <!-- required alias: Users|Target Users -->
+## Users and Jobs-to-be-done <!-- required alias: Target Users -->
 
-| Persona | Job-to-be-done | Frecuencia |
-|---------|----------------|------------|
-| Usuario tipo A | Quiere lograr X para obtener Y | Diario |
-| Usuario tipo B | Necesita hacer Z porque W | Semanal |
+| Persona | Job-to-be-done | Frequency |
+|---------|----------------|-----------|
+| User type A | Wants to achieve X to obtain Y | Daily |
+| User type B | Needs to do Z because W | Weekly |
 
-## Alcance / No Alcance <!-- required alias: Scope -->
+## Scope <!-- required -->
 
-### Incluido (In Scope)
+### In Scope
 
-- Funcionalidad 1
-- Funcionalidad 2
-- Funcionalidad 3
+- Functionality 1
+- Functionality 2
+- Functionality 3
 
-### Excluido (Out of Scope)
+### Out of Scope
 
-- Lo que NO se incluye en este PRD
-- Funcionalidad diferida a futuro
-- Integraciones no contempladas
+- What is NOT included in this PRD
+- Functionality deferred to future
+- Integrations not considered
 
-## Requisitos Funcionales Enlazados <!-- optional alias: Functional Requirements -->
+## Functional Requirements <!-- optional -->
 
-### Casos de Uso
+### Use Cases
 
-- [[UC-NNN-Nombre]] - Descripción breve
-- [[UC-MMM-Nombre]] - Descripción breve
+- [[UC-NNN-Name]] - Brief description
+- [[UC-MMM-Name]] - Brief description
 
-### Reglas de Negocio
+### Business Rules
 
-- [[BR-XXX-NNN]] - Descripción breve
-- [[BR-YYY-NNN]] - Descripción breve
+- [[BR-XXX-NNN]] - Brief description
+- [[BR-YYY-NNN]] - Brief description
 
-## NFRs y Compliance <!-- optional alias: Non-Functional Requirements -->
+## Non-Functional Requirements <!-- optional alias: NFRs -->
 
 - [[NFR-Performance]] - P95 < 500ms
-- [[NFR-Security]] - Autenticación requerida
-- Compliance: GDPR, accesibilidad WCAG 2.1
+- [[NFR-Security]] - Authentication required
+- Compliance: GDPR, WCAG 2.1 accessibility
 
-## Métricas de Éxito y Telemetría <!-- optional alias: Success Metrics -->
+## Success Metrics <!-- optional alias: Metrics -->
 
-| Métrica | Baseline | Target | Cómo se mide |
-|---------|----------|--------|--------------|
-| Conversión | 10% | 15% | Analytics event X |
-| Tiempo en tarea | 5 min | 2 min | Timer en UI |
-| NPS del feature | - | > 50 | Encuesta post-uso |
+| Metric | Baseline | Target | How measured |
+|--------|----------|--------|--------------|
+| Conversion | 10% | 15% | Analytics event X |
+| Time on task | 5 min | 2 min | UI timer |
+| Feature NPS | - | > 50 | Post-use survey |
 
-## Dependencias <!-- optional -->
+## Dependencies <!-- optional -->
 
-- **APIs**: [[API-XXX]] - Descripción
-- **Eventos**: [[EVT-XXX]] - Descripción
-- **Equipos**: Equipo Y para integración Z
-- **Infraestructura**: Requisitos de infra
+- **APIs**: [[API-XXX]] - Description
+- **Events**: [[EVT-XXX]] - Description
+- **Teams**: Team Y for integration Z
+- **Infrastructure**: Infra requirements
 
-## Criterios de Aceptación / Go-Live <!-- required alias: Acceptance Criteria|Release Criteria -->
+## Acceptance Criteria / Go-Live <!-- required alias: Release Criteria -->
 
-- [ ] Todos los escenarios [[SCN-XXX]] en verde
-- [ ] Cobertura de tests > 80%
-- [ ] Performance validada en staging
-- [ ] Documentación de usuario actualizada
-- [ ] Rollback plan definido
+- [ ] All scenarios [[SCN-XXX]] passing
+- [ ] Test coverage > 80%
+- [ ] Performance validated in staging
+- [ ] User documentation updated
+- [ ] Rollback plan defined
 
-## Riesgos y Mitigaciones <!-- optional -->
+## Risks and Mitigations <!-- optional -->
 
-| Riesgo | Probabilidad | Impacto | Mitigación |
-|--------|--------------|---------|------------|
-| Riesgo 1 | Alta | Alto | Plan de mitigación |
-| Riesgo 2 | Media | Medio | Plan alternativo |
+| Risk | Probability | Impact | Mitigation |
+|------|-------------|--------|------------|
+| Risk 1 | High | High | Mitigation plan |
+| Risk 2 | Medium | Medium | Alternative plan |
 
-## Timeline y Milestones <!-- optional -->
+## Timeline and Milestones <!-- optional -->
 
-> Nota: No incluir fechas específicas, solo fases/milestones
+> Note: Do not include specific dates, only phases/milestones
 
-- **Fase 1**: MVP con funcionalidad core
-- **Fase 2**: Mejoras basadas en feedback
-- **Fase 3**: Optimizaciones y scale
+- **Phase 1**: MVP with core functionality
+- **Phase 2**: Improvements based on feedback
+- **Phase 3**: Optimizations and scale

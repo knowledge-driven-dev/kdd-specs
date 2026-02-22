@@ -1,4 +1,4 @@
-# Capa 05: Verificación
+# Capa 04: Verification
 
 ## El Cierre del Ciclo: ¿Cómo Sabemos que Funciona?
 
@@ -6,20 +6,20 @@
 
 ## Introducción
 
-La capa de Verificación es el **cierre del ciclo de especificación** en KDD. Responde a la pregunta más pragmática: **¿Cómo verificamos que el sistema hace lo que debe hacer?**
+La capa de Verification es el **cierre del ciclo de especificación** en KDD. Responde a la pregunta más pragmática: **¿Cómo verificamos que el sistema hace lo que debe hacer?**
 
 Esta capa no es un anexo o un "nice to have". Es la culminación de todo el trabajo anterior, donde las especificaciones abstractas se transforman en **criterios verificables** que pueden ser automatizados, auditados y mantenidos.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                              │
-│   01-Problem   →   02-Domain   →   03-Capabilities   →   04-Interaction    │
-│       │                │                 │                    │             │
-│       │                │                 │                    │             │
-│       └────────────────┴─────────────────┴────────────────────┘             │
+│   00-Requirements → 01-Domain → 02-Behavior    → 03-Experience              │
+│         │               │              │                 │                  │
+│         │               │              │                 │                  │
+│         └───────────────┴──────────────┴─────────────────┘                  │
 │                                   │                                          │
 │                                   ▼                                          │
-│                           05-Verification                                    │
+│                           04-Verification                                    │
 │                                                                              │
 │                        "¿LO CONSTRUIMOS BIEN?"                              │
 │                        "¿CONSTRUIMOS LO CORRECTO?"                          │
@@ -64,14 +64,14 @@ En metodologías tradicionales, la verificación es un ejercicio retrospectivo: 
 En KDD, cada línea de código debe poder rastrearse hasta una especificación:
 
 ```
-Código → Test → Requisito EARS → Caso de Uso → Regla de Negocio → PRD
+Código → Test → Requisito EARS → Caso de Uso → Regla de Negocio → Objetivos
 ```
 
 Si no puedes establecer esta cadena, estás escribiendo código sin justificación.
 
 ---
 
-## Los Artefactos de la Capa de Verificación
+## Los Artefactos de la Capa de Verification
 
 ### 1. Requisitos EARS (Easy Approach to Requirements Syntax)
 
@@ -119,7 +119,7 @@ the system SHALL create a new Challenge entity
   AND SHALL set the status to "borrador"
   AND SHALL redirect the user to the synthetic personas configuration screen.
 
-**Trazabilidad**: UC-001, pasos 7-11
+**Trazabilidad**: UC-001-CrearReto, pasos 7-11
 ```
 
 #### Ejemplo: Requisito Unwanted
@@ -134,7 +134,7 @@ the system SHALL reject new session creation
   AND SHALL display message "Este reto ya tiene una sesión en progreso"
   AND SHALL offer options to continue or cancel the existing session.
 
-**Trazabilidad**: UC-003, extensión; BR-SESION-002
+**Trazabilidad**: UC-003-IniciarSesion, extensión; BR-SESION-002
 ```
 
 ---
@@ -211,14 +211,14 @@ UC → REQ → BR (y viceversa)
 ```markdown
 ## Matriz Completa: UC → REQ → BR
 
-UC-001 Crear Reto
+UC-001-CrearReto
 ├── REQ-001.1 Creación de Reto
-├── REQ-001.2 Validación longitud título ──────── INV-RETO-001
-├── REQ-001.3 Título obligatorio ──────────────── INV-RETO-001
+├── REQ-001.2 Validación longitud título ──────── BR-RETO-001
+├── REQ-001.3 Título obligatorio ──────────────── BR-RETO-001
 ├── REQ-001.4 Límite retos activos ────────────── BR-RETO-002
 ├── REQ-001.5 Emisión de evento
 ├── REQ-001.6 Asistencia IA
-└── REQ-001.7 Estado inicial borrador ─────────── INV-RETO-005
+└── REQ-001.7 Estado inicial borrador ─────────── BR-RETO-003
 ```
 
 #### Usos de la Matriz de Trazabilidad
@@ -273,10 +273,8 @@ Nota que los comentarios referencian los requisitos EARS específicos.
 id: REQ-001
 kind: requirements
 status: draft
-source: UC-001          # Caso de uso del que deriva
+source: UC-001-CrearReto   # Caso de uso del que deriva
 domain: six-hats
-tags:
-  - ears
 ---
 ```
 
@@ -302,7 +300,7 @@ Requisitos derivados del caso de uso [[UC-NNN-Nombre]].
 
 [Especificación EARS en inglés]
 
-**Trazabilidad**: UC-NNN, [paso/extensión]; [BR-XXX]
+**Trazabilidad**: UC-NNN-Nombre, [paso/extensión]; [BR-XXX]
 
 **Criterio de Aceptación**:
 [Gherkin]
@@ -326,20 +324,20 @@ Requisitos derivados del caso de uso [[UC-NNN-Nombre]].
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                              │
-│   1. CASO DE USO (04-Interaction)                                           │
+│   1. CASO DE USO (02-Behavior)                                              │
 │      │                                                                       │
 │      │ "El Usuario crea un Reto con título y descripción"                   │
 │      │                                                                       │
 │      ▼                                                                       │
-│   2. DERIVAR REQUISITOS EARS (05-Verification)                              │
+│   2. DERIVAR REQUISITOS EARS (04-Verification)                              │
 │      │                                                                       │
 │      │ "WHEN user submits form, system SHALL create Reto"                   │
 │      │ "IF title > 100 chars, system SHALL reject"                          │
 │      │                                                                       │
 │      ▼                                                                       │
-│   3. VINCULAR REGLAS DE NEGOCIO (02-Domain)                                 │
+│   3. VINCULAR REGLAS DE NEGOCIO (01-Domain)                                 │
 │      │                                                                       │
-│      │ REQ-001.2 ← INV-RETO-001 (título 1-100 chars)                        │
+│      │ REQ-001.2 ← BR-RETO-001 (título 1-100 chars)                         │
 │      │ REQ-001.4 ← BR-RETO-002 (máx 50 retos activos)                       │
 │      │                                                                       │
 │      ▼                                                                       │
@@ -363,30 +361,32 @@ Requisitos derivados del caso de uso [[UC-NNN-Nombre]].
 
 ## Relación con Otras Capas
 
-La capa de Verificación **consume** todas las capas anteriores y **no es consumida** por ninguna:
+La capa de Verification **consume** todas las capas anteriores y **no es consumida** por ninguna:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                              │
-│   01-Problem ─────────────────────────────────────────────────────┐         │
-│       │                                                           │         │
-│       │  "¿Por qué este requisito?"                              │         │
-│       │  → Ver PRD: "Métricas de éxito"                          │         │
-│       │                                                           ▼         │
-│   02-Domain ──────────────────────────────────────────┐     05-Verification │
-│       │                                               │           │         │
-│       │  "¿Qué regla valida esto?"                   │           │         │
-│       │  → BR-RETO-002: "Máximo 50 retos activos"   │           │         │
-│       │                                               ▼           │         │
-│   03-Capabilities ────────────────────────┐     Trazabilidad     │         │
-│       │                                   │           │           │         │
-│       │  "¿Qué comando implementa?"      │           │           │         │
-│       │  → CMD-001-CreateChallenge       │           │           │         │
-│       │                                   ▼           │           │         │
-│   04-Interaction ─────────────────► UC-001 ──────────┘           │         │
-│                                       │                           │         │
-│                                       │                           │         │
-│                                       └───────► REQ-001.1 ────────┘         │
+│   00-Requirements ──────────────────────────────────────────────┐           │
+│       │                                                         │           │
+│       │  "¿Por qué este requisito?"                            │           │
+│       │  → Ver OBJ: "Métricas de éxito"                        │           │
+│       │                                                         ▼           │
+│   01-Domain ────────────────────────────────────────┐    04-Verification    │
+│       │                                             │           │           │
+│       │  "¿Qué regla valida esto?"                 │           │           │
+│       │  → BR-RETO-002: "Máximo 50 retos activos" │           │           │
+│       │                                             ▼           │           │
+│   02-Behavior ──────────────────────────┐     Trazabilidad     │           │
+│       │                                 │           │           │           │
+│       │  "¿Qué comando implementa?"    │           │           │           │
+│       │  → CMD-001-CreateChallenge     │           │           │           │
+│       │  "¿Qué caso de uso lo define?" │           │           │           │
+│       │  → UC-001-CrearReto            │           │           │           │
+│       │                                 ▼           │           │           │
+│   03-Experience ─────────────────► UI-Views ───────┘           │           │
+│                                       │                         │           │
+│                                       │                         │           │
+│                                       └───────► REQ-001.1 ──────┘           │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -395,17 +395,17 @@ La capa de Verificación **consume** todas las capas anteriores y **no es consum
 
 | Desde | Hacia | Propósito |
 |-------|-------|-----------|
-| REQ → UC | Origen del requisito |
-| REQ → BR | Regla que valida |
-| REQ → CMD | Operación que implementa |
-| REQ → PRD | Justificación de negocio |
+| REQ → UC | Origen del requisito (02-Behavior) |
+| REQ → BR | Regla que valida (01-Domain) |
+| REQ → CMD | Operación que implementa (02-Behavior) |
+| REQ → OBJ | Justificación de negocio (00-Requirements) |
 
 ---
 
 ## Estructura de Carpetas
 
 ```
-/specs/05-verification/
+/specs/04-verification/
 ├── criteria/
 │   ├── REQ-001-Crear-Reto.md
 │   ├── REQ-002-Configurar-Personas.md
@@ -483,7 +483,7 @@ REQ-001.4: Límite de retos
 
 # ✅ CORRECTO
 REQ-001.4: Límite de Retos No Terminados (State-Driven)
-**Trazabilidad**: UC-001, escenario TC-001.6; BR-RETO-002
+**Trazabilidad**: UC-001-CrearReto, escenario TC-001.6; BR-RETO-002
 ```
 
 ### 4. Requisitos Sin Criterios
@@ -504,10 +504,10 @@ REQ-001.4: Límite de Retos No Terminados (State-Driven)
 
 ## Cuándo Actualizar Esta Capa
 
-La capa de Verificación se actualiza cuando:
+La capa de Verification se actualiza cuando:
 
-1. **Nuevos Casos de Uso**: Derivar REQ para cada UC nuevo
-2. **Cambios en Reglas**: Actualizar REQ que referencian la BR modificada
+1. **Nuevos Casos de Uso**: Derivar REQ para cada UC nuevo (de 02-Behavior)
+2. **Cambios en Reglas**: Actualizar REQ que referencian la BR modificada (de 01-Domain)
 3. **Bugs encontrados**: Agregar criterios Gherkin que capturen el bug
 4. **Refactoring**: Verificar que los criterios existentes siguen pasando
 5. **Auditorías**: Completar trazabilidad faltante
@@ -516,7 +516,7 @@ La capa de Verificación se actualiza cuando:
 
 ---
 
-## Beneficios de la Capa de Verificación
+## Beneficios de la Capa de Verification
 
 ### Para Desarrollo
 
@@ -532,7 +532,7 @@ La capa de Verificación se actualiza cuando:
 
 ### Para Producto
 
-- **Trazabilidad a negocio**: Cada feature vinculada al PRD
+- **Trazabilidad a negocio**: Cada feature vinculada a los Objetivos
 - **Impacto de cambios**: Saber qué se afecta al modificar una regla
 - **Documentación viva**: Siempre actualizada con el código
 
@@ -546,7 +546,7 @@ La capa de Verificación se actualiza cuando:
 
 ## Resumen
 
-La capa de Verificación en KDD:
+La capa de Verification en KDD:
 
 1. **Cierra el ciclo**: Conecta especificaciones con implementación verificable
 2. **Usa EARS**: Sintaxis estructurada para requisitos no ambiguos
@@ -562,10 +562,12 @@ La capa de Verificación en KDD:
 ## Artefactos Relacionados
 
 - [[requirements.template]] - Template para documentos REQ
-- [[04-interaction]] - Casos de uso que generan requisitos
-- [[02-domain]] - Reglas de negocio que validan requisitos
+- [[03-experience]] - Vistas que consumen los casos de uso
+- [[02-behavior]] - Casos de uso que generan requisitos
+- [[01-domain]] - Reglas de negocio que validan requisitos
+- [[00-requirements]] - Objetivos de negocio
 - [[Introducción a KDD]] - Visión general de KDD
 
 ---
 
-*Última actualización: 2024-12-14*
+*Última actualización: 2025-01*
