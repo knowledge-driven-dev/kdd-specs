@@ -1,10 +1,8 @@
 ---
+# @path-pattern: 03-experience/flows/
+
 kind: ui-flow
-status: draft
-links:
-  entities: []
-  use-cases: []
-  views: []
+status: draft                  # @required @enum: draft|review|approved|deprecated|superseded
 ---
 
 # Flow: {{FlowName}}
@@ -112,10 +110,3 @@ flowchart TD
 | Local state (React) | Navigation between steps |
 | localStorage | Recover if accidentally closed |
 | Backend (draft) | Long flows requiring persistence |
-
-## Connections
-
-- **Implements**: [[UC-001]]
-- **Views involved**: [[VIEW-Step1]], [[VIEW-Step2]], [[VIEW-Confirmation]]
-- **Commands**: [[CMD-Create]]
-- **Events**: [[EVT-Entity-Created]]

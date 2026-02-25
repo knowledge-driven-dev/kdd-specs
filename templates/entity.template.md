@@ -1,11 +1,9 @@
 ---
-# @type: entity
-# @description: Domain entity, role, or external system
 # @file-pattern: ^[A-Z].+\.md$
-# @path-pattern: domain/entities/
+# @path-pattern: 01-domain/entities/
 
 kind: entity                  # @required @enum: entity|role|system
-aliases:                      # @type: array @optional @description: Alternative names
+aliases: []
   - Alias1
   - Alias2
 ---

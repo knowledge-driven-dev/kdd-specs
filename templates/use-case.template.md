@@ -1,15 +1,10 @@
 ---
-# @type: use-case
-# @description: Use case following Cockburn-lite format
 # @file-pattern: ^UC-\d{3}-.+\.md$
-# @path-pattern: behavior/use-cases/
+# @path-pattern: 02-behavior/use-cases/
 
 id: UC-NNN                    # @required @pattern: ^UC-\d{3}$
-kind: use-case                # @required @literal: use-case
-version: 1                    # @type: number @default: 1
-status: draft                 # @enum: draft|proposed|approved|deprecated @default: draft
-actor: Primary Actor          # @required @description: Primary actor of the use case
-domain: six-hats              # @optional
+kind: use-case                # @required
+status: draft                 # @required @enum: draft|review|approved|deprecated|superseded
 ---
 
 # UC-NNN: Use Case Title <!-- required pattern: ^UC-\d{3}:\s+.+ -->
@@ -23,15 +18,13 @@ Clear description of the use case. Explain the main objective and the value it p
 - **Primary Actor**: [[Actor]] - Role and motivation
 - **Secondary Actor**: System/Other actor (optional)
 
-## Triggers <!-- optional -->
-
-- Action or event that initiates the use case
-- There may be multiple triggers
-
 ## Preconditions <!-- required -->
 
 1. Condition that must be met before starting
 2. Initial state of the system
+
+Triggers:
+- Action or event that initiates the use case
 
 ## Main Flow (Happy Path) <!-- required -->
 
@@ -55,14 +48,9 @@ Clear description of the use case. Explain the main objective and the value it p
 
 1. ...
 
-## Minimal Guarantees <!-- optional -->
-
-- Guarantee that holds even if the use case fails
-- The system does not remain in an inconsistent state
-
 ## Postconditions <!-- required -->
 
-### On Success (Success Guarantees)
+### On Success
 
 - Final state of the system after success
 - Entities created/modified
@@ -86,33 +74,3 @@ Clear description of the use case. Explain the main objective and the value it p
 |------|-------------|
 | [[BR-XXX-001]] | Brief description |
 | [[BR-XXX-002]] | Brief description |
-
-## Non-Functional Requirements <!-- optional -->
-
-- **Performance**: Maximum response time
-- **Availability**: Offline behavior if applicable
-- **Accessibility**: Accessibility requirements
-
-## Test Scenarios <!-- optional -->
-
-| ID | Scenario | Expected Result |
-|----|----------|-----------------|
-| TC-NNN.1 | Scenario description | Expected result |
-| TC-NNN.2 | Another scenario | Expected result |
-
-## Events Emitted <!-- optional -->
-
-| Event | Description |
-|-------|-------------|
-| [[EVT-Something-Happened]] | When it is emitted |
-
-## Related Requirements <!-- optional -->
-
-- [[REQ-NNN.1]] - Description
-- [[REQ-NNN.2]] - Description
-
-## Implementation Notes <!-- optional -->
-
-- Technical considerations
-- Dependencies
-- Implementation suggestions

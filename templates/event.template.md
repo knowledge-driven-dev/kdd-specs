@@ -1,10 +1,8 @@
 ---
-# @type: event
-# @description: Domain event
 # @file-pattern: ^EVT-.+\.md$
-# @path-pattern: domain/events/
+# @path-pattern: 01-domain/events/
 
-kind: event                   # @required @literal: event
+kind: event                   # @required
 ---
 
 # EVT-Event-Name <!-- title-is-name pattern: ^EVT-.+ -->
@@ -16,7 +14,7 @@ Clear description of the event:
 - When it is emitted
 - Why it is important
 
-## Emitter <!-- optional alias: Source|Producer -->
+## Emitter <!-- optional -->
 
 | Entity | Triggering action |
 |--------|-------------------|
@@ -33,7 +31,7 @@ Clear description of the event:
 | `new_state` | string | New state (if applicable) |
 | `timestamp` | datetime | Event timestamp |
 
-## Example <!-- required -->
+## Examples <!-- required -->
 
 <!-- expects: json -->
 ```json
@@ -51,7 +49,7 @@ Clear description of the event:
 }
 ```
 
-## Subscribers <!-- optional alias: Consumers -->
+## Subscribers <!-- optional -->
 
 | System/Process | Reaction |
 |----------------|----------|

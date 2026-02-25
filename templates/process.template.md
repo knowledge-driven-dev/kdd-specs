@@ -1,16 +1,13 @@
 ---
-# @type: process
-# @description: Business process (BPMN-lite)
-# @file-pattern: ^(PRC|PROC)-\d{3}-.+\.md$
-# @path-pattern: behavior/processes/
+# @file-pattern: ^PROC-\d{3}-.+\.md$
+# @path-pattern: 02-behavior/processes/
 
-id: PRC-NNN                   # @optional @pattern: ^(PRC|PROC)-\d{3}$
-kind: process                 # @required @literal: process
-status: draft                 # @enum: draft|proposed|approved|deprecated @default: draft
-domain: six-hats              # @optional
+id: PROC-NNN                  # @required @pattern: ^PROC-\d{3}$
+kind: process                 # @required
+status: draft                 # @required @enum: draft|review|approved|deprecated|superseded
 ---
 
-# PRC-NNN: Process Name <!-- required pattern: ^(PRC|PROC)-\d{3}: -->
+# PROC-NNN: Process Name <!-- required pattern: ^PROC-\d{3}: -->
 
 ## Description <!-- optional -->
 
@@ -34,7 +31,7 @@ flowchart TD
     F --> G
 ```
 
-## Participants <!-- optional alias: Actors|Roles -->
+## Participants <!-- optional -->
 
 | Role | Responsibility |
 |------|----------------|

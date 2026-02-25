@@ -1,23 +1,10 @@
 ---
-# @type: prd
-# @description: Product Requirements Document per epic
 # @file-pattern: ^PRD-.+\.md$
-# @path-pattern: requirements/prd/
+# @path-pattern: 00-requirements/
 
-id: PRD-Name                  # @optional @pattern: ^PRD-.+
-kind: prd                     # @literal: prd
-status: proposed              # @enum: draft|proposed|approved|deprecated @default: proposed
-owner: team                   # @optional @description: Responsible team
-stakeholders:                 # @type: array @optional
-  - stakeholder1
-  - stakeholder2
-related:                      # @type: array @optional @description: Related artifacts
-  - UC-NNN
-  - NFR-XXX
-success_metrics:              # @type: array @optional
-  - "Metric 1"
-release_criteria:             # @type: array @optional
-  - "Criterion 1"
+id: PRD-Name                  # @required @pattern: ^PRD-.+
+kind: prd                     # @required
+status: draft                 # @required @enum: draft|review|approved|deprecated|superseded
 ---
 
 # PRD: Epic Name <!-- required -->
@@ -30,7 +17,7 @@ Clear description of the problem being solved or the opportunity being seized.
 - What business opportunity exists?
 - Why is it important now?
 
-## Users and Jobs-to-be-done <!-- required alias: Target Users -->
+## Users and Jobs-to-be-done <!-- required -->
 
 | Persona | Job-to-be-done | Frequency |
 |---------|----------------|-----------|
@@ -63,13 +50,13 @@ Clear description of the problem being solved or the opportunity being seized.
 - [[BR-XXX-NNN]] - Brief description
 - [[BR-YYY-NNN]] - Brief description
 
-## Non-Functional Requirements <!-- optional alias: NFRs -->
+## Non-Functional Requirements <!-- optional -->
 
 - [[NFR-Performance]] - P95 < 500ms
 - [[NFR-Security]] - Authentication required
 - Compliance: GDPR, WCAG 2.1 accessibility
 
-## Success Metrics <!-- optional alias: Metrics -->
+## Success Metrics <!-- optional -->
 
 | Metric | Baseline | Target | How measured |
 |--------|----------|--------|--------------|
@@ -84,7 +71,7 @@ Clear description of the problem being solved or the opportunity being seized.
 - **Teams**: Team Y for integration Z
 - **Infrastructure**: Infra requirements
 
-## Acceptance Criteria / Go-Live <!-- required alias: Release Criteria -->
+## Acceptance Criteria / Go-Live <!-- required -->
 
 - [ ] All scenarios [[SCN-XXX]] passing
 - [ ] Test coverage > 80%

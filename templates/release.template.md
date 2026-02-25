@@ -1,14 +1,10 @@
 ---
-# @type: release
-# @description: Release Plan (groups Value Units)
-id: REL-NNN            # @required @pattern: ^REL-\d{3}$
-kind: release          # @required @literal: release
-title: Release name          # @required
-status: draft          # @enum: draft|review|approved|deprecated
-owner: Name or role    # @required
-target_date: 2025-03-31 # @optional
-tags:                 # @type: array
-  - release
+# @file-pattern: ^REL-\d{3}-.+\.md$
+# @path-pattern: 00-requirements/releases/
+
+id: REL-NNN                   # @required @pattern: ^REL-\d{3}$
+kind: release                 # @required
+status: draft                 # @required @enum: draft|review|approved|deprecated|superseded
 ---
 
 # REL-NNN: Release name

@@ -1,10 +1,8 @@
 ---
+# @path-pattern: 03-experience/components/
+
 kind: ui-component
-status: draft
-links:
-  entities: []
-  use-cases: []
-  commands: []
+status: draft                  # @required @enum: draft|review|approved|deprecated|superseded
 ---
 
 # {{ComponentName}}
@@ -31,7 +29,7 @@ links:
 │ ─────────────────────────────────── │
 │ Item title                          │
 │                                      │
-│ 📊 metric1  │  📊 metric2          │
+│ metric1  │  metric2                 │
 │                                      │
 │ [Main Action]     [Edit]       [⋮]  │
 └─────────────────────────────────────┘
@@ -82,9 +80,3 @@ links:
 
 - **Compact** (mobile): Hides secondary actions, menu only
 - **Expanded**: Shows additional metrics
-
-## Connections
-
-- **Entities**: [[Entity1]], [[Entity2]]
-- **Use cases**: [[UC-001]], [[UC-002]]
-- **Commands**: [[CMD-Create]], [[CMD-Delete]]

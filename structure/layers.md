@@ -2,15 +2,17 @@
 
 ## Overview
 
-KDD specifications are organized in 5 layers. Each layer has a clear responsibility and dependency rules.
+KDD specifications are organized in 6 layers. Each layer has a clear responsibility and dependency rules.
 
 ```
 /specs
-├── 00-requirements/   # WHY — Business context
-├── 01-domain/         # WHAT EXISTS — Core model
-├── 02-behavior/       # HOW IT WORKS — System behavior
-├── 03-experience/     # HOW USERS SEE IT — User interaction
-└── 04-verification/   # HOW WE TEST IT — Validation
+├── _kdd.yaml              # Meta: KDD version
+├── 00-requirements/       # WHY — Business context
+├── 01-domain/             # WHAT EXISTS — Core model
+├── 02-behavior/           # HOW IT WORKS — System behavior
+├── 03-experience/         # HOW USERS SEE IT — User interaction
+├── 04-verification/       # HOW WE TEST IT — Validation
+└── 05-architecture/       # HOW WE BUILD IT — Technical decisions
 ```
 
 ---
@@ -26,8 +28,7 @@ KDD specifications are organized in 5 layers. Each layer has a clear responsibil
 ├── PRD.md                    # Product Requirements Document (high-level)
 ├── objectives/               # OBJ-NNN-{Name}.md
 ├── value-units/              # UV-NNN-{Name}.md (end-to-end deliverables)
-├── releases/                 # REL-NNN-{Name}.md
-└── decisions/                # ADR-NNNN-{Title}.md (architecture decisions)
+└── releases/                 # REL-NNN-{Name}.md
 ```
 
 **Key point**: This layer is *input* to design. It is intentionally outside the strict 01→04 dependency chain — it can reference domain concepts for context without violating layer rules.
@@ -95,11 +96,25 @@ KDD specifications are organized in 5 layers. Each layer has a clear responsibil
 
 ---
 
+### 05-architecture — Technical Decisions
+
+**Purpose**: Record *how we build it* — technology choices, patterns, and implementation guidelines.
+
+```
+05-architecture/
+├── decisions/                # ADR-NNNN-{Title}.md (architecture decisions)
+└── charter.md                # Implementation Charter (stack, conventions, mappings)
+```
+
+**Dependency rule**: This layer is *orthogonal* — like 00-requirements, it does not participate in the 01→04 dependency chain. It can reference any layer for context. Implementation hints from other artifacts (code patterns, schemas, conventions) belong here, in the charter's "KDD Artifact → Code Mapping" section.
+
+---
+
 ## Dependency Rules (Summary)
 
 ```
 ┌───────────────────────────────────────────────────────────────┐
-│  00-requirements   (PRD, objectives, ADRs)                    │
+│  00-requirements   (PRD, objectives, value-units, releases)   │
 │  INPUT: Feeds design. May mention domain concepts for          │
 │  context. Not part of the layer dependency flow.               │
 └───────────────────────────────────────────────────────────────┘
@@ -115,6 +130,12 @@ KDD specifications are organized in 5 layers. Each layer has a clear responsibil
 │      ↓ references                                             │
 ├───────────────────────────────────────────────────────────────┤
 │  01-domain         (entities, events, rules)   ← BASE         │
+└───────────────────────────────────────────────────────────────┘
+
+┌───────────────────────────────────────────────────────────────┐
+│  05-architecture   (ADR, Implementation Charter)              │
+│  ORTHOGONAL: Records technical decisions and implementation   │
+│  guidelines. Does not participate in the 01→04 chain.         │
 └───────────────────────────────────────────────────────────────┘
 ```
 
@@ -157,5 +178,7 @@ For large applications with multiple bounded contexts:
 | Business Rule | `BR-{ENTITY}-NNN.md` | `BR-ORDER-001.md` |
 | Command | `CMD-NNN-{Name}.md` | `CMD-001-PlaceOrder.md` |
 | Query | `QRY-NNN-{Name}.md` | `QRY-001-GetOrder.md` |
+| Process | `PROC-NNN-{Name}.md` | `PROC-001-Onboarding.md` |
 | Use Case | `UC-NNN-{Name}.md` | `UC-001-PlaceOrder.md` |
 | ADR | `ADR-NNNN-{Title}.md` | `ADR-0001-Use-PostgreSQL.md` |
+| Impl Charter | `charter.md` | `charter.md` |

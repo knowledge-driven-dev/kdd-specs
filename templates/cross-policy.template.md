@@ -1,15 +1,10 @@
 ---
-# @type: cross-policy
-# @description: Cross-cutting policy applied to multiple commands
 # @file-pattern: ^XP-.+\.md$
-# @path-pattern: behavior/policies/
+# @path-pattern: 02-behavior/policies/
 
 id: XP-{DOMAIN}-NNN            # @required @pattern: ^XP-[A-Z]+-\d{3}$
-kind: cross-policy             # @required @literal: cross-policy
-title: "{Descriptive title}"  # @required
-status: draft                  # @enum: draft|review|approved|deprecated @default: draft
-owner: "@team"                 # @optional
-created: "2024-01-01"          # @optional
+kind: cross-policy             # @required
+status: draft                  # @required @enum: draft|review|approved|deprecated|superseded
 ---
 
 # XP-{DOMAIN}-NNN: {Title}
@@ -21,8 +16,6 @@ Description of the cross-cutting concern this policy addresses. Explain why this
 ## Statement <!-- required -->
 
 Clear statement of the policy in natural language. Affected domain entities should be mentioned with wiki-links: [[Entity1]], [[Entity2]].
-
-> **Convention**: Affected commands declare relevant attributes in their frontmatter (e.g., `billable: true`, `credit-cost: N`).
 
 ## EARS Formalization <!-- required -->
 
@@ -60,15 +53,3 @@ What happens if verification fails. Include error code and standard message.
 
 ### Rollback
 What happens if the command fails after passing verification.
-
-## Implementation <!-- optional -->
-
-```typescript
-// Suggested implementation pattern (middleware/interceptor)
-```
-
-## Notes <!-- optional -->
-
-- Additional considerations
-- Known exceptions
-- Relationship with other policies or rules

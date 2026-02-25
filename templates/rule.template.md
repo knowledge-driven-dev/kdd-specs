@@ -1,18 +1,10 @@
 ---
-# @type: rule
-# @description: Business Rule (BR-*) or Business Policy (BP-*)
 # @file-pattern: ^(BR|BP)-[A-Z]+-\d{3}\.md$
-# @path-pattern: domain/rules/
+# @path-pattern: 01-domain/rules/
 
 id: BR-ENTITY-NNN             # @required @pattern: ^(BR|BP)-[A-Z]+-\d{3}$
 kind: business-rule           # @required @enum: business-rule|business-policy
-title: Rule Title             # @required
-entity: EntityName            # @required - Main affected entity
-category: validation          # @enum: validation|limit|state|security|business|policy|data
-severity: critical            # @enum: critical|high|medium|low
-status: draft                 # @enum: draft|review|approved|deprecated @default: draft
-owner: "@team"                # @optional
-created: "2024-01-01"         # @optional
+status: draft                 # @required @enum: draft|review|approved|deprecated|superseded
 ---
 
 # BR-ENTITY-NNN: RuleTitle <!-- required pattern: ^(BR|BP)-[A-Z]+-\d{3}: -->
@@ -37,7 +29,7 @@ Expected outcome when the rule fails. Example: user-visible error, blocked opera
 
 If this is a Business Policy, list configurable parameters and their default values.
 
-## Formalization (optional) <!-- optional -->
+## Formalization <!-- optional -->
 
 ```
 IF/WHEN/WHILE [condition],
@@ -49,24 +41,9 @@ the system SHALL [action]
 ## Examples <!-- required -->
 
 ### Valid Cases
-- ✓ Example of valid scenario
-- ✓ Another valid scenario
+- Example of valid scenario
+- Another valid scenario
 
 ### Invalid Cases
-- ✗ Example of invalid scenario → expected behavior
-- ✗ Another invalid scenario → expected behavior
-
-## Implementation (optional) <!-- optional -->
-
-```typescript
-// Suggested implementation approach
-function validateRule(input: Input): void {
-  if (!condition) {
-    throw new BusinessRuleError('BR-ENTITY-NNN', 'Error message')
-  }
-}
-```
-
-## Notes <!-- optional -->
-
-Additional context, edge cases, or implementation considerations.
+- Example of invalid scenario → expected behavior
+- Another invalid scenario → expected behavior

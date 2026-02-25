@@ -1,17 +1,14 @@
 ---
-# @type: requirement
-# @description: Functional requirements in EARS format
 # @file-pattern: ^REQ-\d{3}-.+\.md$
-# @path-pattern: verification/criteria/
+# @path-pattern: 04-verification/criteria/
 
 id: REQ-NNN                   # @required @pattern: ^REQ-\d{3}$
-kind: requirement             # @required @literal: requirement
-status: draft                 # @enum: draft|proposed|approved|deprecated @default: draft
-source: UC-NNN                # @optional @pattern: ^UC-\d{3}$ @description: Source use case
-domain: six-hats              # @optional
+kind: requirement             # @required
+status: draft                 # @required @enum: draft|review|approved|deprecated|superseded
+source: UC-NNN                # @pattern: ^UC-\d{3}$
 ---
 
-# EARS Requirements: Title <!-- required pattern: ^(EARS Requirements|Requisitos EARS): -->
+# EARS Requirements: Title <!-- required pattern: ^EARS Requirements: -->
 
 Requirements derived from use case [[UC-NNN-Name]].
 
@@ -76,17 +73,3 @@ Then <system response>
 |-------------|---------|---------------|-----------|
 | REQ-NNN.1 | 1-5 | - | TC-NNN.1 |
 | REQ-NNN.2 | Ext Xa | BR-XXX-001 | TC-NNN.2 |
-
-## Zod Schema (Implementation) <!-- optional -->
-
-<!-- expects: typescript -->
-```typescript
-// packages/shared/validators/xxx.ts
-import { z } from 'zod'
-
-export const xxxSchema = z.object({
-  field: z.string().min(1).max(100),
-})
-
-export type XxxInput = z.infer<typeof xxxSchema>
-```

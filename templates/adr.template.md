@@ -1,26 +1,15 @@
 ---
-# @type: adr
-# @description: Architecture Decision Record
 # @file-pattern: ^ADR-\d{4}.*\.md$
-# @path-pattern: architecture/decisions/
+# @path-pattern: 05-architecture/decisions/
 
 id: ADR-NNNN                  # @required @pattern: ^ADR-\d{4}$
-kind: adr                     # @literal: adr
-status: proposed              # @enum: draft|proposed|approved|deprecated|superseded @default: proposed
-supersedes:                   # @type: array @optional @description: ADRs this one replaces
-  - ADR-XXXX
-superseded_by:                # @optional @description: ADR that replaces this one
-date: YYYY-MM-DD              # @optional @type: date
-deciders:                     # @type: array @optional
-  - Name 1
-  - Name 2
+kind: adr                     # @required
+status: draft                 # @required @enum: draft|review|approved|deprecated|superseded
+supersedes: []
+superseded_by:
 ---
 
 # ADR-NNNN: Decision Title <!-- required pattern: ^ADR-\d{4}: -->
-
-## Status <!-- optional -->
-
-Proposed | Accepted | Deprecated | Superseded by [[ADR-XXXX]]
 
 ## Context <!-- required -->
 
@@ -41,7 +30,7 @@ Decision details:
 - How it will be implemented
 - Who is responsible
 
-## Options Considered <!-- optional alias: Alternatives -->
+## Options Considered <!-- optional -->
 
 ### Option 1: Name
 

@@ -1,14 +1,10 @@
 ---
-# @type: value-unit
-# @description: Value Unit (end-to-end delivery)
-id: UV-NNN            # @required @pattern: ^UV-\d{3}$
-kind: value-unit      # @required @literal: value-unit
-title: Unit name              # @required
-status: draft         # @enum: draft|review|approved|deprecated
-owner: Name or role   # @required
-release: REL-NNN      # @optional
-tags:                # @type: array
-  - value-unit
+# @file-pattern: ^UV-\d{3}-.+\.md$
+# @path-pattern: 00-requirements/value-units/
+
+id: UV-NNN                    # @required @pattern: ^UV-\d{3}$
+kind: value-unit              # @required
+status: draft                 # @required @enum: draft|review|approved|deprecated|superseded
 ---
 
 # UV-NNN: Unit name
