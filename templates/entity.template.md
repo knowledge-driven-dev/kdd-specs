@@ -3,7 +3,7 @@
 # @path-pattern: 01-domain/entities/
 
 kind: entity                  # @required @enum: entity|role|system
-aliases: []
+aliases:
   - Alias1
   - Alias2
 ---
