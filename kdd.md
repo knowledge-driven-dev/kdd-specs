@@ -22,12 +22,12 @@
 ├── 01-domain/             # BASE - Domain model (foundation)
 │   ├── entities/          # Entity.md (PascalCase)
 │   ├── events/            # EVT-Entity-Action.md
-│   └── rules/             # BR-*-NNN.md (Business Rules)
+│   └── rules/             # BR-NNN-*.md (Business Rules)
 ├── 02-behavior/           # ORCHESTRATION - How the system behaves
 │   ├── commands/          # CMD-NNN-*.md
 │   ├── queries/           # QRY-NNN-*.md
 │   ├── processes/         # PROC-NNN-*.md
-│   ├── policies/          # BP-*-NNN.md, XP-*-NNN.md (Business & Cross Policies)
+│   ├── policies/          # BP-NNN-*.md, XP-NNN-*.md (Business & Cross Policies)
 │   └── use-cases/         # UC-NNN-*.md
 ├── 03-experience/         # PRESENTATION - How users see it
 │   ├── views/             # UI-*.md
@@ -75,13 +75,13 @@ For large applications with multiple bounded contexts, use the multi-domain stru
 | Release         | REL    | `REL-NNN`               | `REL-NNN-{Name}.md`        | `00-requirements/releases/`    |
 | Entity          | -      | -                       | `PascalCase.md`            | `01-domain/entities/`          |
 | Event           | EVT    | `EVT-{Entity}-{Action}` | `EVT-{Entity}-{Action}.md` | `01-domain/events/`            |
-| Business Rule   | BR     | `BR-{ENTITY}-NNN`       | `BR-{ENTITY}-NNN.md`       | `01-domain/rules/`             |
-| Business Policy | BP     | `BP-{TOPIC}-NNN`        | `BP-{TOPIC}-NNN.md`        | `02-behavior/policies/`        |
+| Business Rule   | BR     | `BR-NNN`                | `BR-NNN-{Name}.md`          | `01-domain/rules/`             |
+| Business Policy | BP     | `BP-NNN`                | `BP-NNN-{Name}.md`          | `02-behavior/policies/`        |
 | Command         | CMD    | `CMD-NNN`               | `CMD-NNN-{Name}.md`        | `02-behavior/commands/`        |
 | Query           | QRY    | `QRY-NNN`               | `QRY-NNN-{Name}.md`        | `02-behavior/queries/`         |
 | Process         | PROC   | `PROC-NNN`              | `PROC-NNN-{Name}.md`       | `02-behavior/processes/`       |
 | Use Case        | UC     | `UC-NNN`                | `UC-NNN-{Name}.md`         | `02-behavior/use-cases/`       |
-| Cross-Policy    | XP     | `XP-{TOPIC}-NNN`        | `XP-{TOPIC}-NNN.md`        | `02-behavior/policies/`        |
+| Cross-Policy    | XP     | `XP-NNN`                | `XP-NNN-{Name}.md`          | `02-behavior/policies/`        |
 | UI View         | UI     | -                       | `UI-{Name}.md`             | `03-experience/views/`         |
 | UI Flow         | -      | -                       | `{FlowName}.md`            | `03-experience/flows/`         |
 | UI Component    | -      | -                       | `{ComponentName}.md`       | `03-experience/components/`    |
@@ -155,7 +155,7 @@ draft → review → approved → deprecated
 | Section headings           | English  | `## Description`, `## Main Flow`        |
 | Template instructions      | English  | `<!-- 1-3 lines: what this view does -->` |
 | Code and examples          | English  | `function placeOrder()`                 |
-| IDs and prefixes           | English  | `CMD-009`, `BR-ORDER-001`               |
+| IDs and prefixes           | English  | `CMD-009`, `BR-001-MinOrderAmount`      |
 | Narrative content (specs)  | Any      | Users write spec content in their language |
 
 > **Note**: Section headings, template instructions, and structural content must be in English. The narrative content that users write inside their specs (descriptions, examples, etc.) can be in any language.
@@ -199,7 +199,7 @@ kind: event              # @required
 
 ```yaml
 ---
-id: BR-ENTITY-NNN       # @required @pattern: ^(BR|BP)-[A-Z]+-\d{3}$
+id: BR-NNN-{Name}       # @required @pattern: ^(BR|BP)-\d{3}$
 kind: business-rule      # @required @enum: business-rule|business-policy
 status: draft            # @required @enum: draft|review|approved|deprecated|superseded
 ---
@@ -209,7 +209,7 @@ status: draft            # @required @enum: draft|review|approved|deprecated|sup
 
 ```yaml
 ---
-id: XP-{TOPIC}-NNN      # @required @pattern: ^XP-[A-Z]+-\d{3}$
+id: XP-NNN-{Name}       # @required @pattern: ^XP-\d{3}$
 kind: cross-policy       # @required
 status: draft            # @required @enum: draft|review|approved|deprecated|superseded
 ---
@@ -464,10 +464,10 @@ status: draft            # @required @enum: draft|review|approved|deprecated|sup
 ```markdown
 [[Order]]                      # Link to entity
 [[Product|products]]           # Link with display alias
-[[BR-ORDER-001]]               # Link to rule
+[[BR-001-MinOrderAmount]]      # Link to rule
 [[CMD-001-PlaceOrder]]         # Link to command
 [[UC-001-PlaceOrder]]          # Link to use case
-[[XP-BILLING-001]]             # Link to cross-policy
+[[XP-001-BillingValidation]]   # Link to cross-policy
 ```
 
 ---

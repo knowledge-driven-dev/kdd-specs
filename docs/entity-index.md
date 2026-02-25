@@ -26,7 +26,7 @@ Markdown document with tables organized by entity type:
 
 - **Domain Entities**: Aggregates, Entities, Value Objects
 - **Events**: System events (EVT-*)
-- **Business Rules**: Process rules (`BR-XXX-NNN`)
+- **Business Rules**: Process rules (`BR-NNN-Name`)
 - **Use Cases**: UC-NNN
 - **Requirements**: Groups (REQ-NNN-*) and individual (REQ-NNN.M)
 - **Processes**: PRC-NNN
@@ -65,14 +65,14 @@ JSON structure for programmatic use:
     },
     {
       "name": "Sequential dependency of order items",
-      "id": "BR-ORDERITEM-003",
-      "aliases": ["BR-ORDERITEM-003"],
+      "id": "BR-009-ItemSequence",
+      "aliases": ["BR-009-ItemSequence"],
       "type": "rule",
       "subtype": "business-rule",
-      "path": "02-domain/rules/BR-ORDERITEM-003.md",
+      "path": "02-domain/rules/BR-009-ItemSequence.md",
       "line": 1,
       "parentId": null,
-      "searchTerms": ["br-orderitem-003", "sequential dependency"]
+      "searchTerms": ["br-009-itemsequence", "sequential dependency"]
     }
   ]
 }
@@ -187,7 +187,7 @@ const matches = indexData.entities.filter(e =>
 | Field | Type | Description |
 |-------|------|-------------|
 | `name` | string | Canonical name (from H1 or filename) |
-| `id` | string? | Unique ID (BR-ORDERITEM-003, REQ-001.1, etc.) |
+| `id` | string? | Unique ID (BR-009-ItemSequence, REQ-001.1, etc.) |
 | `aliases` | string[] | Alternative names from frontmatter |
 | `type` | enum | entity, event, rule, use-case, requirement, process |
 | `subtype` | enum? | individual-rule, individual-requirement |
@@ -201,8 +201,8 @@ const matches = indexData.entities.filter(e =>
 The indexer automatically detects individual rules and requirements within parent files:
 
 ```markdown
-<!-- In BR-ORDERITEM-003.md -->
-## BR-ORDERITEM-003: Sequential dependency
+<!-- In BR-009-ItemSequence.md -->
+## BR-009-ItemSequence: Sequential dependency
 ...
 ```
 

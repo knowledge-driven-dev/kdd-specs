@@ -37,8 +37,8 @@ These are the `.md` documents that exist as independent files in `/specs`.
 |------|----|--------------|-------------|
 | `Entity` | - | `PascalCase.md` | Domain entity |
 | `DomainEvent` | EVT-* | `EVT-{Entity}-{Action}.md` | Domain event |
-| `BusinessRule` | BR-*-NNN | `BR-{ENTITY}-NNN.md` | Business rule |
-| `BusinessPolicy` | BP-*-NNN | `BP-{TOPIC}-NNN.md` | Business policy |
+| `BusinessRule` | BR-NNN | `BR-NNN-{Name}.md` | Business rule |
+| `BusinessPolicy` | BP-NNN | `BP-NNN-{Name}.md` | Business policy |
 
 ### Layer 03-capabilities
 
@@ -353,7 +353,7 @@ Generates node:
 ### From Wiki-Links
 
 ```markdown
-The [[Customer]] places an [[Order]] validating [[BR-ORDER-002]].
+The [[Customer]] places an [[Order]] validating [[BR-002-OrderTitleLength]].
 ```
 
 Generates edges:
@@ -361,7 +361,7 @@ Generates edges:
 [
   { "from": "CMD-001", "to": "Customer", "type": "REFERENCES" },
   { "from": "CMD-001", "to": "Order", "type": "MODIFIES" },
-  { "from": "CMD-001", "to": "BR-ORDER-002", "type": "VALIDATES" }
+  { "from": "CMD-001", "to": "BR-002", "type": "VALIDATES" }
 ]
 ```
 

@@ -224,7 +224,7 @@ Wiki-links now support domain notation with `::` as separator:
 # Explicit reference to another domain
 [[core::Customer]]                # Customer in core domain
 [[billing::Credit]]               # Credit in billing domain
-[[_shared::XP-AUDIT-001]]        # Shared policy
+[[_shared::XP-003-AuditTrail]]   # Shared policy
 ```
 
 ### Resolution Rules
@@ -248,9 +248,9 @@ Elements that apply to ALL domains:
 ```
 _shared/
 ├── policies/
-│   ├── XP-LOGGING-001.md         # Logging policy
-│   ├── XP-AUDIT-001.md           # Audit
-│   └── XP-SECURITY-001.md        # Security
+│   ├── XP-004-RequestLogging.md  # Logging policy
+│   ├── XP-003-AuditTrail.md     # Audit
+│   └── XP-005-SecurityPolicy.md # Security
 ├── glossary.md                    # Universal terms
 ├── domain-map.md                  # Dependency visualization
 └── nfr/                          # Global non-functional requirements

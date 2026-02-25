@@ -74,7 +74,7 @@ The admin controls the process.
 | Requirement | `REQ-NNN` | REQ-001, REQ-015 |
 | Individual Requirement | `REQ-NNN.M` | REQ-001.1, REQ-001.2 |
 | Event | `EVT-Entity-Action` | EVT-Order-Placed |
-| Business Rule | `BR-ENTITY-NNN` | BR-CART-001, BR-ORDER-001 |
+| Business Rule | `BR-NNN` | BR-001, BR-002 |
 | Process | `PRC-NNN` | PRC-001 |
 | ADR | `ADR-NNNN` | ADR-0001 |
 | NFR | `NFR-NNN` | NFR-001 |
@@ -86,7 +86,7 @@ Identifiers are always uppercase and can be linked:
 ```markdown
 # Correct
 This requirement derives from [[UC-001-PlaceOrder]].
-Rule [[BR-CART-001]] applies.
+Rule [[BR-001-CartMaxItems]] applies.
 
 # Incorrect
 This requirement derives from uc-001.

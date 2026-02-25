@@ -37,8 +37,8 @@ State transitions (if applicable):
 
 ## Rules Validated <!-- optional -->
 
-- [[BR-XXX-001]] - Rule description
-- [[BR-YYY-002]] - Another rule
+- [[BR-001-RuleName]] - Rule description
+- [[BR-002-RuleName]] - Another rule
 
 ## Events <!-- optional -->
 

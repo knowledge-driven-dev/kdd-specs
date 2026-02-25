@@ -124,8 +124,8 @@ Creates a new [[Order]] in `draft` state for the current [[Customer]].
 - Event [[EVT-Order-Placed]] emitted
 
 ## Rules Validated
-- [[BR-ORDER-002]]: Title 1-100 characters
-- [[BR-ORDER-005]]: Description required
+- [[BR-002-OrderTitleLength]]: Title 1-100 characters
+- [[BR-011-DescriptionRequired]]: Description required
 
 ## Events
 - [[EVT-Order-Placed]] (always, on success)
@@ -274,7 +274,7 @@ status: approved
 3. The Customer enters the title and description of the Order
 4. The Customer optionally adds additional context
 5. The Customer clicks "Place Order"
-6. The System validates the data ([[BR-ORDER-002]], [[BR-ORDER-005]])
+6. The System validates the data ([[BR-002-OrderTitleLength]], [[BR-011-DescriptionRequired]])
 7. The System creates the [[Order]] with `draft` status
 8. The System emits [[EVT-Order-Placed]]
 9. The System redirects to the [[Product|Products]] configuration
@@ -411,8 +411,8 @@ graph TD
 
 | Type | Prefix | Scope | Description |
 |------|--------|-------|-------------|
-| Business Policy | `BP-{TOPIC}-NNN` | Specific entity | Configurable business policy |
-| Cross-Policy | `XP-{TOPIC}-NNN` | Cross-cutting | Applies to multiple Commands/Queries |
+| Business Policy | `BP-NNN` | Specific entity | Configurable business policy |
+| Cross-Policy | `XP-NNN` | Cross-cutting | Applies to multiple Commands/Queries |
 
 #### Characteristics
 
@@ -424,12 +424,12 @@ graph TD
 
 ```markdown
 ---
-id: XP-AUTH-001
+id: XP-001
 kind: cross-policy
 status: approved
 ---
 
-# XP-AUTH-001: Authentication Required
+# XP-001-AuthRequired: Authentication Required
 
 ## Description
 All Commands and Queries require an authenticated user,
@@ -461,8 +461,8 @@ BEFORE command/query execution:
 #### Naming Conventions for Policies
 
 ```
-BP PATTERN: BP-{TOPIC}-{NNN}  (Business Policy - specific scope)
-XP PATTERN: XP-{TOPIC}-{NNN}  (Cross-Policy - cross-cutting scope)
+BP PATTERN: BP-{NNN}-{Name}  (Business Policy - specific scope)
+XP PATTERN: XP-{NNN}-{Name}  (Cross-Policy - cross-cutting scope)
 
 Common BP Topics:
 - BILLING     → Billing behavior
@@ -477,10 +477,10 @@ Common XP Topics:
 - AUDIT    → Auditing/Logging
 
 Examples:
-- BP-BILLING-001 (Atomic deduction)
-- BP-TIMEOUT-001 (Inactivity 30+15 min)
-- XP-BILLING-001 (Verification in billable commands)
-- XP-AUTH-001 (Authentication required)
+- BP-001-BillingCycle (Atomic deduction)
+- BP-002-SessionTimeout (Inactivity 30+15 min)
+- XP-001-BillingValidation (Verification in billable commands)
+- XP-002-AuthRequired (Authentication required)
 ```
 
 ---
@@ -499,7 +499,7 @@ The Behavior layer:
 │   [[CMD-001-PlaceOrder]]                                                     │
 │     │                                                                        │
 │     ├── references → [[Order]]             (entity)                          │
-│     ├── references → [[BR-ORDER-002]]      (rule)                            │
+│     ├── references → [[BR-002-OrderTitleLength]]  (rule)                     │
 │     ├── references → [[EVT-Order-Placed]]  (event)                           │
 │     │                                                                        │
 │     └── DOES NOT reference → [[UI-OrderEditor]]  ❌                          │
@@ -548,10 +548,10 @@ The Behavior layer:
 │   └── ...
 │
 └── /policies/
-    ├── BP-BILLING-001.md     # Business Policy (specific behavior)
-    ├── BP-TIMEOUT-001.md
-    ├── XP-BILLING-001.md     # Cross-Policy (cross-cutting)
-    └── XP-AUTH-001.md
+    ├── BP-001-BillingCycle.md     # Business Policy (specific behavior)
+    ├── BP-002-SessionTimeout.md
+    ├── XP-001-BillingValidation.md  # Cross-Policy (cross-cutting)
+    └── XP-002-AuthRequired.md
 ```
 
 ---
@@ -595,7 +595,7 @@ The Behavior layer:
 - [ ] Defined timeouts
 
 ### For Policies
-- [ ] ID in `BP-{TOPIC}-NNN` (specific) or `XP-{TOPIC}-NNN` (cross-cutting) format
+- [ ] ID in `BP-NNN` (specific) or `XP-NNN` (cross-cutting) format
 - [ ] Clear application scope (entity or affected commands)
 - [ ] Evaluation logic (WHEN/BEFORE/AFTER)
 - [ ] Configurable parameters

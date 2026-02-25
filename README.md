@@ -44,13 +44,13 @@ See [`structure/layers.md`](structure/layers.md) for full dependency rules and c
 | ADR             | `ADR-NNNN`              | `05-architecture/decisions/`            |
 | Entity          | *(PascalCase)*          | `01-domain/entities/`                   |
 | Event           | `EVT-{Entity}-{Action}` | `01-domain/events/`                     |
-| Business Rule   | `BR-{ENTITY}-NNN`       | `01-domain/rules/`                      |
-| Business Policy | `BP-{TOPIC}-NNN`        | `02-behavior/policies/`                 |
+| Business Rule   | `BR-NNN`                | `01-domain/rules/`                      |
+| Business Policy | `BP-NNN`                | `02-behavior/policies/`                 |
 | Command         | `CMD-NNN`               | `02-behavior/commands/`                 |
 | Query           | `QRY-NNN`               | `02-behavior/queries/`                  |
 | Process         | `PROC-NNN`              | `02-behavior/processes/`                |
 | Use Case        | `UC-NNN`                | `02-behavior/use-cases/`                |
-| Cross-Policy    | `XP-{TOPIC}-NNN`        | `02-behavior/policies/`                 |
+| Cross-Policy    | `XP-NNN`                | `02-behavior/policies/`                 |
 | UI View         | `UI-{Name}`             | `03-experience/views/`                  |
 | UI Flow         | *(custom)*              | `03-experience/flows/`                  |
 | UI Component    | *(custom)*              | `03-experience/components/`             |

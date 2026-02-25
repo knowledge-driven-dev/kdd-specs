@@ -135,7 +135,7 @@ the system SHALL reject new cart creation
   AND SHALL display message "This order already has a cart in progress"
   AND SHALL offer options to continue or cancel the existing cart.
 
-**Traceability**: UC-003-InitiateCart, extension; BR-CART-002
+**Traceability**: UC-003-InitiateCart, extension; BR-008-CartItemLimit
 ```
 
 ---
@@ -214,12 +214,12 @@ UC → REQ → BR (and vice versa)
 
 UC-001-PlaceOrder
 ├── REQ-001.1 Order Creation
-├── REQ-001.2 Title length validation ──────── BR-ORDER-001
-├── REQ-001.3 Title required ──────────────── BR-ORDER-001
-├── REQ-001.4 Active orders limit ────────── BR-ORDER-002
+├── REQ-001.2 Title length validation ──────── BR-001-MinOrderAmount
+├── REQ-001.3 Title required ──────────────── BR-001-MinOrderAmount
+├── REQ-001.4 Active orders limit ────────── BR-003-MaxActiveOrders
 ├── REQ-001.5 Event emission
 ├── REQ-001.6 AI assistance
-└── REQ-001.7 Initial draft status ─────────── BR-ORDER-003
+└── REQ-001.7 Initial draft status ─────────── BR-010-InitialDraftStatus
 ```
 
 #### Uses of the Traceability Matrix
@@ -314,8 +314,8 @@ Requirements derived from use case [[UC-NNN-Name]].
 │      ▼                                                                       │
 │   3. LINK BUSINESS RULES (01-Domain)                                        │
 │      │                                                                       │
-│      │ REQ-001.2 ← BR-ORDER-001 (title 1-100 chars)                         │
-│      │ REQ-001.4 ← BR-ORDER-002 (max 50 active orders)                      │
+│      │ REQ-001.2 ← BR-001-MinOrderAmount (title 1-100 chars)                │
+│      │ REQ-001.4 ← BR-003-MaxActiveOrders (max 50 active orders)            │
 │      │                                                                       │
 │      ▼                                                                       │
 │   4. WRITE GHERKIN CRITERIA                                                 │
@@ -351,7 +351,7 @@ The Verification layer **consumes** all previous layers and **is not consumed** 
 │   01-Domain ────────────────────────────────────────┐    04-Verification    │
 │       │                                             │           │           │
 │       │  "What rule validates this?"                │           │           │
-│       │  → BR-ORDER-002: "Maximum 50 active orders" │           │           │
+│       │  → BR-003-MaxActiveOrders: "Max 50 active" │           │           │
 │       │                                             ▼           │           │
 │   02-Behavior ──────────────────────────┐     Traceability      │           │
 │       │                                 │           │           │           │
@@ -460,7 +460,7 @@ REQ-001.4: Order limit
 
 # ✅ CORRECT
 REQ-001.4: Unfinished Orders Limit (State-Driven)
-**Traceability**: UC-001-PlaceOrder, scenario TC-001.6; BR-ORDER-002
+**Traceability**: UC-001-PlaceOrder, scenario TC-001.6; BR-003-MaxActiveOrders
 ```
 
 ### 4. Requirements Without Criteria

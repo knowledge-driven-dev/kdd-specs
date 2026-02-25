@@ -157,8 +157,8 @@ stateDiagram-v2
 - [[EVT-Order-Started]] when starting the first cart
 
 ## Applicable Rules
-- [[BR-ORDER-002]]: Title of 1-100 characters
-- [[BR-ORDER-004]]: Requires 3-6 Products to be prepared
+- [[BR-002-OrderTitleLength]]: Title of 1-100 characters
+- [[BR-004-OrderModification]]: Requires 3-6 Products to be prepared
 ```
 
 ---
@@ -373,7 +373,7 @@ data:
 
 | Type | Prefix | Description | Location |
 |------|--------|-------------|----------|
-| Business Rule | `BR-{ENTITY}-NNN` | Invariable structural constraint | `01-domain/rules/` |
+| Business Rule | `BR-NNN` | Invariable structural constraint | `01-domain/rules/` |
 
 > **Note**: **Business Policies** (BP-*) and **Cross-Policies** (XP-*) are located in `02-behavior/policies/` because they define conditional behaviors, not structural constraints. See [[02-behavior]].
 
@@ -381,12 +381,12 @@ data:
 
 ```markdown
 ---
-id: BR-ORDER-002
+id: BR-002
 kind: business-rule
 status: approved
 ---
 
-# BR-ORDER-002: Order Title Length
+# BR-002-OrderTitleLength: Order Title Length
 
 ## Declaration
 The title of an [[Order]] must be between 1 and 100 characters.
@@ -465,7 +465,7 @@ The Domain is the **BASE** of the system. It is referenced by the upper layers, 
 │   01-DOMAIN (BASE - does not reference other layers)                         │
 │                                                                              │
 │   [[Order]]                      │                                          │
-│   [[BR-ORDER-002]]               │  ← The domain is PURE                    │
+│   [[BR-002-OrderTitleLength]]    │  ← The domain is PURE                    │
 │   [[EVT-Order-Placed]]           │    It knows nothing of Commands, UI, DB  │
 │                                  │                                          │
 │        ↑ referenced by                                                      │
@@ -474,7 +474,7 @@ The Domain is the **BASE** of the system. It is referenced by the upper layers, 
 │   ───────────────────────────────                                            │
 │   [[CMD-001-PlaceOrder]]                                                     │
 │     - Creates [[Order]]                                                      │
-│     - Validates [[BR-ORDER-002]]                                             │
+│     - Validates [[BR-002-OrderTitleLength]]                                             │
 │     - Emits [[EVT-Order-Placed]]                                             │
 │                                                                              │
 │        ↑ referenced by                                                      │
@@ -518,10 +518,10 @@ The Domain is the **BASE** of the system. It is referenced by the upper layers, 
 │
 └── /rules/
     ├── _index.md             # Index of all rules
-    ├── BR-ORDER-002.md
-    ├── BR-ORDER-004.md
-    ├── BR-PRODUCT-001.md
-    └── BR-CART-001.md
+    ├── BR-002-OrderTitleLength.md
+    ├── BR-004-OrderModification.md
+    ├── BR-005-ProductNameRequired.md
+    └── BR-006-CartMaxItems.md
     # Note: BP-* are in 02-behavior/policies/
 ```
 
@@ -552,7 +552,7 @@ When creating or reviewing domain artifacts:
 - [ ] What entity produces it?
 
 ### For Rules
-- [ ] Is the ID in `BR-{ENTITY}-NNN` or `BP-{TOPIC}-NNN` format?
+- [ ] Is the ID in `BR-NNN` or `BP-NNN` format?
 - [ ] Is the declaration clear and unambiguous?
 - [ ] Is the business justification documented?
 - [ ] Are there examples of valid and invalid cases?
@@ -625,7 +625,7 @@ if (order.title.length > 100) throw new Error('...')
 // No documentation
 
 # CORRECT: Documented rule
-# BR-ORDER-002.md
+# BR-002-OrderTitleLength.md
 The title must be between 1 and 100 characters.
 ```
 

@@ -1,13 +1,13 @@
 ---
-# @file-pattern: ^XP-.+\.md$
+# @file-pattern: ^XP-\d{3}-.+\.md$
 # @path-pattern: 02-behavior/policies/
 
-id: XP-{DOMAIN}-NNN            # @required @pattern: ^XP-[A-Z]+-\d{3}$
+id: XP-NNN-{Name}              # @required @pattern: ^XP-\d{3}$
 kind: cross-policy             # @required
 status: draft                  # @required @enum: draft|review|approved|deprecated|superseded
 ---
 
-# XP-{DOMAIN}-NNN: {Title}
+# XP-NNN-Name: {Title}
 
 ## Purpose <!-- required -->
 

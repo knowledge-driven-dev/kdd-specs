@@ -1,13 +1,13 @@
 ---
-# @file-pattern: ^(BR|BP)-[A-Z]+-\d{3}\.md$
+# @file-pattern: ^(BR|BP)-\d{3}-.+\.md$
 # @path-pattern: 01-domain/rules/
 
-id: BR-ENTITY-NNN             # @required @pattern: ^(BR|BP)-[A-Z]+-\d{3}$
+id: BR-NNN-{Name}             # @required @pattern: ^(BR|BP)-\d{3}$
 kind: business-rule           # @required @enum: business-rule|business-policy
 status: draft                 # @required @enum: draft|review|approved|deprecated|superseded
 ---
 
-# BR-ENTITY-NNN: RuleTitle <!-- required pattern: ^(BR|BP)-[A-Z]+-\d{3}: -->
+# BR-NNN-Name: RuleTitle <!-- required pattern: ^(BR|BP)-\d{3}-[A-Za-z]+: -->
 
 ## Statement <!-- required -->
 

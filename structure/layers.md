@@ -43,7 +43,7 @@ KDD specifications are organized in 6 layers. Each layer has a clear responsibil
 01-domain/
 ├── entities/                 # PascalCase.md (entities, roles, external systems)
 ├── events/                   # EVT-{Entity}-{Action}.md
-└── rules/                    # BR-{ENTITY}-NNN.md (business rules)
+└── rules/                    # BR-NNN-{Name}.md (business rules)
 ```
 
 **Dependency rule**: Should NOT reference higher layers (02, 03, 04).
@@ -59,7 +59,7 @@ KDD specifications are organized in 6 layers. Each layer has a clear responsibil
 ├── commands/                 # CMD-NNN-{Name}.md (state-changing operations)
 ├── queries/                  # QRY-NNN-{Name}.md (read operations)
 ├── processes/                # PROC-NNN-{Name}.md (multi-step workflows)
-├── policies/                 # BP-{TOPIC}-NNN.md, XP-{TOPIC}-NNN.md
+├── policies/                 # BP-NNN-{Name}.md, XP-NNN-{Name}.md
 └── use-cases/                # UC-NNN-{Name}.md (actor↔system interactions)
 ```
 
@@ -175,7 +175,7 @@ For large applications with multiple bounded contexts:
 | Role | `PascalCase.md` | `Admin.md` |
 | External System | `UPPERCASE.md` | `STRIPE.md` |
 | Event | `EVT-{Entity}-{Action}.md` | `EVT-Order-Placed.md` |
-| Business Rule | `BR-{ENTITY}-NNN.md` | `BR-ORDER-001.md` |
+| Business Rule | `BR-NNN-{Name}.md` | `BR-001-MinOrderAmount.md` |
 | Command | `CMD-NNN-{Name}.md` | `CMD-001-PlaceOrder.md` |
 | Query | `QRY-NNN-{Name}.md` | `QRY-001-GetOrder.md` |
 | Process | `PROC-NNN-{Name}.md` | `PROC-001-Onboarding.md` |

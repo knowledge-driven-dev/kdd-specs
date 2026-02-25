@@ -154,17 +154,17 @@ context-map:
 # -----------------------------------------------------------------------------
 # policies:
 #   inherited:
-#     - XP-AUDIT-001
-#     - XP-LOGGING-001
+#     - XP-003-AuditTrail
+#     - XP-004-RequestLogging
 #
 #   local:
-#     - id: XP-${DOMAIN_ID_UPPER}-001
-#       name: "Nombre de la Política"
-#       description: "Descripción de la política local"
+#     - id: XP-001-${Name}
+#       name: "Policy Name"
+#       description: "Local policy description"
 #
 #   excluded:
-#     - id: XP-CACHE-001
-#       reason: "Este dominio requiere datos en tiempo real"
+#     - id: XP-006-CachePolicy
+#       reason: "This domain requires real-time data"
 
 # -----------------------------------------------------------------------------
 # SECCIÓN: technical (opcional)

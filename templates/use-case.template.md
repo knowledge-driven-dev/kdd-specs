@@ -72,5 +72,5 @@ Triggers:
 
 | Rule | Description |
 |------|-------------|
-| [[BR-XXX-001]] | Brief description |
-| [[BR-XXX-002]] | Brief description |
+| [[BR-001-RuleName]] | Brief description |
+| [[BR-002-RuleName]] | Brief description |

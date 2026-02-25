@@ -404,7 +404,7 @@ When you create a new View specification, make sure to include:
 // ❌ INCORRECT: Business rule in the component
 function OrderEditor() {
   const canSave = order.products.length >= 3 && order.products.length <= 6
-  // This rule should be in BR-PRODUCT-001 (01-domain)
+  // This rule should be in BR-005-ProductNameRequired (01-domain)
 }
 
 // ✅ CORRECT: The UI only presents the result

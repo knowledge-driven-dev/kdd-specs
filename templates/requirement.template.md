@@ -72,4 +72,4 @@ Then <system response>
 | Requirement | UC Step | Business Rule | Test Case |
 |-------------|---------|---------------|-----------|
 | REQ-NNN.1 | 1-5 | - | TC-NNN.1 |
-| REQ-NNN.2 | Ext Xa | BR-XXX-001 | TC-NNN.2 |
+| REQ-NNN.2 | Ext Xa | BR-001-RuleName | TC-NNN.2 |

@@ -43,9 +43,9 @@ flowchart TD
 
 | # | Step | Actor | Input | Output | Rules |
 |---|------|-------|-------|--------|-------|
-| 1 | Description | User | Initial data | Result | [[BR-XXX-001]] |
+| 1 | Description | User | Initial data | Result | [[BR-001-RuleName]] |
 | 2 | Next step | System | Previous result | New state | - |
-| 3 | Decision | User | Current state | Chosen option | [[BR-XXX-002]] |
+| 3 | Decision | User | Current state | Chosen option | [[BR-002-RuleName]] |
 
 ## Related Use Cases <!-- optional -->
 
