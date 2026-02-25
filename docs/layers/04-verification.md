@@ -29,7 +29,8 @@ This layer is not an appendix or a "nice to have." It is the culmination of all 
 │                        Formal requirements (EARS)                            │
 │                        Acceptance criteria (Gherkin)                         │
 │                        Complete traceability                                 │
-│                        Implementation schemas                                │
+│                                                                              │
+│   05-Architecture (ORTHOGONAL — ADRs, Implementation Charter)                │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -233,34 +234,11 @@ UC-001-PlaceOrder
 
 ---
 
-### 4. Implementation Schemas
+### 4. Implementation Mapping
 
-The verification layer includes **implementation hints** that translate requirements into code:
+Implementation details (code patterns, schemas, validation libraries) belong in `05-architecture/charter.md`, section "KDD Artifact → Code Mapping". The verification layer stays **technology-agnostic** — it defines WHAT to verify, not HOW to implement it.
 
-```typescript
-// packages/shared/validators/order.ts
-import { z } from 'zod'
-
-export const createOrderSchema = z.object({
-  title: z
-    .string()
-    .min(1, 'Enter a title for your order')              // REQ-001.3
-    .max(100, 'Title cannot exceed 100 characters')       // REQ-001.2
-    .transform(s => s.trim()),
-  description: z
-    .string()
-    .max(2000, 'Description cannot exceed 2000 characters')
-    .optional(),
-  context: z
-    .string()
-    .max(5000, 'Context cannot exceed 5000 characters')
-    .optional(),
-})
-
-export type CreateOrderInput = z.infer<typeof createOrderSchema>
-```
-
-Note that the comments reference the specific EARS requirements.
+When implementing, reference EARS requirements in code comments (e.g., `// REQ-001.2`) to maintain traceability.
 
 ---
 
@@ -271,10 +249,9 @@ Note that the comments reference the specific EARS requirements.
 ```yaml
 ---
 id: REQ-001
-kind: requirements
+kind: requirement
 status: draft
-source: UC-001-PlaceOrder   # Use case it derives from
-domain: store
+source: UC-001             # Use case it derives from
 ---
 ```
 
@@ -312,9 +289,9 @@ Requirements derived from use case [[UC-NNN-Name]].
 | Requirement | UC Step | Business Rule | Test Case |
 |-------------|---------|---------------|-----------|
 
-## Zod Schema (Implementation)
+## Traceability Matrix
 
-[TypeScript code]
+[UC → BR → Test Case links]
 ```
 
 ---
@@ -553,7 +530,7 @@ The Verification layer in KDD:
 3. **Includes Gherkin**: Executable acceptance criteria
 4. **Maintains traceability**: Complete UC → REQ → BR chain
 5. **Enables automation**: Criteria become tests
-6. **Documents hints**: Implementation schemas for developers
+6. **Is technology-agnostic**: Implementation details belong in 05-architecture
 
 > **"A system without specified verification is a system that only works by accident. KDD ensures it works by design."**
 

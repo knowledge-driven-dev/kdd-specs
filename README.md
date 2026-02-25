@@ -15,17 +15,19 @@
 
 ---
 
-## The 5 Layers
+## The 6 Layers
 
-KDD organizes specifications into 5 layers, each with a clear purpose:
+KDD organizes specifications into 6 layers, each with a clear purpose:
 
 ```
 /specs
-├── 00-requirements/   # WHY — Business context, objectives, ADRs, value units, releases
-├── 01-domain/         # WHAT EXISTS — Entities, events, business rules
-├── 02-behavior/       # HOW IT WORKS — Commands, queries, use-cases, processes, policies
-├── 03-experience/     # HOW USERS SEE IT — UI views, flows, components
-└── 04-verification/   # HOW WE TEST IT — Requirements, BDD scenarios, contracts
+├── _kdd.yaml              # Meta: KDD version
+├── 00-requirements/       # WHY — Business context, objectives, value units, releases
+├── 01-domain/             # WHAT EXISTS — Entities, events, business rules
+├── 02-behavior/           # HOW IT WORKS — Commands, queries, use-cases, processes, policies
+├── 03-experience/         # HOW USERS SEE IT — UI views, flows, components
+├── 04-verification/       # HOW WE TEST IT — Requirements, BDD scenarios
+└── 05-architecture/       # HOW WE BUILD IT — ADRs, implementation charter (orthogonal)
 ```
 
 See [`structure/layers.md`](structure/layers.md) for full dependency rules and conventions.
@@ -39,7 +41,7 @@ See [`structure/layers.md`](structure/layers.md) for full dependency rules and c
 | Objective       | `OBJ-NNN`               | `00-requirements/objectives/`           |
 | Value Unit      | `UV-NNN`                | `00-requirements/value-units/`          |
 | Release         | `REL-NNN`               | `00-requirements/releases/`             |
-| ADR             | `ADR-NNNN`              | `00-requirements/decisions/`            |
+| ADR             | `ADR-NNNN`              | `05-architecture/decisions/`            |
 | Entity          | *(PascalCase)*          | `01-domain/entities/`                   |
 | Event           | `EVT-{Entity}-{Action}` | `01-domain/events/`                     |
 | Business Rule   | `BR-{ENTITY}-NNN`       | `01-domain/rules/`                      |
@@ -50,7 +52,11 @@ See [`structure/layers.md`](structure/layers.md) for full dependency rules and c
 | Use Case        | `UC-NNN`                | `02-behavior/use-cases/`                |
 | Cross-Policy    | `XP-{TOPIC}-NNN`        | `02-behavior/policies/`                 |
 | UI View         | `UI-{Name}`             | `03-experience/views/`                  |
+| UI Flow         | *(custom)*              | `03-experience/flows/`                  |
+| UI Component    | *(custom)*              | `03-experience/components/`             |
 | Requirement     | `REQ-NNN`               | `04-verification/criteria/`             |
+| NFR             | `NFR-{Name}`            | `00-requirements/`                      |
+| Impl Charter    | `ARCH-CHARTER-*`        | `05-architecture/`                      |
 
 ---
 
@@ -74,6 +80,10 @@ All templates are in [`templates/`](templates/):
 | `adr.template.md` | Architecture Decision Record |
 | `requirement.template.md` | Functional requirements (REQ) |
 | `nfr.template.md` | Non-functional requirements |
+| `cross-policy.template.md` | Cross-cutting policies (XP) |
+| `value-unit.template.md` | Value Units |
+| `release.template.md` | Release plans |
+| `implementation-charter.template.md` | Tech stack and implementation guidelines |
 
 ---
 

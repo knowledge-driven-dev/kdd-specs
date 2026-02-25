@@ -15,17 +15,17 @@ Here we apply the principles of **Domain-Driven Design (DDD)** to model the doma
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                              │
-│   00-Requirements  →  01-Domain   →  02-Behavior     →  03-Experience       │
-│                                                                              │
-│   "Why does           "WHAT           "What can          "How do they        │
-│    it exist?"         EXISTS?"         it do?"            see it?"           │
+│   00-Requirements  →  01-Domain   →  02-Behavior  →  03-Experience          │
+│                                          ↓                                   │
+│   "Why does           "WHAT          04-Verification   05-Architecture      │
+│    it exist?"         EXISTS?"                                               │
 │                                                                              │
 │   ──────────────────────────────────────────────────────────────────────────│
 │                                                                              │
-│   Motivation          CONCEPTUAL      Functional         Experiential       │
-│   Context             ENTITIES        (operations)       (views)            │
-│   Objectives          RULES                                                  │
-│                       EVENTS                                                 │
+│   Motivation          CONCEPTUAL      Functional       Experiential         │
+│   Context             ENTITIES        (operations)     (views)              │
+│   Objectives          RULES           (use cases)      Validation           │
+│                       EVENTS          (processes)      Architecture         │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -329,11 +329,7 @@ Examples: `EVT-Order-Placed`, `EVT-Cart-Completed`, `EVT-CartItem-Started`
 
 ```markdown
 ---
-id: EVT-Order-Placed
 kind: event
-title: Order Placed
-producer: Order
-status: approved
 ---
 
 # EVT-Order-Placed
@@ -387,10 +383,7 @@ data:
 ---
 id: BR-ORDER-002
 kind: business-rule
-title: Title Length
 status: approved
-priority: high
-entity: Order
 ---
 
 # BR-ORDER-002: Order Title Length

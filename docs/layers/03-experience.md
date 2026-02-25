@@ -15,16 +15,18 @@ In the previous layers we defined the domain (01-Domain) and the available opera
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                              │
-│   00-Requirements  →  01-Domain   →  02-Behavior     →  03-Experience       │
-│                                                                              │
-│   "Why does            "What           "How does           "HOW DO           │
-│    it exist?"          exists?"         it behave?"         USERS SEE IT?"  │
+│   00-Requirements  →  01-Domain   →  02-Behavior  →  03-Experience          │
+│                                          ↓                                   │
+│   "Why does            "What          04-Verification   05-Architecture     │
+│    it exist?"          exists?"       "HOW DO USERS SEE IT?"                │
 │                                                                              │
 │   ──────────────────────────────────────────────────────────────────────────│
 │                                                                              │
-│   Motivation          Conceptual      Functional          PRESENTATION      │
-│   Context             (entities)      (operations)        (views)           │
-│   Objectives          (rules)         (use cases)                           │
+│   Motivation          Conceptual      Functional       PRESENTATION         │
+│   Context             (entities)      (operations)     (views, flows,       │
+│   Objectives          (rules)         (use cases)       components)         │
+│                                                        Validation           │
+│                                                        Architecture         │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -92,10 +94,7 @@ Views are **visual interface specifications** that implement the Use Cases defin
 
 ```markdown
 ---
-id: UI-OrderEditor
-kind: view
-title: Order Editor
-route: /orders/:id/edit
+kind: ui-view
 status: approved
 ---
 
@@ -351,14 +350,7 @@ NAVIGATES TO: Route/page change (replaces the current view)
 
 View specifications are designed to generate Storybook stories:
 
-```yaml
-# In the front-matter of a View
-storybook:
-  category: "Views"
-  auto-generate: true
-```
-
-Each documented **state** becomes a story:
+Each documented **state** can become a Storybook story:
 
 | State in Spec | Generated Story |
 |---------------|-----------------|

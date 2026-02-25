@@ -15,16 +15,17 @@ Here we do not talk about code, nor technology, nor even software. We talk about
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                              │
-│   00-Requirements  →  01-Domain  →  02-Behavior     →  03-Experience        │
-│                                                                              │
-│   "WHY DOES          "What          "What can          "How do they          │
-│    IT EXIST?"         exists?"       it do?"            see it?"             │
+│   00-Requirements  →  01-Domain  →  02-Behavior  →  03-Experience           │
+│                                          ↓                                   │
+│   "WHY DOES          "What          04-Verification   05-Architecture       │
+│    IT EXIST?"         exists?"                                               │
 │                                                                              │
 │   ──────────────────────────────────────────────────────────────────────────│
 │                                                                              │
-│   MOTIVATION          Conceptual     Functional         Experiential        │
-│   CONTEXT             (entities)     (operations)       (views)             │
-│   OBJECTIVES                                                                 │
+│   MOTIVATION          Conceptual     Functional       Experiential          │
+│   CONTEXT             (entities)     (operations)     (views)               │
+│   OBJECTIVES          (rules)        (use cases)      Validation            │
+│                       (events)       (processes)      Architecture          │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -181,8 +182,6 @@ Objectives capture the high-level goals of system actors in User Story format.
 ---
 id: OBJ-NNN
 kind: objective
-title: ObjectiveName
-actor: ActorName
 status: draft
 ---
 ```
@@ -216,9 +215,7 @@ Value Units describe an **end-to-end delivery** that can be used by the user and
 ---
 id: UV-NNN
 kind: value-unit
-title: Unit name
 status: draft
-owner: PM/Lead
 ---
 ```
 
@@ -254,10 +251,7 @@ Release Plans group Value Units into deliveries (MVP, v1, v1.1) with objectives,
 ---
 id: REL-NNN
 kind: release
-title: Release name
 status: draft
-owner: PM/Lead
-target_date: 2025-03-31
 ---
 ```
 
@@ -285,8 +279,6 @@ Validate Order creation and Product configuration.
 ---
 id: OBJ-001
 kind: objective
-title: Browse and purchase products efficiently
-actor: Customer
 status: approved
 ---
 
@@ -341,7 +333,7 @@ How do we generate revenue? What is the cost structure?
 
 ### 4. ADRs (Architecture Decision Records)
 
-ADRs document important decisions and their justification. In this layer, **business or strategy** decisions are documented. Purely technical decisions go in `05-architecture`.
+ADRs document important decisions and their justification. All ADRs live in `05-architecture/decisions/`. Business/strategy ADRs and purely technical ADRs coexist in the same location.
 
 #### Structure of an ADR
 
@@ -349,10 +341,9 @@ ADRs document important decisions and their justification. In this layer, **busi
 ---
 id: ADR-NNNN
 kind: adr
-title: Decision Title
-status: accepted  # proposed | accepted | deprecated | superseded
-date: 2024-01-15
-deciders: ["@juan", "@maria"]
+status: draft            # draft|review|approved|deprecated|superseded
+supersedes: []
+superseded_by:
 ---
 ```
 
@@ -362,10 +353,7 @@ deciders: ["@juan", "@maria"]
 ---
 id: ADR-0001
 kind: adr
-title: Credit-based monetization model
-status: accepted
-date: 2024-01-15
-deciders: ["@product", "@founder"]
+status: approved
 ---
 
 # ADR-0001: Credit-based monetization model
@@ -459,14 +447,16 @@ The Requirements layer is the **INPUT** that feeds into design. It sits **outsid
 │   │  04-Verification   (tests, criteria)                                │   │
 │   │      ↓ references                                                   │   │
 │   ├─────────────────────────────────────────────────────────────────────┤   │
-│   │  03-Experience     (views)                                          │   │
+│   │  03-Experience     (views, flows, components)                       │   │
 │   │      ↓ references                                                   │   │
 │   ├─────────────────────────────────────────────────────────────────────┤   │
-│   │  02-Behavior       (UC, CMD, QRY, XP)                               │   │
+│   │  02-Behavior       (UC, CMD, QRY, XP, processes)                    │   │
 │   │      ↓ references                                                   │   │
 │   ├─────────────────────────────────────────────────────────────────────┤   │
-│   │  01-Domain         (entities, rules)   ← BASE                       │   │
+│   │  01-Domain         (entities, events, rules)   ← BASE               │   │
 │   └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                              │
+│   05-Architecture (ORTHOGONAL - ADRs, Implementation Charter)                │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -482,10 +472,13 @@ The Requirements layer is the **INPUT** that feeds into design. It sits **outsid
 ├── /objectives/
 │   ├── OBJ-001-StructuredAnalysis.md
 │   └── OBJ-002-ProductRecommendations.md
-└── /decisions/
-    ├── ADR-0001-CreditModel.md
-    └── ADR-0002-GTMStrategy.md
+├── /value-units/
+│   └── UV-001-PlaceOrder.md
+└── /releases/
+    └── REL-001-MVP.md
 ```
+
+> **Note**: ADRs are in `05-architecture/decisions/`, not in this layer.
 
 ---
 
@@ -500,7 +493,7 @@ Before moving on to other layers, make sure you have:
 - [ ] **Clear boundaries**: What is this product NOT?
 - [ ] **Constraints**: What limitations do we have?
 - [ ] **Objectives (OBJ)**: What do users want to achieve?
-- [ ] **Initial ADRs**: What business decisions have we made?
+- [ ] **Initial ADRs**: What business decisions have we made? (recorded in `05-architecture/decisions/`)
 
 ---
 

@@ -15,17 +15,17 @@ Here we define the **possible operations** on the domain and the **interaction f
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                              │
-│   00-Requirements  →  01-Domain   →  02-Behavior    →  03-Experience        │
-│                                                                              │
-│   "Why does            "What           "HOW DOES           "How do           │
-│    it exist?"          exists?"         IT BEHAVE?"         users see it?"   │
+│   00-Requirements  →  01-Domain   →  02-Behavior  →  03-Experience          │
+│                                          ↓                                   │
+│   "Why does            "What          04-Verification   05-Architecture     │
+│    it exist?"          exists?"       "HOW DOES IT BEHAVE?"                 │
 │                                                                              │
 │   ──────────────────────────────────────────────────────────────────────────│
 │                                                                              │
-│   Motivation          Conceptual      FUNCTIONAL          Experiential       │
-│   Context             (entities)      COMMANDS            (views)            │
-│   Objectives          (rules)         QUERIES                                │
-│                                       PROCESSES                              │
+│   Motivation          Conceptual      FUNCTIONAL       Experiential         │
+│   Context             (entities)      COMMANDS         (views)              │
+│   Objectives          (rules)         QUERIES          Validation           │
+│                                       PROCESSES        Architecture         │
 │                                       USE CASES                              │
 │                                       POLICIES                               │
 │                                                                              │
@@ -93,9 +93,8 @@ Operations that **modify the state** of the system.
 
 ```markdown
 ---
-id: CMD-001-PlaceOrder
+id: CMD-001
 kind: command
-title: Place Order
 status: approved
 ---
 
@@ -124,11 +123,11 @@ Creates a new [[Order]] in `draft` state for the current [[Customer]].
   - createdAt = current timestamp
 - Event [[EVT-Order-Placed]] emitted
 
-## Validated Rules
+## Rules Validated
 - [[BR-ORDER-002]]: Title 1-100 characters
 - [[BR-ORDER-005]]: Description required
 
-## Generated Events
+## Events
 - [[EVT-Order-Placed]] (always, on success)
 
 ## Possible Errors
@@ -138,15 +137,6 @@ Creates a new [[Order]] in `draft` state for the current [[Customer]].
 | ORDER-002 | Title > 100 chars | "Title cannot exceed 100 characters" |
 | ORDER-003 | Empty description | "Description is required" |
 | AUTH-001 | Not authenticated | "You must log in" |
-
-## Output
-```typescript
-interface PlaceOrderOutput {
-  orderId: string      // UUID of the created order
-  status: 'draft'      // Initial status
-  createdAt: string    // ISO 8601
-}
-```
 ```
 
 #### Naming Conventions for Commands
@@ -189,9 +179,8 @@ Operations that **read state** without modifying it.
 
 ```markdown
 ---
-id: QRY-002-ListOrders
+id: QRY-002
 kind: query
-title: List Orders
 status: approved
 ---
 
@@ -211,15 +200,14 @@ with filters and pagination.
 | offset | number | No | 0 | For pagination |
 
 ## Output
-```typescript
-interface ListOrdersOutput {
-  items: OrderSummary[]
-  total: number
-  limit: number
-  offset: number
-  hasMore: boolean
-}
-```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| items | OrderSummary[] | List of order summaries |
+| total | number | Total matching results |
+| limit | number | Page size |
+| offset | number | Current offset |
+| hasMore | boolean | Whether more results exist |
 
 ## Special Cases
 | Case | Result |
@@ -264,10 +252,8 @@ Examples:
 
 ```markdown
 ---
-id: UC-001-PlaceOrder
+id: UC-001
 kind: use-case
-title: Place Order
-actor: Customer
 status: approved
 ---
 
@@ -354,10 +340,8 @@ Examples:
 
 ```markdown
 ---
-id: PROC-001-StartCart
+id: PROC-001
 kind: process
-title: Start Cart
-trigger: EVT-Cart-Initiated
 status: approved
 ---
 
@@ -442,8 +426,6 @@ graph TD
 ---
 id: XP-AUTH-001
 kind: cross-policy
-title: Authentication Required
-scope: [CMD-*, QRY-*]
 status: approved
 ---
 

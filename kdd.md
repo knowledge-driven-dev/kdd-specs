@@ -13,12 +13,12 @@
 
 ```
 /specs
+├── _kdd.yaml              # Meta: KDD version (currently "2.0")
 ├── 00-requirements/       # INPUT - Business context (feeds design)
 │   ├── PRD.md
 │   ├── objectives/        # OBJ-NNN-*.md (High-level User Stories)
 │   ├── value-units/       # UV-NNN-*.md (Value Units)
-│   ├── releases/          # REL-NNN-*.md (Release plans)
-│   └── decisions/         # ADR-NNN-*.md
+│   └── releases/          # REL-NNN-*.md (Release plans)
 ├── 01-domain/             # BASE - Domain model (foundation)
 │   ├── entities/          # Entity.md (PascalCase)
 │   ├── events/            # EVT-Entity-Action.md
@@ -30,14 +30,16 @@
 │   ├── policies/          # BP-*-NNN.md, XP-*-NNN.md (Business & Cross Policies)
 │   └── use-cases/         # UC-NNN-*.md
 ├── 03-experience/         # PRESENTATION - How users see it
-│   └── views/             # UI-*.md
-└── 04-verification/       # VALIDATION - How we test it
-    ├── criteria/          # REQ-NNN-*.md
-    └── examples/          # *.feature (BDD)
+│   ├── views/             # UI-*.md
+│   ├── flows/             # Navigation flows
+│   └── components/        # Reusable UI components
+├── 04-verification/       # VALIDATION - How we test it
+│   ├── criteria/          # REQ-NNN-*.md
+│   └── examples/          # *.feature (BDD)
+└── 05-architecture/       # TECHNICAL - How we build it (orthogonal)
+    ├── decisions/         # ADR-NNNN-*.md
+    └── charter.md         # Implementation Charter
 ```
-
-> **Note**: Architecture decisions (ADRs) live in `00-requirements/decisions/`, not in a separate `05-architecture/` layer.
-
 
 ### Multi-Domain Structure (Optional)
 
@@ -71,7 +73,6 @@ For large applications with multiple bounded contexts, use the multi-domain stru
 | Objective       | OBJ    | `OBJ-NNN`               | `OBJ-NNN-{Name}.md`        | `00-requirements/objectives/`  |
 | Value Unit      | UV     | `UV-NNN`                | `UV-NNN-{Name}.md`         | `00-requirements/value-units/` |
 | Release         | REL    | `REL-NNN`               | `REL-NNN-{Name}.md`        | `00-requirements/releases/`    |
-| ADR             | ADR    | `ADR-NNNN`              | `ADR-NNNN-{Title}.md`      | `00-requirements/decisions/`   |
 | Entity          | -      | -                       | `PascalCase.md`            | `01-domain/entities/`          |
 | Event           | EVT    | `EVT-{Entity}-{Action}` | `EVT-{Entity}-{Action}.md` | `01-domain/events/`            |
 | Business Rule   | BR     | `BR-{ENTITY}-NNN`       | `BR-{ENTITY}-NNN.md`       | `01-domain/rules/`             |
@@ -82,7 +83,12 @@ For large applications with multiple bounded contexts, use the multi-domain stru
 | Use Case        | UC     | `UC-NNN`                | `UC-NNN-{Name}.md`         | `02-behavior/use-cases/`       |
 | Cross-Policy    | XP     | `XP-{TOPIC}-NNN`        | `XP-{TOPIC}-NNN.md`        | `02-behavior/policies/`        |
 | UI View         | UI     | -                       | `UI-{Name}.md`             | `03-experience/views/`         |
+| UI Flow         | -      | -                       | `{FlowName}.md`            | `03-experience/flows/`         |
+| UI Component    | -      | -                       | `{ComponentName}.md`       | `03-experience/components/`    |
 | Requirement     | REQ    | `REQ-NNN`               | `REQ-NNN-{Name}.md`        | `04-verification/criteria/`    |
+| NFR             | NFR    | `NFR-{Name}`            | `NFR-{Name}.md`            | `00-requirements/`             |
+| ADR             | ADR    | `ADR-NNNN`              | `ADR-NNNN-{Title}.md`      | `05-architecture/decisions/`   |
+| Impl Charter    | -      | `ARCH-CHARTER-*`        | `charter.md`               | `05-architecture/`             |
 
 ---
 
@@ -90,7 +96,7 @@ For large applications with multiple bounded contexts, use the multi-domain stru
 
 ```
 ┌───────────────────────────────────────────────────────────────┐
-│  00-requirements   (PRD, objectives, ADRs)                    │
+│  00-requirements   (PRD, objectives, value-units, releases)   │
 │  INPUT: Feeds design. May mention domain concepts for          │
 │  context. Not part of the layer dependency flow.               │
 └───────────────────────────────────────────────────────────────┘
@@ -99,19 +105,27 @@ For large applications with multiple bounded contexts, use the multi-domain stru
 │  04-verification   (tests, criteria)                          │
 │      ↓ references                                             │
 ├───────────────────────────────────────────────────────────────┤
-│  03-experience     (views)                                    │
+│  03-experience     (views, flows, components)                 │
 │      ↓ references                                             │
 ├───────────────────────────────────────────────────────────────┤
-│  02-behavior       (UC, CMD, QRY, XP)                         │
+│  02-behavior       (UC, CMD, QRY, XP, processes)              │
 │      ↓ references                                             │
 ├───────────────────────────────────────────────────────────────┤
-│  01-domain         (entities, rules)   ← BASE                 │
+│  01-domain         (entities, events, rules)   ← BASE         │
+└───────────────────────────────────────────────────────────────┘
+
+┌───────────────────────────────────────────────────────────────┐
+│  05-architecture   (ADR, Implementation Charter)              │
+│  ORTHOGONAL: Records technical decisions and implementation   │
+│  guidelines. Does not participate in the 01→04 chain.         │
 └───────────────────────────────────────────────────────────────┘
 ```
 
 **Rule**: Higher layers (04→03→02→01) CAN reference lower layers. Lower layers SHOULD NOT reference higher layers.
 
 > **00-requirements** is outside the dependency flow. It is the input that feeds design, so it can naturally mention domain concepts without violating the layer rule.
+
+> **05-architecture** is orthogonal. It records HOW we build (technology, patterns, conventions) but does not participate in the WHAT chain (01→04). Implementation hints from other artifacts belong here, in the charter's "KDD Artifact → Code Mapping" section.
 
 ---
 
@@ -121,6 +135,7 @@ All artifacts use the same cycle:
 
 ```
 draft → review → approved → deprecated
+                         ↘ superseded
 ```
 
 | Status | Meaning |
@@ -129,8 +144,7 @@ draft → review → approved → deprecated
 | `review` | Pending approval |
 | `approved` | Official source of truth |
 | `deprecated` | Obsolete, should link to replacement |
-
-> **Note**: Do not use `proposed`. Use `review` for artifacts pending approval.
+| `superseded` | Replaced by another version (used by ADRs, Charters) |
 
 ---
 
@@ -150,55 +164,44 @@ draft → review → approved → deprecated
 
 ## Front-Matter by Type
 
-> **Note**: The `kind` attribute indicates the KDD artifact type. `tags` are optional and used for additional categorization (not for indicating the type).
+All artifacts share a **universal base** of 3 attributes:
+
+```yaml
+id: TYPE-NNN     # @required (except entity, which uses filename)
+kind: <type>     # @required
+status: draft    # @required @enum: draft|review|approved|deprecated|superseded
+```
+
+Only type-specific extras are added where strictly necessary. No other attributes (`title`, `owner`, `tags`, `version`, `domain`, `created`, `author`, `billable`, etc.) belong in front-matter.
 
 ### Entity
 
 ```yaml
 ---
-id: "{EntityName}"       # Optional, defaults to filename
-kind: entity             # Required
-aliases: []              # Optional alternative names
-status: draft            # draft|review|approved|deprecated
+kind: entity             # @required @enum: entity|role|system
+aliases: []              # Alternative names for search/indexing
 ---
 ```
+
+> Entity uses filename as identity (PascalCase.md). No `id` field.
 
 ### Event (EVT)
 
 ```yaml
 ---
-id: EVT-{Entity}-{Action}  # Required, must match filename
-kind: event                # Required
-title: "{Entity} {Action}" # Required
-status: draft
+kind: event              # @required
 ---
 ```
 
-### Business Rule (BR)
+> Event uses title as identity (EVT-Entity-Action). No `id` field.
+
+### Business Rule (BR) / Business Policy (BP)
 
 ```yaml
 ---
-id: BR-{ENTITY}-NNN      # Required, e.g., BR-CART-001
-kind: business-rule      # Required
-title: RuleName          # Required
-entity: EntityName       # Required: primary affected entity
-category: validation     # validation|state|limit|security
-severity: medium         # low|medium|high|critical
-status: draft
----
-```
-
-### Business Policy (BP)
-
-```yaml
----
-id: BP-{TOPIC}-NNN       # Required, e.g., BP-BILLING-001
-kind: business-policy    # Required
-title: PolicyName        # Required
-entity: EntityName       # Optional: primary affected entity
-category: business       # business|compliance|limit
-severity: medium         # low|medium|high|critical
-status: draft
+id: BR-ENTITY-NNN       # @required @pattern: ^(BR|BP)-[A-Z]+-\d{3}$
+kind: business-rule      # @required @enum: business-rule|business-policy
+status: draft            # @required @enum: draft|review|approved|deprecated|superseded
 ---
 ```
 
@@ -206,10 +209,9 @@ status: draft
 
 ```yaml
 ---
-id: XP-{TOPIC}-NNN       # Required, e.g., XP-BILLING-001
-kind: cross-policy       # Required
-title: PolicyName        # Required
-status: draft
+id: XP-{TOPIC}-NNN      # @required @pattern: ^XP-[A-Z]+-\d{3}$
+kind: cross-policy       # @required
+status: draft            # @required @enum: draft|review|approved|deprecated|superseded
 ---
 ```
 
@@ -217,13 +219,9 @@ status: draft
 
 ```yaml
 ---
-id: CMD-NNN              # Required, pattern: ^CMD-\d{3}$
-kind: command            # Required
-title: CommandName       # Required
-status: draft
-billable: false          # Optional: if true, applies XP-BILLING-001
-credit-cost: 0           # Optional: credits consumed (requires billable: true)
-tags: [core, destructive] # Optional: categorization tags
+id: CMD-NNN              # @required @pattern: ^CMD-\d{3}$
+kind: command            # @required
+status: draft            # @required @enum: draft|review|approved|deprecated|superseded
 ---
 ```
 
@@ -231,10 +229,9 @@ tags: [core, destructive] # Optional: categorization tags
 
 ```yaml
 ---
-id: QRY-NNN              # Required, pattern: ^QRY-\d{3}$
-kind: query              # Required
-title: QueryName         # Required
-status: draft
+id: QRY-NNN              # @required @pattern: ^QRY-\d{3}$
+kind: query              # @required
+status: draft            # @required @enum: draft|review|approved|deprecated|superseded
 ---
 ```
 
@@ -242,65 +239,9 @@ status: draft
 
 ```yaml
 ---
-id: UC-NNN               # Required, pattern: ^UC-\d{3}$
-kind: use-case           # Required
-title: UseCaseName       # Required
-version: 1               # Number, default: 1
-status: draft            # draft|review|approved|deprecated
-actor: ActorName         # Required
----
-```
-
-### UI View
-
-```yaml
----
-id: UI-{Name}            # Optional, defaults to filename
-kind: ui-view            # Required
-title: ViewName          # Required
-status: draft
-links:
-  use-cases: []          # UCs this view triggers
-  components: []         # UI components used
----
-```
-
-### UI Component
-
-```yaml
----
-id: UI-{Name}            # Optional, defaults to filename
-kind: ui-component       # Required
-title: ComponentName     # Required
-status: draft
-links:
-  entities: []           # Domain entities used
-  use-cases: []          # UCs this component supports
----
-```
-
-### Requirement (REQ)
-
-```yaml
----
-id: REQ-NNN              # Required, pattern: ^REQ-\d{3}$
-kind: requirement        # Required
-title: RequirementName   # Required
-status: draft
-priority: medium         # low|medium|high|critical
-source: PRD              # Where this requirement comes from
----
-```
-
-### Objective (OBJ)
-
-```yaml
----
-id: OBJ-NNN              # Required, pattern: ^OBJ-\d{3}$
-kind: objective          # Required
-title: ObjectiveName     # Required
-actor: ActorName         # Required
-status: draft
+id: UC-NNN               # @required @pattern: ^UC-\d{3}$
+kind: use-case           # @required
+status: draft            # @required @enum: draft|review|approved|deprecated|superseded
 ---
 ```
 
@@ -308,10 +249,102 @@ status: draft
 
 ```yaml
 ---
-id: PROC-NNN             # Required, pattern: ^PROC-\d{3}$
-kind: process            # Required
-title: ProcessName       # Required
-status: draft
+id: PROC-NNN             # @required @pattern: ^PROC-\d{3}$
+kind: process            # @required
+status: draft            # @required @enum: draft|review|approved|deprecated|superseded
+---
+```
+
+### UI View / UI Component / UI Flow
+
+```yaml
+---
+kind: ui-view            # @required (or ui-component, ui-flow)
+status: draft            # @required @enum: draft|review|approved|deprecated|superseded
+---
+```
+
+### PRD
+
+```yaml
+---
+id: PRD-Name             # @required @pattern: ^PRD-.+
+kind: prd                # @required
+status: draft            # @required @enum: draft|review|approved|deprecated|superseded
+---
+```
+
+### NFR
+
+```yaml
+---
+id: NFR-Name             # @required @pattern: ^NFR-.+
+kind: nfr                # @required
+status: draft            # @required @enum: draft|review|approved|deprecated|superseded
+---
+```
+
+### Requirement (REQ)
+
+```yaml
+---
+id: REQ-NNN              # @required @pattern: ^REQ-\d{3}$
+kind: requirement        # @required
+status: draft            # @required @enum: draft|review|approved|deprecated|superseded
+source: UC-NNN           # @pattern: ^UC-\d{3}$ — traceability to source use case
+---
+```
+
+### ADR
+
+```yaml
+---
+id: ADR-NNNN             # @required @pattern: ^ADR-\d{4}$
+kind: adr                # @required
+status: draft            # @required @enum: draft|review|approved|deprecated|superseded
+supersedes: []           # ADRs this one replaces
+superseded_by:           # ADR that replaces this one
+---
+```
+
+### Implementation Charter
+
+```yaml
+---
+id: ARCH-CHARTER-XXXX    # @required @pattern: ^ARCH-CHARTER-[A-Z0-9\-]+$
+kind: implementation-charter # @required
+status: draft            # @required @enum: draft|review|approved|deprecated|superseded
+supersedes: []           # Previous charter versions
+---
+```
+
+### Value Unit (UV)
+
+```yaml
+---
+id: UV-NNN               # @required @pattern: ^UV-\d{3}$
+kind: value-unit         # @required
+status: draft            # @required @enum: draft|review|approved|deprecated|superseded
+---
+```
+
+### Release (REL)
+
+```yaml
+---
+id: REL-NNN              # @required @pattern: ^REL-\d{3}$
+kind: release            # @required
+status: draft            # @required @enum: draft|review|approved|deprecated|superseded
+---
+```
+
+### Objective (OBJ)
+
+```yaml
+---
+id: OBJ-NNN              # @required @pattern: ^OBJ-\d{3}$
+kind: objective          # @required
+status: draft            # @required @enum: draft|review|approved|deprecated|superseded
 ---
 ```
 
@@ -325,8 +358,8 @@ status: draft
 |---------|----------|-------------|
 | `## Description` | Yes | What it is and what it's for |
 | `## Attributes` | Yes | Table with fields |
+| `## States` | If has lifecycle | State table and transitions |
 | `## Lifecycle` | No | Mermaid stateDiagram |
-| `## Relations` | No | Relationships with other entities |
 | `## Invariants` | No | Constraints that must always hold |
 
 ### Command
@@ -336,25 +369,21 @@ status: draft
 | `## Purpose` | Yes | What the command does |
 | `## Input` | Yes | Table: Parameter, Type, Required, Validation |
 | `## Preconditions` | Yes | List of prior conditions |
-| `## Postconditions` | Yes | State after execution |
+| `## Postconditions` | Yes | State after execution (includes state transitions) |
+| `## Rules Validated` | No | BR-* wiki-links |
+| `## Events` | No | Events emitted on success |
 | `## Possible Errors` | Yes | Table: Code, Condition, Message |
-
-**Required columns for Input:**
-| Parameter | Type | Required | Validation |
-|-----------|------|----------|------------|
-
-**Required columns for Errors:**
-| Code | Condition | Message |
-|------|-----------|---------|
 
 ### Query
 
 | Section | Required | Description |
 |---------|----------|-------------|
 | `## Purpose` | Yes | What data it returns |
-| `## Input` | Yes | Table with parameters |
-| `## Output` | Yes | Response structure |
+| `## Input` | Yes | Parameters (includes Filters, Sorting, Pagination as sub-sections) |
+| `## Output` | Yes | Response structure (table, not TypeScript interface) |
+| `## Authorization` | Yes | Access control rules |
 | `## Possible Errors` | Yes | Error table |
+| `## Examples` | No | Example response JSON |
 
 ### Use Case
 
@@ -362,22 +391,20 @@ status: draft
 |---------|----------|-------------|
 | `## Description` | Yes | Use case summary |
 | `## Actors` | Yes | Who participates |
-| `## Preconditions` | Yes | Required initial state |
-| `## Main Flow` | Yes | Happy path steps |
-| `## Alternative Flows` | No | Valid variations |
-| `## Exceptions` | No | What happens when something fails |
-| `## Postconditions` | Yes | Final state |
-| `## Applied Rules` | No | BR-*, BP-*, XP-* that are validated |
-| `## Executed Commands` | No | CMD-* that are invoked |
+| `## Preconditions` | Yes | Required initial state (includes triggers) |
+| `## Main Flow (Happy Path)` | Yes | Step sequence |
+| `## Extensions / Alternative Flows` | No | Valid variations |
+| `## Postconditions` | Yes | Final state (On Success + On Failure sub-sections) |
+| `## Business Rules` | No | BR-* wiki-links |
 
 ### Business Rule (BR/BP)
 
 | Section | Required | Description |
 |---------|----------|-------------|
 | `## Statement` | Yes | Clear description with wiki-links |
-| `## Why It Exists` | Yes | Business justification |
-| `## When It Applies` | Yes | Activation conditions |
-| `## What Happens on Violation` | Yes | Consequences |
+| `## Rationale` | Yes | Business justification |
+| `## When Applies` | Yes | Activation conditions |
+| `## Violation Behavior` | Yes | Consequences |
 | `## Parameters` | BP only | Configurable values |
 | `## Formalization` | No | EARS pattern |
 | `## Examples` | Yes | Valid and invalid cases |
@@ -391,36 +418,44 @@ status: draft
 | `## EARS Formalization` | Yes | BEFORE/AFTER pattern |
 | `## Examples` | Yes | Successful/failed verification |
 | `## Standard Behavior` | Yes | BEFORE, AFTER, Rejection, Rollback |
-| `## Implementation` | No | Reference code |
 
 ### UI View
 
 | Section | Required | Description |
 |---------|----------|-------------|
 | `## Purpose` | Yes | Purpose of the view |
-| `## Layout` | Yes | ASCII wireframe or image |
-| `## Components` | Yes | List of components used |
-| `## States` | Yes* | loading, empty, error, success |
-| `## Behavior` | Yes | Interactions and navigation |
-
-> *States: Include only those **applicable** to the view. A view with no data can omit `empty`. A static view can omit `loading`.
+| `## Navigation` | Yes | Route, arrives from, navigates to |
+| `## Layout` | Yes | ASCII wireframe (includes responsive as sub-section) |
+| `## Components` | Yes | Component table by zone |
+| `## Data` | Yes | Data sources needed |
+| `## View States` | Yes | Loading, empty, error (described in text) |
+| `## Behavior` | Yes | On load, main actions, validations |
 
 ### Requirement (REQ)
 
 | Section | Required | Description |
 |---------|----------|-------------|
-| `## Description` | Yes | What must be fulfilled |
-| `## Acceptance Criteria` | Yes | List of verifiable conditions |
-| `## Traceability` | Yes | Links to UC-*, BR-*, CMD-* that implement it |
+| `## Requirements Summary` | No | Overview table |
+| `## REQ-NNN.N: Name` | Yes | EARS formalization + Gherkin acceptance criteria |
+| `## Traceability Matrix` | No | UC → BR → Test Case links |
 
-### Objective (OBJ)
+### NFR
 
 | Section | Required | Description |
 |---------|----------|-------------|
-| `## Actor` | Yes | Who has this objective |
-| `## Objective` | Yes | "As X, I want Y, so that Z" |
-| `## Success Criteria` | Yes | How the user knows they achieved it |
-| `## Related Use Cases` | No | Links to UC-* |
+| `## Goal` | Yes | Quality objective and impact |
+| `## Metrics` | Yes | Simple table: Metric, Target |
+| `## Affected Use Cases` | No | UC wiki-links |
+| `## Trade-offs` | No | Accepted trade-offs |
+
+### ADR
+
+| Section | Required | Description |
+|---------|----------|-------------|
+| `## Context` | Yes | Problem and forces |
+| `## Decision` | Yes | What was chosen and why |
+| `## Options Considered` | No | Alternatives with pros/cons |
+| `## Consequences` | Yes | Positive, negative, neutral |
 
 ---
 
@@ -461,18 +496,29 @@ All templates are in `templates/` (in the kdd-specs repo):
 |----------|-----|
 | `entity.template.md` | Domain entities, roles, external systems |
 | `event.template.md` | Domain events |
-| `rule.template.md` | Business rules (BR) |
+| `rule.template.md` | Business rules (BR) and policies (BP) |
 | `command.template.md` | Commands (CQRS write) |
 | `query.template.md` | Queries (CQRS read) |
 | `process.template.md` | Business processes |
 | `use-case.template.md` | Use cases |
+| `cross-policy.template.md` | Cross-cutting policies (XP) |
 | `ui-view.template.md` | UI views/pages |
 | `ui-flow.template.md` | UI navigation flows |
 | `ui-component.template.md` | Reusable UI components |
 | `prd.template.md` | Product Requirements Document |
-| `adr.template.md` | Architecture Decision Record |
-| `requirement.template.md` | Functional requirements |
+| `adr.template.md` | Architecture Decision Records |
+| `requirement.template.md` | Functional requirements (EARS) |
 | `nfr.template.md` | Non-functional requirements |
+| `value-unit.template.md` | Value Units (end-to-end deliverables) |
+| `release.template.md` | Release plans |
+| `implementation-charter.template.md` | Tech stack and implementation guidelines |
+| `_manifest.template.yaml` | Domain manifest (multi-domain) |
+
+---
+
+## Technology-Agnostic Principle
+
+Layers 01-04 are **technology-agnostic**. No TypeScript, no framework references, no pseudocode. Implementation details (code patterns, schemas, stack conventions) belong exclusively in `05-architecture/charter.md`, section "KDD Artifact → Code Mapping".
 
 ---
 
