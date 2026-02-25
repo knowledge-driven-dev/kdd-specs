@@ -9,60 +9,60 @@ links:
 
 # {{ComponentName}}
 
-## Propósito
+## Purpose
 
-<!-- 1-3 líneas: qué problema resuelve este componente para el usuario -->
+<!-- 1-3 lines: what problem does this component solve for the user -->
 
-## Datos
+## Data
 
-<!-- Qué información muestra. Lista simple, sin tipos TS -->
+<!-- What information it displays. Simple list, no TS types -->
 
-- campo1 — descripción breve
-- campo2 — descripción breve
-- campoOpcional? — cuándo aparece
+- field1 — brief description
+- field2 — brief description
+- optionalField? — when it appears
 
-## Estructura
+## Structure
 
-<!-- UN wireframe que muestre la anatomía. Los estados van después -->
+<!-- ONE wireframe showing the anatomy. States come later -->
 
 ```
 ┌─────────────────────────────────────┐
-│ [Estado]                        [⭐] │
+│ [Status]                        [⭐] │
 │ ─────────────────────────────────── │
-│ Título del elemento                  │
+│ Item title                          │
 │                                      │
-│ 📊 métrica1  │  📊 métrica2          │
+│ 📊 metric1  │  📊 metric2          │
 │                                      │
-│ [Acción Principal]  [Editar]  [⋮]   │
+│ [Main Action]     [Edit]       [⋮]  │
 └─────────────────────────────────────┘
 ```
 
-## Acciones
+## Actions
 
-<!-- Qué puede hacer el usuario. Formato: Acción → Consecuencia -->
+<!-- What the user can do. Format: Action → Consequence -->
 
-| Acción | Resultado | Navegación |
-|--------|-----------|------------|
-| Click en card | Abre detalle | → [[VIEW-Detalle]] |
-| Click en acción principal | Inicia proceso X | → [[VIEW-Proceso]] |
-| Click en menú (⋮) | Muestra opciones: Editar, Duplicar, Eliminar | — |
-| Eliminar | Requiere confirmación, ejecuta [[CMD-Delete]] | — |
+| Action | Result | Navigation |
+|--------|--------|------------|
+| Click on card | Opens detail | → [[VIEW-Detail]] |
+| Click on main action | Starts process X | → [[VIEW-Process]] |
+| Click on menu (⋮) | Shows options: Edit, Duplicate, Delete | — |
+| Delete | Requires confirmation, executes [[CMD-Delete]] | — |
 
-## Estados Funcionales
+## Functional States
 
-<!-- Solo estados que cambian QUÉ se muestra, no cómo se ve -->
+<!-- Only states that change WHAT is shown, not how it looks -->
 
-### Por estado de la entidad
+### By entity state
 
-<!-- Si el componente cambia según el estado del dato que muestra -->
+<!-- If the component changes based on the state of the data it displays -->
 
-| Estado | Acción principal | Acciones disponibles |
-|--------|------------------|----------------------|
-| borrador | "Configurar" | editar, eliminar |
-| activo | "Continuar" | solo menú |
-| terminado | "Ver resultado" | duplicar |
+| State | Main action | Available actions |
+|-------|-------------|-------------------|
+| draft | "Configure" | edit, delete |
+| active | "Continue" | menu only |
+| completed | "View result" | duplicate |
 
-### Cargando
+### Loading
 
 ```
 ┌─────────────────────────────────────┐
@@ -72,19 +72,19 @@ links:
 └─────────────────────────────────────┘
 ```
 
-### Error / Vacío
+### Error / Empty
 
-<!-- Solo si aplica y cambia significativamente el layout -->
+<!-- Only if applicable and significantly changes the layout -->
 
-## Variantes
+## Variants
 
-<!-- Solo si hay variantes funcionales, no de estilo -->
+<!-- Only if there are functional variants, not style variants -->
 
-- **Compacta** (móvil): Oculta acciones secundarias, solo menú
-- **Expandida**: Muestra métricas adicionales
+- **Compact** (mobile): Hides secondary actions, menu only
+- **Expanded**: Shows additional metrics
 
-## Conexiones
+## Connections
 
-- **Entidades**: [[Entidad1]], [[Entidad2]]
-- **Casos de uso**: [[UC-001]], [[UC-002]]
-- **Comandos**: [[CMD-Create]], [[CMD-Delete]]
+- **Entities**: [[Entity1]], [[Entity2]]
+- **Use cases**: [[UC-001]], [[UC-002]]
+- **Commands**: [[CMD-Create]], [[CMD-Delete]]

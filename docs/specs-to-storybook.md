@@ -1,288 +1,288 @@
-# Specs-to-Storybook: Guía del Proceso
+# Specs-to-Storybook: Process Guide
 
-> Cómo materializar especificaciones de UI en wireframes visuales antes de codificar.
+> How to materialize UI specifications into visual wireframes before coding.
 
-## Resumen Ejecutivo
+## Executive Summary
 
-Este documento describe el flujo de trabajo para transformar especificaciones de UI escritas en lenguaje natural (Markdown) en wireframes visuales de Storybook, permitiendo validar diseños **antes de escribir código de producción**.
+This document describes the workflow for transforming UI specifications written in natural language (Markdown) into visual Storybook wireframes, allowing you to validate designs **before writing production code**.
 
 ```
 ┌─────────────────┐      ┌─────────────────┐      ┌─────────────────┐
-│   Spec en MD    │  →   │  /generate-story │  →   │   Storybook     │
-│  (lenguaje      │      │     (Claude)     │      │   (wireframe)   │
-│   natural)      │      │                  │      │                 │
+│   Spec in MD    │  →   │  /generate-story │  →   │   Storybook     │
+│  (natural       │      │     (Claude)     │      │   (wireframe)   │
+│   language)     │      │                  │      │                 │
 └─────────────────┘      └─────────────────┘      └─────────────────┘
 ```
 
-## ¿Por qué este proceso?
+## Why This Process?
 
-### El Problema
+### The Problem
 
-En desarrollo tradicional:
-1. Diseñador crea mockup en Figma
-2. Desarrollador interpreta el mockup
-3. Se pierde contexto de comportamiento
-4. Iteraciones costosas en código
+In traditional development:
+1. Designer creates a mockup in Figma
+2. Developer interprets the mockup
+3. Behavioral context is lost
+4. Costly iterations in code
 
-### La Solución
+### The Solution
 
-Con Specs-to-Storybook:
-1. **Analista/Diseñador** escribe spec completa (estructura + comportamiento)
-2. **Claude** genera wireframe visual en Storybook
-3. **Stakeholders** validan en Storybook antes de codificar
-4. **Desarrollador** implementa con spec clara y wireframe de referencia
+With Specs-to-Storybook:
+1. **Analyst/Designer** writes a complete spec (structure + behavior)
+2. **Claude** generates a visual wireframe in Storybook
+3. **Stakeholders** validate in Storybook before coding
+4. **Developer** implements with a clear spec and reference wireframe
 
-## Tipos de Especificación UI
+## UI Specification Types
 
-| Tipo | Tag | Uso | Plantilla |
-|------|-----|-----|-----------|
-| **Component** | `ui/component` | Elementos reutilizables (botón, card, input) | `kdd/templates/ui-component.md` |
-| **View** | `ui/view` | Pantallas completas | `kdd/templates/ui-view.md` |
-| **Flow** | `ui/flow` | Secuencias de interacción | `kdd/templates/ui-flow.md` |
+| Type | Tag | Usage | Template |
+|------|-----|-------|----------|
+| **Component** | `ui/component` | Reusable elements (button, card, input) | `kdd/templates/ui-component.md` |
+| **View** | `ui/view` | Full screens | `kdd/templates/ui-view.md` |
+| **Flow** | `ui/flow` | Interaction sequences | `kdd/templates/ui-flow.md` |
 
-## Estructura de Directorios
+## Directory Structure
 
 ```
 specs/04-interaction/
-├── components/           # Componentes atómicos
-│   └── PersonaCard.md
-├── views/                # Vistas/Páginas
-│   └── ConfigurarReto.md
-└── flows/                # Flujos de usuario
-│   └── CrearYConfigurarReto.md
-└── use-cases/           
-    └── UC-001-CrearRetomd
+├── components/           # Atomic components
+│   └── ProductCard.md
+├── views/                # Views/Pages
+│   └── ConfigureOrder.md
+└── flows/                # User flows
+│   └── CreateAndConfigureOrder.md
+└── use-cases/
+    └── UC-001-PlaceOrder.md
 
 kdd/templates/
-├── ui-component.template.md       # Plantilla componentes
-├── ui-view.template.md            # Plantilla vistas
-└── ui-flow.template.md            # Plantilla flujos
+├── ui-component.template.md       # Component template
+├── ui-view.template.md            # View template
+└── ui-flow.template.md            # Flow template
 
 apps/web/components/features/
 └── {feature}/
-    ├── {componente}.stories.tsx  # Stories generados
-    └── {componente}.tsx          # Implementación (después)
+    ├── {component}.stories.tsx  # Generated stories
+    └── {component}.tsx          # Implementation (later)
 ```
 
-## Flujo de Trabajo Paso a Paso
+## Step-by-Step Workflow
 
-### Paso 1: Crear la Especificación
+### Step 1: Create the Specification
 
-Usa la plantilla correspondiente de `kdd/templates/`:
+Use the corresponding template from `kdd/templates/`:
 
 ```bash
-# Copiar plantilla
-cp kdd/templates/ui-view.md specs/04-experience/views/MiNuevaVista.md
+# Copy template
+cp kdd/templates/ui-view.md specs/04-experience/views/MyNewView.md
 ```
 
-Completa las secciones:
-- **Front-matter**: tags, links a entidades/casos de uso
-- **Descripción**: Propósito de la vista
-- **Layout**: Estructura en ASCII art
-- **Estados**: Loading, empty, error, success
-- **Comportamiento**: Interacciones y validaciones
-- **Accesibilidad**: Consideraciones a11y
+Complete the sections:
+- **Front-matter**: tags, links to entities/use cases
+- **Description**: View purpose
+- **Layout**: Structure in ASCII art
+- **States**: Loading, empty, error, success
+- **Behavior**: Interactions and validations
+- **Accessibility**: a11y considerations
 
-### Paso 2: Generar el Story
+### Step 2: Generate the Story
 
-Ejecuta el slash command de Claude:
+Run the Claude slash command:
 
 ```
-/generate-story specs/04-experience/views/MiNuevaVista.md
+/generate-story specs/04-experience/views/MyNewView.md
 ```
 
 Claude:
-1. Lee y comprende la spec
-2. Traduce ASCII art a componentes shadcn/ui
-3. Genera mock data basada en entidades referenciadas
-4. Crea stories para cada estado descrito
-5. Guarda en `apps/web/components/features/{feature}/`
+1. Reads and understands the spec
+2. Translates ASCII art to shadcn/ui components
+3. Generates mock data based on referenced entities
+4. Creates stories for each described state
+5. Saves to `apps/web/components/features/{feature}/`
 
-### Paso 3: Visualizar en Storybook
+### Step 3: Visualize in Storybook
 
 ```bash
 bun run storybook
 ```
 
-Navega al story generado y valida:
-- ¿La estructura coincide con la spec?
-- ¿Los estados están correctos?
-- ¿La responsividad funciona?
+Navigate to the generated story and validate:
+- Does the structure match the spec?
+- Are the states correct?
+- Does the responsiveness work?
 
-### Paso 4: Iterar
+### Step 4: Iterate
 
-Si algo no está bien:
-1. **Ajusta la spec** (no el story directamente)
-2. **Re-genera** con `/generate-story`
-3. El story refleja los cambios
+If something is not right:
+1. **Adjust the spec** (not the story directly)
+2. **Regenerate** with `/generate-story`
+3. The story reflects the changes
 
-### Paso 5: Aprobar e Implementar
+### Step 5: Approve and Implement
 
-Una vez validado:
-1. Marca la spec como `status: approved`
-2. Implementa el componente real basándote en:
-   - La spec (comportamiento)
-   - El wireframe (estructura visual)
-3. Reemplaza el wireframe por la implementación real
+Once validated:
+1. Mark the spec as `status: approved`
+2. Implement the real component based on:
+   - The spec (behavior)
+   - The wireframe (visual structure)
+3. Replace the wireframe with the real implementation
 
-## Anatomía de una Spec
+## Anatomy of a Spec
 
-### Front-matter (obligatorio)
+### Front-matter (required)
 
 ```yaml
 ---
 tags:
-  - ui/view                    # Tipo de spec
+  - ui/view                    # Spec type
 status: draft                  # draft | review | approved | implemented
 version: "1.0"
 links:
-  entities:                    # Entidades de dominio usadas
-    - "[[Reto]]"
-    - "[[Persona Sintética]]"
-  use-cases:                   # Casos de uso implementados
-    - "[[UC-002-Configurar-Personas-Sinteticas]]"
-  components:                  # Componentes referenciados
-    - "[[PersonaCard]]"
+  entities:                    # Domain entities used
+    - "[[Order]]"
+    - "[[Product]]"
+  use-cases:                   # Use cases implemented
+    - "[[UC-002-Configure-Products]]"
+  components:                  # Referenced components
+    - "[[ProductCard]]"
 storybook:
-  category: "Views"            # Categoría en Storybook
-  auto-generate: true          # Si Claude debe generarlo
+  category: "Views"            # Category in Storybook
+  auto-generate: true          # Whether Claude should generate it
 ---
 ```
 
-### Wireframe en ASCII (recomendado)
+### ASCII Wireframe (recommended)
 
-El ASCII art es interpretado por Claude:
+The ASCII art is interpreted by Claude:
 
 ```ascii
 ┌──────────────────────────────────────┐
-│  [← Volver]    Título    [Badge]     │  ← Header
+│  [← Back]    Title    [Badge]        │  ← Header
 ├──────────────────────────────────────┤
 │                                      │
-│  ┌────────────┐  ┌────────────┐      │  ← Grid de cards
+│  ┌────────────┐  ┌────────────┐      │  ← Card grid
 │  │  Card 1    │  │  Card 2    │      │
 │  └────────────┘  └────────────┘      │
 │                                      │
-│  [Botón Primario]  [Botón Sec.]      │  ← Acciones
+│  [Primary Button]  [Secondary Btn.]  │  ← Actions
 └──────────────────────────────────────┘
 ```
 
-Claude traduce:
-- `┌───┐` → `<Card>` o `<div className="border rounded">`
-- `[Texto]` → `<Button>`
-- `←` → Icono de Lucide
-- Proporciones → clases de Tailwind
+Claude translates:
+- `┌───┐` → `<Card>` or `<div className="border rounded">`
+- `[Text]` → `<Button>`
+- `←` → Lucide icon
+- Proportions → Tailwind classes
 
-### Estados (crítico para UX)
+### States (critical for UX)
 
-Documenta todos los estados de la vista:
+Document all view states:
 
 ```markdown
-## Estados de la Vista
+## View States
 
 ### Loading
-- Mostrar skeleton
-- Deshabilitar interacciones
+- Show skeleton
+- Disable interactions
 
 ### Empty
-- Mensaje "Sin datos"
-- CTA para crear/añadir
+- "No data" message
+- CTA to create/add
 
 ### Error
-- Mensaje de error
-- Botón de retry
+- Error message
+- Retry button
 
 ### Success (default)
-- Datos cargados
-- Interacciones habilitadas
+- Data loaded
+- Interactions enabled
 ```
 
-## Comandos Útiles
+## Useful Commands
 
-| Comando | Descripción |
+| Command | Description |
 |---------|-------------|
-| `/generate-story specs/04-experience/...` | Genera story desde spec |
-| `bun run storybook` | Inicia Storybook local |
-| `bun run build:storybook` | Build estático de Storybook |
+| `/generate-story specs/04-experience/...` | Generate story from spec |
+| `bun run storybook` | Start local Storybook |
+| `bun run build:storybook` | Static Storybook build |
 
-## Ejemplos Reales
+## Real Examples
 
-### Spec: PersonaCard
+### Spec: ProductCard
 
-**Archivo**: `specs/04-experience/components/PersonaCard.md`
+**File**: `specs/04-experience/components/ProductCard.md`
 
-**Secciones clave**:
-- Props documentadas con tipos
-- ASCII art para cada tamaño (sm, md, lg)
-- Estados: default, hover, selected, loading
-- Comportamiento de eliminación con confirmación
+**Key sections**:
+- Props documented with types
+- ASCII art for each size (sm, md, lg)
+- States: default, hover, selected, loading
+- Deletion behavior with confirmation
 
-**Story generado**: `apps/web/components/features/reto/persona-card.stories.tsx`
+**Generated story**: `apps/web/components/features/order/product-card.stories.tsx`
 
-**Stories incluidos**:
+**Included stories**:
 - Default, Selected, ReadOnly, Loading
 - SizeSmall, SizeMedium, SizeLarge
-- GridOfPersonas, InteractiveDemo
+- GridOfProducts, InteractiveDemo
 
-### Spec: ConfigurarReto (Vista)
+### Spec: ConfigureOrder (View)
 
-**Archivo**: `specs/04-experience/views/ConfigurarReto.md`
+**File**: `specs/04-experience/views/ConfigureOrder.md`
 
-**Secciones clave**:
-- Layout completo con header, main, footer
+**Key sections**:
+- Complete layout with header, main, footer
 - Responsive: desktop, tablet, mobile
-- Estados: loading, empty, partial, configured, error
-- Comportamiento de cada interacción
+- States: loading, empty, partial, configured, error
+- Behavior for each interaction
 
-**Story generado**: `apps/web/components/features/reto/configurar-reto-view.stories.tsx`
+**Generated story**: `apps/web/components/features/order/configure-order-view.stories.tsx`
 
-**Stories incluidos**:
+**Included stories**:
 - Loading, Empty, Partial, Configured, Error
 - MobileView, TabletView
-- InteractiveDemo (funcional)
+- InteractiveDemo (functional)
 
-## Mejores Prácticas
+## Best Practices
 
-### DO ✅
+### DO
 
-- **Escribe specs completas** antes de generar
-- **Incluye todos los estados** de la UI
-- **Referencia entidades** para mock data realista
-- **Usa ASCII art** para layouts complejos
-- **Documenta comportamiento**, no solo apariencia
-- **Itera en la spec**, no en el story
+- **Write complete specs** before generating
+- **Include all UI states**
+- **Reference entities** for realistic mock data
+- **Use ASCII art** for complex layouts
+- **Document behavior**, not just appearance
+- **Iterate on the spec**, not the story
 
-### DON'T ❌
+### DON'T
 
-- No edites stories generados directamente (se perderán al regenerar)
-- No omitas estados de error/loading
-- No escribas specs sin front-matter
-- No generes sin validar que la spec está completa
+- Do not edit generated stories directly (they will be lost on regeneration)
+- Do not omit error/loading states
+- Do not write specs without front-matter
+- Do not generate without validating that the spec is complete
 
 ## Troubleshooting
 
-### El story no se genera correctamente
+### The story does not generate correctly
 
-1. Verifica que la spec tiene front-matter válido
-2. Asegúrate de que el ASCII art usa caracteres Unicode estándar
-3. Revisa que las entidades referenciadas existen
+1. Verify that the spec has valid front-matter
+2. Make sure the ASCII art uses standard Unicode characters
+3. Check that the referenced entities exist
 
-### Storybook no encuentra el story
+### Storybook does not find the story
 
-1. Verifica la ubicación del archivo
-2. Revisa que `.storybook/main.ts` incluye el patrón correcto
-3. Reinicia Storybook
+1. Verify the file location
+2. Check that `.storybook/main.ts` includes the correct pattern
+3. Restart Storybook
 
-### El wireframe no se parece a la spec
+### The wireframe does not resemble the spec
 
-1. Sé más explícito en el ASCII art
-2. Añade descripciones a cada sección
-3. Especifica componentes de shadcn/ui a usar
+1. Be more explicit in the ASCII art
+2. Add descriptions to each section
+3. Specify shadcn/ui components to use
 
-## Referencias
+## References
 
-- **Plan original**: `wip/plan-specs-to-storybook.md`
-- **Plantillas**: `kdd/templates/ui-*.md`
+- **Original plan**: `wip/plan-specs-to-storybook.md`
+- **Templates**: `kdd/templates/ui-*.md`
 - **Slash command**: `.claude/commands/generate-story.md`
-- **Ejemplos**:
-  - `specs/04-experience/components/PersonaCard.md`
-  - `specs/04-experience/views/ConfigurarReto.md`
+- **Examples**:
+  - `specs/04-experience/components/ProductCard.md`
+  - `specs/04-experience/views/ConfigureOrder.md`

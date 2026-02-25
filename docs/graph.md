@@ -1,441 +1,441 @@
-# KDD Graph RAG - Tipos de Nodos
+# KDD Graph RAG - Node Types
 
-> **Propósito**: Documentación de los tipos de nodos para indexar especificaciones KDD en un Graph RAG.
+> **Purpose**: Documentation of node types for indexing KDD specifications in a Graph RAG.
 
 ---
 
-## Visión General
+## Overview
 
-El Graph RAG de KDD indexa las especificaciones en `/specs` como un grafo de conocimiento. Los nodos representan artefactos y sus elementos internos, mientras que las aristas representan las relaciones entre ellos.
+The KDD Graph RAG indexes the specifications in `/specs` as a knowledge graph. Nodes represent artifacts and their internal elements, while edges represent the relationships between them.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                    GRAPH RAG KDD                            │
 ├─────────────────────────────────────────────────────────────┤
-│  Nodos Principales    →  Artefactos (Entity, Command, UC)   │
-│  Nodos Secundarios    →  Elementos internos (State, Attr)   │
-│  Aristas              →  Relaciones tipadas (IMPLEMENTS)    │
+│  Primary Nodes      →  Artifacts (Entity, Command, UC)      │
+│  Secondary Nodes    →  Internal elements (State, Attr)      │
+│  Edges              →  Typed relationships (IMPLEMENTS)     │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Artefactos Principales (Top-Level Nodes)
+## Primary Artifacts (Top-Level Nodes)
 
-Estos son los documentos `.md` que existen como archivos independientes en `/specs`.
+These are the `.md` documents that exist as independent files in `/specs`.
 
-### Capa 01-problem
+### Layer 01-problem
 
-| Tipo | ID | Patrón Archivo | Descripción |
-|------|----|----------------|-------------|
+| Type | ID | File Pattern | Description |
+|------|----|--------------|-------------|
 | `PRD` | - | `PRD.md` | Product Requirements Document |
 | `ADR` | ADR-NNNN | `ADR-NNNN-{Title}.md` | Architecture Decision Record |
 
-### Capa 02-domain
+### Layer 02-domain
 
-| Tipo | ID | Patrón Archivo | Descripción |
-|------|----|----------------|-------------|
-| `Entity` | - | `PascalCase.md` | Entidad de dominio |
-| `DomainEvent` | EVT-* | `EVT-{Entity}-{Action}.md` | Evento de dominio |
-| `BusinessRule` | BR-*-NNN | `BR-{ENTITY}-NNN.md` | Regla de negocio |
-| `BusinessPolicy` | BP-*-NNN | `BP-{TOPIC}-NNN.md` | Política de negocio |
+| Type | ID | File Pattern | Description |
+|------|----|--------------|-------------|
+| `Entity` | - | `PascalCase.md` | Domain entity |
+| `DomainEvent` | EVT-* | `EVT-{Entity}-{Action}.md` | Domain event |
+| `BusinessRule` | BR-*-NNN | `BR-{ENTITY}-NNN.md` | Business rule |
+| `BusinessPolicy` | BP-*-NNN | `BP-{TOPIC}-NNN.md` | Business policy |
 
-### Capa 03-capabilities
+### Layer 03-capabilities
 
-| Tipo | ID | Patrón Archivo | Descripción |
-|------|----|----------------|-------------|
-| `Command` | CMD-NNN | `CMD-NNN-{Name}.md` | Comando CQRS (escritura) |
-| `Query` | QRY-NNN | `QRY-NNN-{Name}.md` | Query CQRS (lectura) |
-| `Process` | PROC-NNN | `PROC-NNN-{Name}.md` | Proceso de negocio |
+| Type | ID | File Pattern | Description |
+|------|----|--------------|-------------|
+| `Command` | CMD-NNN | `CMD-NNN-{Name}.md` | CQRS command (write) |
+| `Query` | QRY-NNN | `QRY-NNN-{Name}.md` | CQRS query (read) |
+| `Process` | PROC-NNN | `PROC-NNN-{Name}.md` | Business process |
 
-### Capa 04-interaction
+### Layer 04-interaction
 
-| Tipo | ID | Patrón Archivo | Descripción |
-|------|----|----------------|-------------|
-| `UseCase` | UC-NNN | `UC-NNN-{Name}.md` | Caso de uso |
-| `UIView` | UI-* | `UI-{Name}.md` | Vista/página de UI |
-| `UIFlow` | Flow-* | `Flow-{Name}.md` | Flujo de navegación |
-| `UIComponent` | - | `{Name}.md` | Componente reutilizable |
+| Type | ID | File Pattern | Description |
+|------|----|--------------|-------------|
+| `UseCase` | UC-NNN | `UC-NNN-{Name}.md` | Use case |
+| `UIView` | UI-* | `UI-{Name}.md` | UI view/page |
+| `UIFlow` | Flow-* | `Flow-{Name}.md` | Navigation flow |
+| `UIComponent` | - | `{Name}.md` | Reusable component |
 
-### Capa 05-verification
+### Layer 05-verification
 
-| Tipo | ID | Patrón Archivo | Descripción |
-|------|----|----------------|-------------|
-| `Requirement` | REQ-NNN | `REQ-NNN-{Name}.md` | Requisito funcional |
-| `Contract` | - | `*.yaml` | Contrato de API |
+| Type | ID | File Pattern | Description |
+|------|----|--------------|-------------|
+| `Requirement` | REQ-NNN | `REQ-NNN-{Name}.md` | Functional requirement |
+| `Contract` | - | `*.yaml` | API contract |
 
 ---
 
-## Nodos Secundarios (Elementos Internos)
+## Secondary Nodes (Internal Elements)
 
-Estos nodos se extraen del contenido de los artefactos principales.
+These nodes are extracted from the content of the primary artifacts.
 
-### Ciclo de Vida
+### Lifecycle
 
-| Tipo | Contenedor | Descripción |
-|------|------------|-------------|
-| `State` | Entity, Process | Estado en máquina de estados |
-| `StateTransition` | Entity, Process | Transición entre estados |
-| `StateMachine` | Entity | Máquina de estados completa |
+| Type | Container | Description |
+|------|-----------|-------------|
+| `State` | Entity, Process | State in a state machine |
+| `StateTransition` | Entity, Process | Transition between states |
+| `StateMachine` | Entity | Complete state machine |
 
-**Propiedades de State:**
+**State Properties:**
 ```yaml
-name: string           # Nombre del estado (ej: "Borrador")
-description: string    # Descripción
-is_initial: boolean    # Es estado inicial
-is_final: boolean      # Es estado terminal
+name: string           # State name (e.g.: "Draft")
+description: string    # Description
+is_initial: boolean    # Is initial state
+is_final: boolean      # Is terminal state
 ```
 
-**Propiedades de StateTransition:**
+**StateTransition Properties:**
 ```yaml
-from_state: string     # Estado origen
-to_state: string       # Estado destino
-trigger: string        # Evento que dispara la transición
-guard: string          # Condición de guarda (opcional)
-action: string         # Acción a ejecutar (opcional)
-produces_event: string # Evento producido (opcional)
+from_state: string     # Source state
+to_state: string       # Target state
+trigger: string        # Event that triggers the transition
+guard: string          # Guard condition (optional)
+action: string         # Action to execute (optional)
+produces_event: string # Produced event (optional)
 ```
 
-### Estructura de Entidad
+### Entity Structure
 
-| Tipo | Contenedor | Descripción |
-|------|------------|-------------|
-| `EntityAttribute` | Entity | Atributo/propiedad |
-| `EntityRelationship` | Entity | Relación con otra entidad |
-| `Invariant` | Entity, BusinessRule | Regla de integridad |
-| `Constraint` | Entity | Restricción de datos |
+| Type | Container | Description |
+|------|-----------|-------------|
+| `EntityAttribute` | Entity | Attribute/property |
+| `EntityRelationship` | Entity | Relationship with another entity |
+| `Invariant` | Entity, BusinessRule | Integrity rule |
+| `Constraint` | Entity | Data constraint |
 
-**Propiedades de EntityAttribute:**
+**EntityAttribute Properties:**
 ```yaml
-name: string           # Nombre del atributo
-type: string           # Tipo de dato
-required: boolean      # Es obligatorio
-description: string    # Descripción
-validation: string     # Regla de validación (opcional)
-default: any           # Valor por defecto (opcional)
+name: string           # Attribute name
+type: string           # Data type
+required: boolean      # Is required
+description: string    # Description
+validation: string     # Validation rule (optional)
+default: any           # Default value (optional)
 ```
 
-**Propiedades de EntityRelationship:**
+**EntityRelationship Properties:**
 ```yaml
-target_entity: string  # Entidad destino
+target_entity: string  # Target entity
 cardinality: string    # 1:1, 1:N, N:1, N:M
-relationship_type: string  # tiene, pertenece_a, asociado_con
-description: string    # Descripción
+relationship_type: string  # has, belongs_to, associated_with
+description: string    # Description
 ```
 
-### Entrada/Salida
+### Input/Output
 
-| Tipo | Contenedor | Descripción |
-|------|------------|-------------|
-| `InputParameter` | Command, Query, Process | Parámetro de entrada |
-| `OutputField` | Command, Query | Campo de salida |
-| `EventPayload` | DomainEvent | Campo del payload del evento |
+| Type | Container | Description |
+|------|-----------|-------------|
+| `InputParameter` | Command, Query, Process | Input parameter |
+| `OutputField` | Command, Query | Output field |
+| `EventPayload` | DomainEvent | Event payload field |
 
-**Propiedades de InputParameter:**
+**InputParameter Properties:**
 ```yaml
-name: string           # Nombre del parámetro
-type: string           # Tipo de dato
-required: boolean      # Es obligatorio
-validation: string     # Regla de validación
-description: string    # Descripción
+name: string           # Parameter name
+type: string           # Data type
+required: boolean      # Is required
+validation: string     # Validation rule
+description: string    # Description
 ```
 
-### Flujos
+### Flows
 
-| Tipo | Contenedor | Descripción |
-|------|------------|-------------|
-| `UseCaseStep` | UseCase | Paso del flujo principal |
-| `AlternativeFlow` | UseCase | Flujo alternativo/extensión |
-| `ProcessStep` | Process | Paso de proceso |
-| `DecisionPoint` | Process, UIFlow | Punto de decisión |
-| `GuardCondition` | Command, StateTransition | Condición de guarda |
+| Type | Container | Description |
+|------|-----------|-------------|
+| `UseCaseStep` | UseCase | Main flow step |
+| `AlternativeFlow` | UseCase | Alternative flow/extension |
+| `ProcessStep` | Process | Process step |
+| `DecisionPoint` | Process, UIFlow | Decision point |
+| `GuardCondition` | Command, StateTransition | Guard condition |
 
-**Propiedades de UseCaseStep:**
+**UseCaseStep Properties:**
 ```yaml
-number: integer        # Número de paso
-actor: string          # Actor que ejecuta (Usuario/Sistema)
-action: string         # Acción realizada
-validation: string     # Validación aplicada (opcional)
-produces_event: string # Evento producido (opcional)
+number: integer        # Step number
+actor: string          # Actor who executes (User/System)
+action: string         # Action performed
+validation: string     # Applied validation (optional)
+produces_event: string # Produced event (optional)
 ```
 
-**Propiedades de AlternativeFlow:**
+**AlternativeFlow Properties:**
 ```yaml
-id: string             # Identificador (ej: "3a", "5b")
-condition: string      # Condición de disparo
-steps: Step[]          # Pasos del flujo alternativo
-returns_to: integer    # Paso al que retorna (opcional)
+id: string             # Identifier (e.g.: "3a", "5b")
+condition: string      # Trigger condition
+steps: Step[]          # Alternative flow steps
+returns_to: integer    # Step to return to (optional)
 ```
 
 ### UI
 
-| Tipo | Contenedor | Descripción |
-|------|------------|-------------|
-| `UIInteraction` | UIView, UIComponent | Interacción de usuario |
-| `ComponentState` | UIComponent | Estado visual del componente |
-| `ComponentVariant` | UIComponent | Variante del componente |
-| `FieldValidation` | UIView | Validación de campo de formulario |
-| `UserAction` | UIView, UseCase | Acción del usuario |
+| Type | Container | Description |
+|------|-----------|-------------|
+| `UIInteraction` | UIView, UIComponent | User interaction |
+| `ComponentState` | UIComponent | Component visual state |
+| `ComponentVariant` | UIComponent | Component variant |
+| `FieldValidation` | UIView | Form field validation |
+| `UserAction` | UIView, UseCase | User action |
 
-**Propiedades de UIInteraction:**
+**UIInteraction Properties:**
 ```yaml
-trigger: string        # Evento disparador (click, hover, submit)
-precondition: string   # Precondición (opcional)
-action: string         # Acción ejecutada
-feedback: string       # Feedback al usuario
-emits_event: string    # Evento emitido (opcional)
-navigates_to: string   # Navegación destino (opcional)
+trigger: string        # Trigger event (click, hover, submit)
+precondition: string   # Precondition (optional)
+action: string         # Executed action
+feedback: string       # User feedback
+emits_event: string    # Emitted event (optional)
+navigates_to: string   # Navigation target (optional)
 ```
 
-**Propiedades de ComponentState:**
+**ComponentState Properties:**
 ```yaml
-name: string           # Nombre (default, hover, loading, error, disabled)
-description: string    # Descripción
-wireframe: string      # ASCII wireframe (opcional)
+name: string           # Name (default, hover, loading, error, disabled)
+description: string    # Description
+wireframe: string      # ASCII wireframe (optional)
 ```
 
-### Testing y Verificación
+### Testing and Verification
 
-| Tipo | Contenedor | Descripción |
-|------|------------|-------------|
-| `TestScenario` | UseCase, Requirement | Escenario de prueba |
-| `AcceptanceCriterion` | Requirement | Criterio de aceptación |
-| `GherkinScenario` | Requirement | Escenario BDD |
+| Type | Container | Description |
+|------|-----------|-------------|
+| `TestScenario` | UseCase, Requirement | Test scenario |
+| `AcceptanceCriterion` | Requirement | Acceptance criterion |
+| `GherkinScenario` | Requirement | BDD scenario |
 
-**Propiedades de AcceptanceCriterion:**
+**AcceptanceCriterion Properties:**
 ```yaml
-id: string             # Identificador
-description: string    # Descripción
-pattern: string        # Patrón EARS (opcional)
-gherkin: GherkinScenario  # Escenario Gherkin (opcional)
+id: string             # Identifier
+description: string    # Description
+pattern: string        # EARS pattern (optional)
+gherkin: GherkinScenario  # Gherkin scenario (optional)
 ```
 
-**Propiedades de GherkinScenario:**
+**GherkinScenario Properties:**
 ```yaml
-name: string           # Nombre del escenario
-given: string[]        # Precondiciones
-when: string[]         # Acciones
-then: string[]         # Resultados esperados
+name: string           # Scenario name
+given: string[]        # Preconditions
+when: string[]         # Actions
+then: string[]         # Expected results
 ```
 
-### Errores
+### Errors
 
-| Tipo | Contenedor | Descripción |
-|------|------------|-------------|
-| `ErrorCode` | Command, Query | Código de error |
-| `BusinessRuleException` | BusinessRule | Excepción a la regla |
+| Type | Container | Description |
+|------|-----------|-------------|
+| `ErrorCode` | Command, Query | Error code |
+| `BusinessRuleException` | BusinessRule | Rule exception |
 
-**Propiedades de ErrorCode:**
+**ErrorCode Properties:**
 ```yaml
-code: string           # Código (ej: "CHALLENGE-003")
-condition: string      # Condición que lo dispara
-message: string        # Mensaje de error
-http_status: integer   # Código HTTP (opcional)
+code: string           # Code (e.g.: "ORDER-003")
+condition: string      # Condition that triggers it
+message: string        # Error message
+http_status: integer   # HTTP status code (optional)
 ```
 
 ---
 
-## Aristas (Relaciones)
+## Edges (Relationships)
 
-Las aristas conectan nodos y representan relaciones semánticas.
+Edges connect nodes and represent semantic relationships.
 
-### Relaciones Entre Artefactos
+### Relationships Between Artifacts
 
-| Relación | Desde | Hacia | Descripción |
-|----------|-------|-------|-------------|
-| `IMPLEMENTS` | UseCase | Command, Query | UC invoca operación |
-| `PRODUCES` | Command, Process | DomainEvent | Operación genera evento |
-| `CONSUMES` | Process, Command | DomainEvent | Proceso reacciona a evento |
-| `VALIDATES` | Command, Query | BusinessRule | Operación valida regla |
-| `MODIFIES` | Command | Entity | Comando modifica entidad |
-| `READS` | Query | Entity | Query lee entidad |
-| `EXTENDS` | UseCase | UseCase | UC extiende otro UC |
-| `INCLUDES` | UseCase | UseCase | UC incluye otro UC |
-| `SUPERSEDES` | ADR | ADR | ADR reemplaza otro |
-| `TRACES_TO` | Requirement | UseCase, BusinessRule | Trazabilidad de requisito |
+| Relationship | From | To | Description |
+|--------------|------|----|-------------|
+| `IMPLEMENTS` | UseCase | Command, Query | UC invokes operation |
+| `PRODUCES` | Command, Process | DomainEvent | Operation generates event |
+| `CONSUMES` | Process, Command | DomainEvent | Process reacts to event |
+| `VALIDATES` | Command, Query | BusinessRule | Operation validates rule |
+| `MODIFIES` | Command | Entity | Command modifies entity |
+| `READS` | Query | Entity | Query reads entity |
+| `EXTENDS` | UseCase | UseCase | UC extends another UC |
+| `INCLUDES` | UseCase | UseCase | UC includes another UC |
+| `SUPERSEDES` | ADR | ADR | ADR supersedes another |
+| `TRACES_TO` | Requirement | UseCase, BusinessRule | Requirement traceability |
 
-### Relaciones Estructurales
+### Structural Relationships
 
-| Relación | Desde | Hacia | Descripción |
-|----------|-------|-------|-------------|
-| `HAS_ATTRIBUTE` | Entity | EntityAttribute | Entidad tiene atributo |
-| `HAS_STATE` | Entity | State | Entidad tiene estado |
-| `HAS_RELATIONSHIP` | Entity | EntityRelationship | Entidad tiene relación |
-| `HAS_STEP` | UseCase, Process | Step | Artefacto tiene paso |
-| `HAS_PARAMETER` | Command, Query | InputParameter | Operación tiene parámetro |
-| `HAS_ERROR` | Command, Query | ErrorCode | Operación tiene error |
+| Relationship | From | To | Description |
+|--------------|------|----|-------------|
+| `HAS_ATTRIBUTE` | Entity | EntityAttribute | Entity has attribute |
+| `HAS_STATE` | Entity | State | Entity has state |
+| `HAS_RELATIONSHIP` | Entity | EntityRelationship | Entity has relationship |
+| `HAS_STEP` | UseCase, Process | Step | Artifact has step |
+| `HAS_PARAMETER` | Command, Query | InputParameter | Operation has parameter |
+| `HAS_ERROR` | Command, Query | ErrorCode | Operation has error |
 
-### Relaciones de Dependencia
+### Dependency Relationships
 
-| Relación | Desde | Hacia | Descripción |
-|----------|-------|-------|-------------|
-| `REFERENCES` | Any | Any | Wiki-link genérico |
-| `DEPENDS_ON` | Any | Any | Dependencia explícita |
-| `RELATED_TO` | Entity | Entity | Relación de dominio |
+| Relationship | From | To | Description |
+|--------------|------|----|-------------|
+| `REFERENCES` | Any | Any | Generic wiki-link |
+| `DEPENDS_ON` | Any | Any | Explicit dependency |
+| `RELATED_TO` | Entity | Entity | Domain relationship |
 
-### Relaciones de UI
+### UI Relationships
 
-| Relación | Desde | Hacia | Descripción |
-|----------|-------|-------|-------------|
-| `DISPLAYS` | UIView | Entity | Vista muestra entidad |
-| `USES_COMPONENT` | UIView | UIComponent | Vista usa componente |
-| `NAVIGATES_TO` | UIView, UIFlow | UIView | Navegación entre vistas |
-| `TRIGGERS` | UIInteraction | Command | Interacción invoca comando |
+| Relationship | From | To | Description |
+|--------------|------|----|-------------|
+| `DISPLAYS` | UIView | Entity | View displays entity |
+| `USES_COMPONENT` | UIView | UIComponent | View uses component |
+| `NAVIGATES_TO` | UIView, UIFlow | UIView | Navigation between views |
+| `TRIGGERS` | UIInteraction | Command | Interaction invokes command |
 
-### Relaciones de Ciclo de Vida
+### Lifecycle Relationships
 
-| Relación | Desde | Hacia | Descripción |
-|----------|-------|-------|-------------|
-| `TRANSITIONS_TO` | State | State | Transición de estado |
-| `TRIGGERED_BY` | StateTransition | DomainEvent | Transición disparada por evento |
+| Relationship | From | To | Description |
+|--------------|------|----|-------------|
+| `TRANSITIONS_TO` | State | State | State transition |
+| `TRIGGERED_BY` | StateTransition | DomainEvent | Transition triggered by event |
 
 ---
 
-## Dependencias Entre Capas
+## Cross-Layer Dependencies
 
-Las referencias solo pueden ir hacia capas inferiores (nunca hacia arriba).
+References can only go toward lower layers (never upward).
 
 ```
 ┌─────────────────────────────────────────┐
 │  05-verification                        │
-│      ↓ puede referenciar                │
+│      ↓ can reference                    │
 ├─────────────────────────────────────────┤
 │  04-interaction                         │
-│      ↓ puede referenciar                │
+│      ↓ can reference                    │
 ├─────────────────────────────────────────┤
 │  03-capabilities                        │
-│      ↓ puede referenciar                │
+│      ↓ can reference                    │
 ├─────────────────────────────────────────┤
 │  02-domain                              │
-│      ↓ puede referenciar                │
+│      ↓ can reference                    │
 ├─────────────────────────────────────────┤
 │  01-problem                             │
-│      ✗ no referencia nada               │
+│      ✗ references nothing               │
 └─────────────────────────────────────────┘
 ```
 
-**Ejemplos válidos:**
+**Valid examples:**
 - `UC-001` → `[[CMD-001]]` (04 → 03)
-- `CMD-001` → `[[Reto]]` (03 → 02)
+- `CMD-001` → `[[Order]]` (03 → 02)
 - `REQ-001` → `[[UC-001]]` (05 → 04)
 
-**Ejemplos inválidos:**
+**Invalid examples:**
 - `Entity` → `[[UC-001]]` (02 → 04)
 - `Command` → `[[UI-Home]]` (03 → 04)
 
 ---
 
-## Extracción de Nodos
+## Node Extraction
 
-### Desde Front-Matter
+### From Front-Matter
 
 ```yaml
 ---
 id: CMD-001
-title: CreateChallenge
+title: PlaceOrder
 type: command
 status: approved
 tags: [command]
 ---
 ```
 
-Genera nodo:
+Generates node:
 ```json
 {
   "id": "CMD-001",
   "type": "Command",
-  "title": "CreateChallenge",
+  "title": "PlaceOrder",
   "status": "approved",
-  "file": "specs/03-capabilities/commands/CMD-001-CreateChallenge.md"
+  "file": "specs/03-capabilities/commands/CMD-001-PlaceOrder.md"
 }
 ```
 
-### Desde Wiki-Links
+### From Wiki-Links
 
 ```markdown
-El [[Usuario]] crea un [[Reto]] validando [[BR-RETO-002]].
+The [[Customer]] places an [[Order]] validating [[BR-ORDER-002]].
 ```
 
-Genera aristas:
+Generates edges:
 ```json
 [
-  { "from": "CMD-001", "to": "Usuario", "type": "REFERENCES" },
-  { "from": "CMD-001", "to": "Reto", "type": "MODIFIES" },
-  { "from": "CMD-001", "to": "BR-RETO-002", "type": "VALIDATES" }
+  { "from": "CMD-001", "to": "Customer", "type": "REFERENCES" },
+  { "from": "CMD-001", "to": "Order", "type": "MODIFIES" },
+  { "from": "CMD-001", "to": "BR-ORDER-002", "type": "VALIDATES" }
 ]
 ```
 
-### Desde Secciones
+### From Sections
 
 ```markdown
-## Atributos
+## Attributes
 
-| Atributo | Tipo | Descripción |
-|----------|------|-------------|
-| titulo | string | Título del reto |
-| estado | enum | Estado actual |
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| title | string | Order title |
+| status | enum | Current status |
 ```
 
-Genera nodos secundarios:
+Generates secondary nodes:
 ```json
 [
-  { "id": "Reto.titulo", "type": "EntityAttribute", "parent": "Reto", "dataType": "string" },
-  { "id": "Reto.estado", "type": "EntityAttribute", "parent": "Reto", "dataType": "enum" }
+  { "id": "Order.title", "type": "EntityAttribute", "parent": "Order", "dataType": "string" },
+  { "id": "Order.status", "type": "EntityAttribute", "parent": "Order", "dataType": "enum" }
 ]
 ```
 
-### Desde Diagramas Mermaid
+### From Mermaid Diagrams
 
 ```markdown
-## Ciclo de Vida
+## Lifecycle
 
 '''mermaid
 stateDiagram-v2
-    [*] --> Borrador
-    Borrador --> Preparado: RETO_PREPARED
-    Preparado --> EnAnalisis: SESSION_STARTED
+    [*] --> Draft
+    Draft --> Ready: ORDER_PREPARED
+    Ready --> InReview: CART_STARTED
 '''
 ```
 
-Genera nodos y aristas:
+Generates nodes and edges:
 ```json
 {
   "nodes": [
-    { "id": "Reto.State.Borrador", "type": "State", "parent": "Reto" },
-    { "id": "Reto.State.Preparado", "type": "State", "parent": "Reto" },
-    { "id": "Reto.State.EnAnalisis", "type": "State", "parent": "Reto" }
+    { "id": "Order.State.Draft", "type": "State", "parent": "Order" },
+    { "id": "Order.State.Ready", "type": "State", "parent": "Order" },
+    { "id": "Order.State.InReview", "type": "State", "parent": "Order" }
   ],
   "edges": [
-    { "from": "Reto.State.Borrador", "to": "Reto.State.Preparado", "type": "TRANSITIONS_TO", "trigger": "RETO_PREPARED" }
+    { "from": "Order.State.Draft", "to": "Order.State.Ready", "type": "TRANSITIONS_TO", "trigger": "ORDER_PREPARED" }
   ]
 }
 ```
 
 ---
 
-## Esquema de Nodo Base
+## Base Node Schema
 
-Todos los nodos comparten estas propiedades:
+All nodes share these properties:
 
 ```typescript
 interface KDDNode {
-  id: string              // Identificador único
-  type: NodeType          // Tipo de nodo
-  title: string           // Título legible
-  file?: string           // Archivo fuente (si aplica)
-  parent?: string         // Nodo padre (para nodos secundarios)
-  layer?: Layer           // Capa KDD (01-05)
-  status?: Status         // Estado del artefacto
-  metadata?: Record<string, unknown>  // Metadatos adicionales
+  id: string              // Unique identifier
+  type: NodeType          // Node type
+  title: string           // Human-readable title
+  file?: string           // Source file (if applicable)
+  parent?: string         // Parent node (for secondary nodes)
+  layer?: Layer           // KDD layer (01-05)
+  status?: Status         // Artifact status
+  metadata?: Record<string, unknown>  // Additional metadata
 }
 
 type NodeType =
-  // Principales
+  // Primary
   | 'Entity' | 'DomainEvent' | 'BusinessRule' | 'BusinessPolicy'
   | 'Command' | 'Query' | 'Process'
   | 'UseCase' | 'UIView' | 'UIFlow' | 'UIComponent'
   | 'Requirement' | 'ADR' | 'PRD'
-  // Secundarios
+  // Secondary
   | 'State' | 'StateTransition' | 'StateMachine'
   | 'EntityAttribute' | 'EntityRelationship' | 'Invariant' | 'Constraint'
   | 'InputParameter' | 'OutputField' | 'EventPayload'
@@ -451,40 +451,40 @@ type Status = 'draft' | 'review' | 'approved' | 'deprecated'
 
 ---
 
-## Esquema de Arista Base
+## Base Edge Schema
 
 ```typescript
 interface KDDEdge {
-  from: string            // ID del nodo origen
-  to: string              // ID del nodo destino
-  type: EdgeType          // Tipo de relación
+  from: string            // Source node ID
+  to: string              // Target node ID
+  type: EdgeType          // Relationship type
   metadata?: {
-    trigger?: string      // Evento disparador (para transiciones)
-    guard?: string        // Condición de guarda
-    description?: string  // Descripción de la relación
+    trigger?: string      // Trigger event (for transitions)
+    guard?: string        // Guard condition
+    description?: string  // Relationship description
   }
 }
 
 type EdgeType =
-  // Entre artefactos
+  // Between artifacts
   | 'IMPLEMENTS' | 'PRODUCES' | 'CONSUMES' | 'VALIDATES'
   | 'MODIFIES' | 'READS' | 'EXTENDS' | 'INCLUDES'
   | 'SUPERSEDES' | 'TRACES_TO'
-  // Estructurales
+  // Structural
   | 'HAS_ATTRIBUTE' | 'HAS_STATE' | 'HAS_RELATIONSHIP'
   | 'HAS_STEP' | 'HAS_PARAMETER' | 'HAS_ERROR'
-  // Dependencia
+  // Dependency
   | 'REFERENCES' | 'DEPENDS_ON' | 'RELATED_TO'
   // UI
   | 'DISPLAYS' | 'USES_COMPONENT' | 'NAVIGATES_TO' | 'TRIGGERS'
-  // Ciclo de vida
+  // Lifecycle
   | 'TRANSITIONS_TO' | 'TRIGGERED_BY'
 ```
 
 ---
 
-## Referencias
+## References
 
-- [Introducción a KDD](/kdd/docs/introducción.md)
-- [Referencia KDD para Agentes](/kdd/kdd.md)
-- [Convenciones de Escritura](/kdd/docs/convenciones-escritura.md)
+- [Introduction to KDD](/kdd/docs/introduction.md)
+- [KDD Reference for Agents](/kdd/kdd.md)
+- [Writing Conventions](/kdd/docs/writing-conventions.md)

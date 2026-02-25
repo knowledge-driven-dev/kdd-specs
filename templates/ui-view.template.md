@@ -9,34 +9,34 @@ links:
 
 # {{ViewName}}
 
-## Propósito
+## Purpose
 
-<!-- 1-3 líneas: qué objetivo del usuario cumple esta vista -->
+<!-- 1-3 lines: what user goal does this view fulfill -->
 
-## Navegación
+## Navigation
 
-- **Ruta**: `/path/to/view`
-- **Llega desde**: [[VIEW-Origen]] (acción que trae aquí)
-- **Sale hacia**: [[VIEW-Destino1]], [[VIEW-Destino2]]
+- **Route**: `/path/to/view`
+- **Arrives from**: [[VIEW-Origin]] (action that leads here)
+- **Navigates to**: [[VIEW-Destination1]], [[VIEW-Destination2]]
 
 ## Layout
 
-<!-- UN wireframe principal. Indicar zonas, no detalles pixel-perfect -->
+<!-- ONE main wireframe. Indicate zones, not pixel-perfect details -->
 
 ```
 ┌──────────────────────────────────────────────────────────┐
-│  [← Volver]           Título de la Vista        [Acción] │
+│  [← Back]             View Title               [Action]  │
 ├──────────────────────────────────────────────────────────┤
 │                                                          │
 │  ┌─────────────────────────┐  ┌───────────────────────┐  │
 │  │                         │  │                       │  │
-│  │     Zona Principal      │  │    Zona Secundaria    │  │
+│  │       Main Zone         │  │    Secondary Zone     │  │
 │  │        (70%)            │  │        (30%)          │  │
 │  │                         │  │                       │  │
 │  └─────────────────────────┘  └───────────────────────┘  │
 │                                                          │
 │  ┌──────────────────────────────────────────────────┐    │
-│  │              Zona de Acciones                    │    │
+│  │                Actions Zone                      │    │
 │  └──────────────────────────────────────────────────┘    │
 │                                                          │
 └──────────────────────────────────────────────────────────┘
@@ -44,34 +44,34 @@ links:
 
 ### Responsive
 
-- **Desktop**: Layout de 2 columnas como arriba
-- **Móvil**: Columnas apiladas, zona secundaria colapsable
+- **Desktop**: 2-column layout as above
+- **Mobile**: Stacked columns, secondary zone collapsible
 
-## Componentes
+## Components
 
-| Zona | Componente | Propósito |
-|------|------------|-----------|
-| Principal | [[UI-ComponenteA]] | Muestra/edita el contenido principal |
-| Secundaria | [[UI-ComponenteB]] | Navegación contextual o info auxiliar |
-| Acciones | Botones estándar | Guardar, cancelar, etc. |
+| Zone | Component | Purpose |
+|------|-----------|---------|
+| Main | [[UI-ComponentA]] | Displays/edits the main content |
+| Secondary | [[UI-ComponentB]] | Contextual navigation or auxiliary info |
+| Actions | Standard buttons | Save, cancel, etc. |
 
-## Datos
+## Data
 
-<!-- Qué necesita esta vista para renderizar -->
+<!-- What this view needs to render -->
 
-| Dato | Fuente | Notas |
+| Data | Source | Notes |
 |------|--------|-------|
-| entidadPrincipal | `GET /api/resource/:id` | Carga inicial |
-| listaRelacionada | Incluida en entidad | — |
-| estadoLocal | React state | Para edición en curso |
+| mainEntity | `GET /api/resource/:id` | Initial load |
+| relatedList | Included in entity | — |
+| localState | React state | For in-progress editing |
 
-## Estados de la Vista
+## View States
 
-### Cargando
+### Loading
 
 ```
 ┌──────────────────────────────────────────────────────────┐
-│  [← Volver]           ░░░░░░░░░░░░                       │
+│  [← Back]           ░░░░░░░░░░░░                         │
 ├──────────────────────────────────────────────────────────┤
 │                                                          │
 │       ┌────────────────────────────────────┐             │
@@ -83,18 +83,18 @@ links:
 └──────────────────────────────────────────────────────────┘
 ```
 
-### Vacío
+### Empty
 
-<!-- Solo si la vista puede no tener datos -->
+<!-- Only if the view can have no data -->
 
 ```
 ┌──────────────────────────────────────────────────────────┐
 │                                                          │
-│                    📭 Sin elementos                      │
+│                    📭 No items                           │
 │                                                          │
-│            Descripción de qué hacer ahora                │
+│              Description of what to do now               │
 │                                                          │
-│                  [Acción sugerida]                       │
+│                  [Suggested action]                      │
 │                                                          │
 └──────────────────────────────────────────────────────────┘
 ```
@@ -104,43 +104,43 @@ links:
 ```
 ┌──────────────────────────────────────────────────────────┐
 │                                                          │
-│                 ⚠️ Error al cargar                       │
+│                 ⚠️ Failed to load                        │
 │                                                          │
-│            No pudimos obtener los datos.                 │
+│            We couldn't retrieve the data.                │
 │                                                          │
-│                   [Reintentar]                           │
+│                     [Retry]                              │
 │                                                          │
 └──────────────────────────────────────────────────────────┘
 ```
 
-## Comportamiento
+## Behavior
 
-### Al cargar
+### On load
 
-1. Mostrar skeleton
-2. Fetch de datos
-3. Si error → estado error con retry
-4. Si OK → renderizar vista
+1. Show skeleton
+2. Fetch data
+3. If error → error state with retry
+4. If OK → render view
 
-### Acciones principales
+### Main Actions
 
-| Acción | Resultado | Feedback |
-|--------|-----------|----------|
-| Guardar | Persiste cambios via [[CMD-X]] | Toast éxito/error |
-| Cancelar | Descarta cambios, confirma si hay edición | — |
-| [Otra acción] | Descripción | Feedback |
+| Action | Result | Feedback |
+|--------|--------|----------|
+| Save | Persists changes via [[CMD-X]] | Success/error toast |
+| Cancel | Discards changes, confirms if editing | — |
+| [Other action] | Description | Feedback |
 
-### Validaciones
+### Validations
 
-<!-- Solo si hay formularios -->
+<!-- Only if there are forms -->
 
-| Campo | Regla | Mensaje |
-|-------|-------|---------|
-| campo1 | requerido | "Este campo es obligatorio" |
-| campo2 | max 100 chars | "Máximo 100 caracteres" |
+| Field | Rule | Message |
+|-------|------|---------|
+| field1 | required | "This field is required" |
+| field2 | max 100 chars | "Maximum 100 characters" |
 
-## Conexiones
+## Connections
 
-- **Implementa**: [[UC-001]], [[UC-002]]
-- **Usa componentes**: [[UI-CompA]], [[UI-CompB]]
-- **Ejecuta comandos**: [[CMD-Create]], [[CMD-Update]]
+- **Implements**: [[UC-001]], [[UC-002]]
+- **Uses components**: [[UI-CompA]], [[UI-CompB]]
+- **Executes commands**: [[CMD-Create]], [[CMD-Update]]

@@ -9,113 +9,113 @@ links:
 
 # Flow: {{FlowName}}
 
-## Propósito
+## Purpose
 
-<!-- 1-3 líneas: qué logra el usuario al completar este flujo -->
+<!-- 1-3 lines: what the user achieves by completing this flow -->
 
-## Actor y Contexto
+## Actor and Context
 
-- **Actor**: [[Usuario]] / [[Admin]] / etc.
-- **Precondición**: Estado requerido antes de iniciar
-- **Resultado exitoso**: Qué cambia en el sistema al completar
+- **Actor**: [[Customer]] / [[Admin]] / etc.
+- **Precondition**: Required state before starting
+- **Successful outcome**: What changes in the system upon completion
 
-## Diagrama
+## Diagram
 
 ```mermaid
 flowchart TD
-    A[Inicio] --> B[Paso 1: Datos básicos]
-    B --> C{¿Datos válidos?}
-    C -->|Sí| D[Paso 2: Configuración]
+    A[Start] --> B[Step 1: Basic data]
+    B --> C{Valid data?}
+    C -->|Yes| D[Step 2: Configuration]
     C -->|No| B
-    D --> E[Paso 3: Confirmación]
-    E --> F{¿Confirma?}
-    F -->|Sí| G[✓ Completado]
-    F -->|No| H[✗ Cancelado]
+    D --> E[Step 3: Confirmation]
+    E --> F{Confirmed?}
+    F -->|Yes| G[✓ Completed]
+    F -->|No| H[✗ Cancelled]
 ```
 
-## Pasos
+## Steps
 
-### 1. {{Nombre del paso}}
+### 1. {{Step name}}
 
-- **Vista**: [[VIEW-PasoUno]]
-- **Usuario hace**: Completa formulario con datos X, Y, Z
-- **Sistema responde**: Valida datos, habilita continuar
-- **Siguiente**: Paso 2 / Fin si cancela
+- **View**: [[VIEW-StepOne]]
+- **User does**: Fills in form with data X, Y, Z
+- **System responds**: Validates data, enables continue
+- **Next**: Step 2 / End if cancelled
 
-### 2. {{Nombre del paso}}
+### 2. {{Step name}}
 
-- **Vista**: [[VIEW-PasoDos]]
-- **Usuario hace**: Configura opciones A, B, C
-- **Sistema responde**: Previsualiza resultado
-- **Siguiente**: Paso 3 / Volver a Paso 1
+- **View**: [[VIEW-StepTwo]]
+- **User does**: Configures options A, B, C
+- **System responds**: Previews result
+- **Next**: Step 3 / Back to Step 1
 
-### 3. Confirmación
+### 3. Confirmation
 
-- **Vista**: [[VIEW-Confirmacion]] o modal
-- **Usuario hace**: Revisa resumen y confirma
-- **Sistema responde**: Ejecuta [[CMD-Create]], emite [[EVT-Creado]]
-- **Siguiente**: Estado terminal
+- **View**: [[VIEW-Confirmation]] or modal
+- **User does**: Reviews summary and confirms
+- **System responds**: Executes [[CMD-Create]], emits [[EVT-Created]]
+- **Next**: Terminal state
 
-## Wireframe del Flujo
+## Flow Wireframe
 
-<!-- Opcional: un wireframe que muestre la progresión -->
+<!-- Optional: a wireframe showing the progression -->
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│  ● Datos ─────── ○ Configuración ─────── ○ Confirmación     │
+│  ● Data ─────── ○ Configuration ─────── ○ Confirmation       │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
-│                    [Contenido del paso]                     │
+│                      [Step content]                         │
 │                                                             │
 ├─────────────────────────────────────────────────────────────┤
-│  [Cancelar]                      [← Anterior]  [Siguiente →]│
+│  [Cancel]                          [← Previous]  [Next →]   │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-## Puntos de Decisión
+## Decision Points
 
-<!-- Solo si hay bifurcaciones significativas -->
+<!-- Only if there are significant branches -->
 
-| Condición | Camino A | Camino B |
-|-----------|----------|----------|
-| Usuario nuevo | Mostrar onboarding | Saltar a paso 2 |
-| Tiene datos previos | Pre-rellenar formulario | Formulario vacío |
+| Condition | Path A | Path B |
+|-----------|--------|--------|
+| New user | Show onboarding | Skip to step 2 |
+| Has previous data | Pre-fill form | Empty form |
 
-## Estados Terminales
+## Terminal States
 
-### Éxito
+### Success
 
-- **Condición**: Usuario completó todos los pasos
-- **Efecto**: Entidad creada/modificada
-- **Navegación**: → [[VIEW-Detalle]] o [[VIEW-Lista]]
-- **Feedback**: Toast "Operación completada"
+- **Condition**: User completed all steps
+- **Effect**: Entity created/modified
+- **Navigation**: → [[VIEW-Detail]] or [[VIEW-List]]
+- **Feedback**: Toast "Operation completed"
 
-### Cancelado
+### Cancelled
 
-- **Condición**: Usuario cancela en cualquier paso
-- **Efecto**: Sin cambios (o borrador guardado si aplica)
-- **Navegación**: → Vista de origen
-- **Feedback**: Confirmación si hay datos sin guardar
+- **Condition**: User cancels at any step
+- **Effect**: No changes (or draft saved if applicable)
+- **Navigation**: → Origin view
+- **Feedback**: Confirmation if there is unsaved data
 
 ### Error
 
-- **Condición**: Fallo del sistema durante el flujo
-- **Efecto**: Mantener estado actual, permitir retry
-- **Feedback**: Mensaje de error con opción de reintentar
+- **Condition**: System failure during the flow
+- **Effect**: Maintain current state, allow retry
+- **Feedback**: Error message with retry option
 
-## Persistencia
+## Persistence
 
-<!-- Cómo se maneja el estado entre pasos -->
+<!-- How state is managed between steps -->
 
-| Estrategia | Uso |
-|------------|-----|
-| Estado local (React) | Navegación entre pasos |
-| localStorage | Recuperar si se cierra accidentalmente |
-| Backend (borrador) | Flujos largos que requieren persistencia |
+| Strategy | Use |
+|----------|-----|
+| Local state (React) | Navigation between steps |
+| localStorage | Recover if accidentally closed |
+| Backend (draft) | Long flows requiring persistence |
 
-## Conexiones
+## Connections
 
-- **Implementa**: [[UC-001]]
-- **Vistas involucradas**: [[VIEW-Paso1]], [[VIEW-Paso2]], [[VIEW-Confirmacion]]
-- **Comandos**: [[CMD-Create]]
-- **Eventos**: [[EVT-Entidad-Creada]]
+- **Implements**: [[UC-001]]
+- **Views involved**: [[VIEW-Step1]], [[VIEW-Step2]], [[VIEW-Confirmation]]
+- **Commands**: [[CMD-Create]]
+- **Events**: [[EVT-Entity-Created]]

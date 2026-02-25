@@ -11,8 +11,7 @@
 1. **SSoT (Single Source of Truth)**: Specification > Code. Code is a regenerable cache.
 2. **Executable Specification**: Examples and contracts become tests and automated checks.
 3. **Granularity & Links**: Atomic files with front-matter and wiki-links forming a knowledge graph.
-4. **RAG-first**: Agents consult indexed documentation, not the code repo.
-5. **Lightweight Governance**: Automated states, coverage, and reviews.
+4. **Lightweight Governance**: Automated states, coverage, and reviews.
 
 ---
 

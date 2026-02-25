@@ -1,264 +1,264 @@
-# Capa 03: Experience (Experiencia)
+# Layer 03: Experience
 
-## La Capa de Presentación: ¿Cómo lo Ven los Usuarios?
+## The Presentation Layer: How Do Users See It?
 
 ---
 
-## Introducción
+## Introduction
 
-La capa de Experience responde a la pregunta: **¿Cómo se presenta el sistema al usuario?**
+The Experience layer answers the question: **How is the system presented to the user?**
 
-En las capas anteriores definimos el dominio (01-Domain) y las operaciones disponibles incluyendo casos de uso (02-Behavior). La capa de Experience es donde **diseñamos la interfaz visual** que implementa esas operaciones.
+In the previous layers we defined the domain (01-Domain) and the available operations including use cases (02-Behavior). The Experience layer is where we **design the visual interface** that implements those operations.
 
-> **Nota importante**: Esta capa es de **PRESENTATION**. Referencia a 02-Behavior y contiene únicamente especificaciones de vistas (Views).
+> **Important note**: This layer is the **PRESENTATION** layer. It references 02-Behavior and contains only view (Views) specifications.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                              │
 │   00-Requirements  →  01-Domain   →  02-Behavior     →  03-Experience       │
 │                                                                              │
-│   "¿Por qué           "¿Qué           "¿Cómo se           "¿CÓMO LO         │
-│    existe?"           existe?"         comporta?"           VEN?"            │
+│   "Why does            "What           "How does           "HOW DO           │
+│    it exist?"          exists?"         it behave?"         USERS SEE IT?"  │
 │                                                                              │
 │   ──────────────────────────────────────────────────────────────────────────│
 │                                                                              │
-│   Motivación          Conceptual      Funcional           PRESENTACIÓN      │
-│   Contexto            (entidades)     (operaciones)       (vistas)          │
-│   Objetivos           (reglas)        (use cases)                           │
+│   Motivation          Conceptual      Functional          PRESENTATION      │
+│   Context             (entities)      (operations)        (views)           │
+│   Objectives          (rules)         (use cases)                           │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## La Filosofía: Views como Consumidores de Behavior
+## The Philosophy: Views as Consumers of Behavior
 
-### El Usuario como Consumidor del Comportamiento
+### The User as a Consumer of Behavior
 
-El diseño de esta capa parte de un principio clave:
+The design of this layer starts from a key principle:
 
-> **Las interfaces de usuario son "clientes" de las capacidades del sistema, no su definición.**
+> **User interfaces are "clients" of the system's capabilities, not their definition.**
 
-Esto significa que una View (UI) **no define** lo que el sistema hace; una View **consume** lo que el sistema ya sabe hacer.
+This means that a View (UI) **does not define** what the system does; a View **consumes** what the system already knows how to do.
 
 ```
-❌ Incorrecto: "El sistema puede crear retos porque hay un formulario"
-✅ Correcto:   "Hay un formulario porque el sistema puede crear retos"
+❌ Incorrect: "The system can place orders because there is a form"
+✅ Correct:   "There is a form because the system can place orders"
 ```
 
-Esta distinción es crucial porque:
+This distinction is crucial because:
 
-1. **Desacopla la lógica de la presentación**: El mismo Command puede ser invocado desde una web, una CLI, una API, o un test automatizado.
-2. **Permite evolución independiente**: Puedes rediseñar completamente la UI sin tocar la lógica de negocio.
-3. **Facilita el testing**: Los Commands se pueden probar aislados de la UI.
+1. **Decouples logic from presentation**: The same Command can be invoked from a web app, a CLI, an API, or an automated test.
+2. **Enables independent evolution**: You can completely redesign the UI without touching the business logic.
+3. **Facilitates testing**: Commands can be tested in isolation from the UI.
 
-### Las Tres Responsabilidades de una View
+### The Three Responsibilities of a View
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                              │
-│   1. PRESENTAR DATOS                                                         │
-│      Obtener información via Queries y mostrarla al usuario                  │
-│      Query → Datos → Renderizado visual                                      │
+│   1. PRESENT DATA                                                            │
+│      Retrieve information via Queries and display it to the user             │
+│      Query → Data → Visual rendering                                         │
 │                                                                              │
-│   2. CAPTURAR INTENCIONES                                                    │
-│      Traducir acciones del usuario en Commands                               │
-│      Click/Input → Validación → Command                                      │
+│   2. CAPTURE INTENTS                                                         │
+│      Translate user actions into Commands                                    │
+│      Click/Input → Validation → Command                                      │
 │                                                                              │
-│   3. DAR FEEDBACK                                                            │
-│      Comunicar el resultado de las operaciones                               │
-│      Loading → Success/Error → Actualización visual                          │
+│   3. PROVIDE FEEDBACK                                                        │
+│      Communicate the result of operations                                    │
+│      Loading → Success/Error → Visual update                                 │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-La UI **no debe contener lógica de negocio**. Si te encuentras escribiendo reglas de validación complejas o cálculos en un componente, probablemente esa lógica pertenece a un Command o a un Domain Service.
+The UI **must not contain business logic**. If you find yourself writing complex validation rules or calculations in a component, that logic probably belongs in a Command or a Domain Service.
 
 ---
 
-## El Único Artefacto: Views (Vistas)
+## The Single Artifact: Views
 
-Las Views son **especificaciones de la interfaz visual** que implementan los Use Cases definidos en 02-Behavior.
+Views are **visual interface specifications** that implement the Use Cases defined in 02-Behavior.
 
-### Tipos de Views
+### Types of Views
 
-| Tipo | Prefijo | Propósito | Tiene ruta |
-|------|---------|-----------|------------|
-| **View** | `UI-{Name}` | Página completa | Sí (`/retos/:id/editar`) |
-| **Component** | `UI-{Name}` | Pieza reutilizable | No |
-| **Modal** | `UI-{Name}Modal` | Overlay sobre vista | No |
+| Type | Prefix | Purpose | Has route |
+|------|--------|---------|-----------|
+| **View** | `UI-{Name}` | Full page | Yes (`/orders/:id/edit`) |
+| **Component** | `UI-{Name}` | Reusable piece | No |
+| **Modal** | `UI-{Name}Modal` | Overlay on view | No |
 
-### Estructura de una View
+### Structure of a View
 
 ```markdown
 ---
-id: UI-RetoEditor
+id: UI-OrderEditor
 kind: view
-title: Editor de Reto
-route: /retos/:id/editar
+title: Order Editor
+route: /orders/:id/edit
 status: approved
 ---
 
-# UI-RetoEditor
+# UI-OrderEditor
 
-## Contexto
-| Elemento | Descripción |
-|----------|-------------|
-| Ruta | `/retos/:id/editar` |
-| Tipo | Página completa |
-| Acceso | Usuario autenticado |
-| Use Case | [[UC-001-CrearReto]], [[UC-002-EditarReto]] |
+## Context
+| Element | Description |
+|---------|-------------|
+| Route | `/orders/:id/edit` |
+| Type | Full page |
+| Access | Authenticated customer |
+| Use Case | [[UC-001-PlaceOrder]], [[UC-002-EditOrder]] |
 
-## Queries Consumidas
-- [[QRY-001-GetChallenge]] - Carga datos del reto
+## Queries Consumed
+- [[QRY-001-GetOrder]] - Loads order data
 
-## Commands Invocados
-- [[CMD-001-CreateChallenge]] - Al crear nuevo
-- [[CMD-002-UpdateChallenge]] - Al guardar cambios
+## Commands Invoked
+- [[CMD-001-PlaceOrder]] - When creating new
+- [[CMD-002-UpdateOrder]] - When saving changes
 
 ## Layout
 
 ```ascii
 ┌──────────────────────────────────────────────────────────────────────────────┐
 │  HEADER                                                                       │
-│  ← Volver    [Título del Reto]                    [Guardar] [Siguiente →]    │
+│  ← Back    [Order Title]                            [Save] [Next →]          │
 ├────────────────┬─────────────────────────────────────────────┬───────────────┤
 │                │                                             │               │
-│  NAV STEPPER   │            EDITOR MARKDOWN                  │  TABLE OF     │
+│  NAV STEPPER   │            MARKDOWN EDITOR                  │  TABLE OF     │
 │  (200px)       │            (flexible)                       │  CONTENTS     │
 │                │                                             │  (220px)      │
-│  ○ Objetivos   │  # Objetivos del Reto                       │               │
-│  ○ Contexto    │                                             │  • Objetivos  │
-│  ● Hipótesis   │  Describir aquí los objetivos               │  • Contexto   │
-│                │  principales...                             │  • Hipótesis  │
+│  ○ Objectives  │  # Order Objectives                         │               │
+│  ○ Context     │                                             │  • Objectives │
+│  ● Details     │  Describe the main objectives               │  • Context    │
+│                │  here...                                     │  • Details    │
 │                │                                             │               │
 ├────────────────┴─────────────────────────────────────────────┴───────────────┤
 │  FOOTER                                                                       │
-│  [Potenciar con IA]           Último guardado: hace 2 min      [Vista previa]│
+│  [Enhance with AI]           Last saved: 2 min ago            [Preview]      │
 └──────────────────────────────────────────────────────────────────────────────┘
 ```
 
-## Estados
+## States
 
 ### Loading
-- Mostrar skeleton del editor
-- Header con título placeholder
+- Show editor skeleton
+- Header with placeholder title
 
-### Empty (Nuevo Reto)
-- Formulario vacío con placeholders guía
-- Stepper en primer paso
+### Empty (New Order)
+- Empty form with guiding placeholders
+- Stepper at first step
 
-### Success (Reto Existente)
-- Datos cargados en el editor
-- Stepper refleja progreso
+### Success (Existing Order)
+- Data loaded in the editor
+- Stepper reflects progress
 
 ### Error
-- Toast con mensaje de error
-- Opción de reintentar carga
+- Toast with error message
+- Option to retry loading
 
-## Interacciones
+## Interactions
 
-### Click en [Guardar]
-- **Trigger**: Click en botón Guardar
-- **Precondición**: Formulario válido (título no vacío)
-- **Comando**: [[CMD-002-UpdateChallenge]]
+### Click on [Save]
+- **Trigger**: Click on Save button
+- **Precondition**: Valid form (title not empty)
+- **Command**: [[CMD-002-UpdateOrder]]
 - **Feedback**:
-  - Durante: Spinner + botón deshabilitado
-  - Éxito: Toast "Cambios guardados"
-  - Error: Toast con mensaje del error
+  - During: Spinner + disabled button
+  - Success: Toast "Changes saved"
+  - Error: Toast with error message
 
-### Click en [Siguiente →]
-- **Trigger**: Click en botón Siguiente
-- **Precondición**: Reto guardado
-- **Navega a**: [[UI-ConfigurarPersonas]]
+### Click on [Next →]
+- **Trigger**: Click on Next button
+- **Precondition**: Order saved
+- **Navigates to**: [[UI-ConfigureProducts]]
 
 ## Responsive
 
-| Breakpoint | Cambios |
+| Breakpoint | Changes |
 |------------|---------|
-| Desktop (>1024px) | Layout 3 columnas |
-| Tablet (768-1024px) | TOC colapsable, 2 columnas |
-| Mobile (<768px) | Una columna, stepper horizontal |
+| Desktop (>1024px) | 3-column layout |
+| Tablet (768-1024px) | Collapsible TOC, 2 columns |
+| Mobile (<768px) | Single column, horizontal stepper |
 
-## Accesibilidad
-- Focus trap en modales
-- Keyboard shortcuts: Ctrl+S para guardar
-- ARIA labels en botones de acción
+## Accessibility
+- Focus trap in modals
+- Keyboard shortcuts: Ctrl+S to save
+- ARIA labels on action buttons
 ```
 
 ---
 
-## El Principio de Dependencia Unidireccional
+## The Unidirectional Dependency Principle
 
-Este es el corazón de cómo KDD estructura las relaciones entre capas:
+This is the heart of how KDD structures relationships between layers:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                              │
-│   REGLA FUNDAMENTAL:                                                         │
+│   FUNDAMENTAL RULE:                                                          │
 │                                                                              │
-│   03-Experience → referencia → 02-Behavior                                   │
-│   02-Behavior → NO referencia → 03-Experience                                │
+│   03-Experience → references → 02-Behavior                                   │
+│   02-Behavior → DOES NOT reference → 03-Experience                           │
 │                                                                              │
-│   La View conoce qué Commands puede invocar.                                 │
-│   El Command NO sabe qué Views lo usan.                                      │
+│   The View knows which Commands it can invoke.                               │
+│   The Command DOES NOT know which Views use it.                              │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Por Qué Esta Regla
+### Why This Rule
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                              │
-│   El mismo CMD-001-CreateChallenge puede ser invocado desde:                │
+│   The same CMD-001-PlaceOrder can be invoked from:                           │
 │                                                                              │
 │   ┌─────────────────┐                                                        │
-│   │  UI-RetoEditor  │ ────┐                                                  │
+│   │  UI-OrderEditor │ ────┐                                                  │
 │   └─────────────────┘     │                                                  │
 │                           │                                                  │
 │   ┌─────────────────┐     │      ┌─────────────────────┐                    │
-│   │  API REST       │ ────┼────► │ CMD-001             │                    │
-│   └─────────────────┘     │      │ CreateChallenge     │                    │
+│   │  REST API       │ ────┼────► │ CMD-001             │                    │
+│   └─────────────────┘     │      │ PlaceOrder          │                    │
 │                           │      │                     │                    │
-│   ┌─────────────────┐     │      │ (no sabe quién      │                    │
-│   │  CLI Admin      │ ────┤      │  lo invoca)         │                    │
+│   ┌─────────────────┐     │      │ (does not know who  │                    │
+│   │  Admin CLI      │ ────┤      │  invokes it)        │                    │
 │   └─────────────────┘     │      └─────────────────────┘                    │
 │                           │                                                  │
 │   ┌─────────────────┐     │                                                  │
-│   │  Test E2E       │ ────┘                                                  │
+│   │  E2E Test       │ ────┘                                                  │
 │   └─────────────────┘                                                        │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Implicaciones en las Especificaciones
+### Implications in Specifications
 
 ```yaml
-# ✅ CORRECTO: La View conoce al Command
-# UI-RetoEditor.md
-## Commands Invocados
-- [[CMD-001-CreateChallenge]]
+# ✅ CORRECT: The View knows the Command
+# UI-OrderEditor.md
+## Commands Invoked
+- [[CMD-001-PlaceOrder]]
 
-# ❌ INCORRECTO: El Command conoce a la View
-# CMD-001-CreateChallenge.md (en 02-behavior)
-## Usado por:  # NO DEBE EXISTIR
-- [[UI-RetoEditor]]
+# ❌ INCORRECT: The Command knows the View
+# CMD-001-PlaceOrder.md (in 02-behavior)
+## Used by:  # SHOULD NOT EXIST
+- [[UI-OrderEditor]]
 ```
 
 ---
 
-## Estados de una Vista
+## States of a View
 
-Toda vista debe especificar sus posibles estados:
+Every view must specify its possible states:
 
 ### 1. Loading
 
-Mientras se cargan los datos iniciales.
+While initial data is being loaded.
 
 ```ascii
 ┌──────────────────────────────────────┐
-│  ← Volver    ████████████            │
+│  ← Back    ████████████              │
 ├──────────────────────────────────────┤
 │                                      │
 │      ┌────────────────────┐          │
@@ -272,231 +272,231 @@ Mientras se cargan los datos iniciales.
 
 ### 2. Empty
 
-Cuando no hay datos que mostrar.
+When there is no data to display.
 
 ```ascii
 ┌──────────────────────────────────────┐
 │                                      │
 │         📋                           │
 │                                      │
-│    No tienes retos todavía           │
+│    You don't have any orders yet     │
 │                                      │
-│    Crea tu primer reto para          │
-│    empezar a analizar ideas          │
+│    Create your first order to        │
+│    start processing items            │
 │                                      │
-│       [+ Crear mi primer reto]       │
+│       [+ Create my first order]      │
 │                                      │
 └──────────────────────────────────────┘
 ```
 
 ### 3. Error
 
-Cuando algo falla.
+When something fails.
 
 ```ascii
 ┌──────────────────────────────────────┐
 │                                      │
 │         ⚠️                           │
 │                                      │
-│    No pudimos cargar los datos       │
+│    We couldn't load the data         │
 │                                      │
 │    Error: Connection timeout         │
 │                                      │
-│       [Reintentar]  [Volver]         │
+│       [Retry]  [Go Back]            │
 │                                      │
 └──────────────────────────────────────┘
 ```
 
 ### 4. Success/Default
 
-El estado normal con datos cargados.
+The normal state with loaded data.
 
 ---
 
-## Estructura de Interacciones
+## Interaction Structure
 
-La sección más crítica de una especificación de View. Documenta exactamente qué pasa cuando el usuario hace algo.
+The most critical section of a View specification. It documents exactly what happens when the user does something.
 
-### Campos de una Interacción
+### Fields of an Interaction
 
-| Campo | Descripción | Ejemplo |
+| Field | Description | Example |
 |-------|-------------|---------|
-| **Trigger** | Qué acción del usuario dispara esto | Click, Hover, Submit |
-| **Precondición** | Condiciones que deben cumplirse | Formulario válido |
-| **Comando** | Command que se ejecuta | CMD-001-CreateChallenge |
-| **Query** | Query que se ejecuta | QRY-001-GetChallenge |
-| **Feedback** | Feedback visual al usuario | Spinner, Toast |
-| **Abre** | Modal/drawer que se abre | UI-PersonaModal |
-| **Navega a** | Vista destino | UI-ConfigurarPersonas |
+| **Trigger** | What user action triggers this | Click, Hover, Submit |
+| **Precondition** | Conditions that must be met | Valid form |
+| **Command** | Command that is executed | CMD-001-PlaceOrder |
+| **Query** | Query that is executed | QRY-001-GetOrder |
+| **Feedback** | Visual feedback to the user | Spinner, Toast |
+| **Opens** | Modal/drawer that opens | UI-ProductModal |
+| **Navigates to** | Destination view | UI-ConfigureProducts |
 
-### Diferencia entre "Abre" y "Navega a"
+### Difference Between "Opens" and "Navigates to"
 
 ```
-ABRE: Modal, drawer, popover (overlay sobre la vista actual)
+OPENS: Modal, drawer, popover (overlay on the current view)
 ─────
-- La vista actual permanece debajo
-- El usuario puede cerrar y volver
-- No cambia la URL
+- The current view remains underneath
+- The user can close and return
+- Does not change the URL
 
-NAVEGA A: Cambio de ruta/página (reemplaza la vista actual)
-─────────
-- La vista actual se desmonta
-- Cambia la URL del navegador
-- El usuario usa "atrás" para volver
+NAVIGATES TO: Route/page change (replaces the current view)
+─────────────
+- The current view is unmounted
+- Changes the browser URL
+- The user uses "back" to return
 ```
 
 ---
 
-## Conexión con Storybook
+## Connection with Storybook
 
-Las especificaciones de Views están diseñadas para generar stories de Storybook:
+View specifications are designed to generate Storybook stories:
 
 ```yaml
-# En el front-matter de una View
+# In the front-matter of a View
 storybook:
   category: "Views"
   auto-generate: true
 ```
 
-Cada **estado** documentado se convierte en una story:
+Each documented **state** becomes a story:
 
-| Estado en Spec | Story Generada |
-|----------------|----------------|
-| Loading | `RetoEditor.stories.tsx` → `Loading` |
-| Empty | `RetoEditor.stories.tsx` → `Empty` |
-| Error | `RetoEditor.stories.tsx` → `Error` |
-| Default | `RetoEditor.stories.tsx` → `Default` |
+| State in Spec | Generated Story |
+|---------------|-----------------|
+| Loading | `OrderEditor.stories.tsx` → `Loading` |
+| Empty | `OrderEditor.stories.tsx` → `Empty` |
+| Error | `OrderEditor.stories.tsx` → `Error` |
+| Default | `OrderEditor.stories.tsx` → `Default` |
 
 ---
 
-## Estructura de Carpetas
+## Folder Structure
 
 ```
 /specs/03-experience/
 └── /views/
     ├── UI-Dashboard.md
-    ├── UI-RetoEditor.md
-    ├── UI-ConfigurarPersonas.md
-    ├── UI-SesionActiva.md
-    ├── UI-VerAnalisis.md
-    ├── UI-PersonaCard.md          # Component
-    ├── UI-PersonaModal.md         # Modal
-    └── UI-CreditBalance.md        # Component
+    ├── UI-OrderEditor.md
+    ├── UI-ConfigureProducts.md
+    ├── UI-ActiveCart.md
+    ├── UI-ViewAnalysis.md
+    ├── UI-ProductCard.md          # Component
+    ├── UI-ProductModal.md         # Modal
+    └── UI-BillingBalance.md       # Component
 ```
 
 ---
 
-## Checklist: Especificando una Nueva Vista
+## Checklist: Specifying a New View
 
-Cuando crees una nueva especificación de View, asegúrate de incluir:
+When you create a new View specification, make sure to include:
 
-- [ ] **ID** en formato `UI-{NombreDescriptivo}`
-- [ ] **kind**: `view`, `component`, o `modal`
-- [ ] **Contexto**: Ruta (si aplica), tipo, acceso requerido
-- [ ] **Use Cases** que implementa (de 02-behavior)
-- [ ] **Queries** que consume
-- [ ] **Commands** que invoca
-- [ ] **Layout** con wireframe ASCII
-- [ ] **Estados**: loading, empty, error, success
-- [ ] **Interacciones**: cada acción del usuario documentada
-- [ ] **Responsive**: comportamiento en diferentes breakpoints
-- [ ] **Accesibilidad**: focus, keyboard nav, ARIA
+- [ ] **ID** in `UI-{DescriptiveName}` format
+- [ ] **kind**: `view`, `component`, or `modal`
+- [ ] **Context**: Route (if applicable), type, required access
+- [ ] **Use Cases** it implements (from 02-behavior)
+- [ ] **Queries** it consumes
+- [ ] **Commands** it invokes
+- [ ] **Layout** with ASCII wireframe
+- [ ] **States**: loading, empty, error, success
+- [ ] **Interactions**: each user action documented
+- [ ] **Responsive**: behavior at different breakpoints
+- [ ] **Accessibility**: focus, keyboard nav, ARIA
 
 ---
 
-## Anti-patrones a Evitar
+## Anti-patterns to Avoid
 
-### 1. Lógica de Negocio en la View
+### 1. Business Logic in the View
 
 ```typescript
-// ❌ INCORRECTO: Regla de negocio en el componente
-function RetoEditor() {
-  const canSave = reto.personas.length >= 3 && reto.personas.length <= 6
-  // Esta regla debería estar en BR-PERSONA-001 (01-domain)
+// ❌ INCORRECT: Business rule in the component
+function OrderEditor() {
+  const canSave = order.products.length >= 3 && order.products.length <= 6
+  // This rule should be in BR-PRODUCT-001 (01-domain)
 }
 
-// ✅ CORRECTO: La UI solo presenta el resultado
-function RetoEditor() {
-  const { canInitiateSession } = useRetoValidation(reto)
-  // La validación viene del dominio
+// ✅ CORRECT: The UI only presents the result
+function OrderEditor() {
+  const { canInitiateCart } = useOrderValidation(order)
+  // The validation comes from the domain
 }
 ```
 
-### 2. View que Define Operaciones
+### 2. View that Defines Operations
 
 ```yaml
-# ❌ INCORRECTO: La View "inventa" operaciones
-# UI-RetoEditor.md
-## Operaciones:
-- Crear reto
-- Duplicar reto
+# ❌ INCORRECT: The View "invents" operations
+# UI-OrderEditor.md
+## Operations:
+- Place order
+- Duplicate order
 
-# ✅ CORRECTO: La View consume Commands existentes
-# UI-RetoEditor.md
-## Commands Invocados:
-- [[CMD-001-CreateChallenge]]    # Ya definido en 02-behavior
-- [[CMD-004-DuplicateChallenge]]
+# ✅ CORRECT: The View consumes existing Commands
+# UI-OrderEditor.md
+## Commands Invoked:
+- [[CMD-001-PlaceOrder]]    # Already defined in 02-behavior
+- [[CMD-004-DuplicateOrder]]
 ```
 
-### 3. Especificar Solo el Happy Path
+### 3. Specifying Only the Happy Path
 
 ```markdown
-# ❌ INCORRECTO: Solo el caso feliz
-## Interacciones
-- Click en Guardar → Reto guardado
+# ❌ INCORRECT: Only the happy case
+## Interactions
+- Click on Save → Order saved
 
-# ✅ CORRECTO: Todos los casos
-## Interacciones
+# ✅ CORRECT: All cases
+## Interactions
 
-### Click en Guardar (éxito)
-- Comando: [[CMD-002-UpdateChallenge]]
-- Feedback: Toast "Cambios guardados"
+### Click on Save (success)
+- Command: [[CMD-002-UpdateOrder]]
+- Feedback: Toast "Changes saved"
 
-### Click en Guardar (error de validación)
-- Feedback: Campos inválidos resaltados
+### Click on Save (validation error)
+- Feedback: Invalid fields highlighted
 
-### Click en Guardar (error de servidor)
-- Feedback: Toast de error con opción de reintentar
+### Click on Save (server error)
+- Feedback: Error toast with retry option
 ```
 
-### 4. View sin Use Case
+### 4. View without Use Case
 
 ```yaml
-# ❌ INCORRECTO: View sin contexto de uso
-# UI-RetoEditor.md
-(Sin mención a Use Cases)
+# ❌ INCORRECT: View without usage context
+# UI-OrderEditor.md
+(No mention of Use Cases)
 
-# ✅ CORRECTO: View vinculada a Use Cases
-# UI-RetoEditor.md
-## Contexto
-| Use Case | [[UC-001-CrearReto]], [[UC-002-EditarReto]] |
+# ✅ CORRECT: View linked to Use Cases
+# UI-OrderEditor.md
+## Context
+| Use Case | [[UC-001-PlaceOrder]], [[UC-002-EditOrder]] |
 ```
 
 ---
 
-## Resumen
+## Summary
 
-La capa de Experience en KDD:
+The Experience layer in KDD:
 
-1. **Es de presentación**: Solo contiene especificaciones de Views
-2. **Referencia hacia atrás**: Conoce Commands/Queries/Use Cases de 02-behavior
-3. **No es referenciada por capas anteriores**: Los Commands no saben qué Views los usan
-4. **Es derivable**: Si tienes Use Cases bien especificados, la UI es "solo presentación"
-5. **Es verificable**: Los tests BDD ejercitan la UI contra los Commands
-6. **Genera Storybook**: Las especificaciones alimentan la documentación visual
+1. **Is presentational**: Only contains View specifications
+2. **References backward**: Knows Commands/Queries/Use Cases from 02-behavior
+3. **Is not referenced by previous layers**: Commands do not know which Views use them
+4. **Is derivable**: If you have well-specified Use Cases, the UI is "just presentation"
+5. **Is verifiable**: BDD tests exercise the UI against the Commands
+6. **Generates Storybook**: Specifications feed the visual documentation
 
-> **"La mejor UI es invisible: presenta las capacidades del sistema de forma natural, sin inventar comportamiento propio."**
-
----
-
-## Artefactos Relacionados
-
-- [[view.template]] - Template para vistas
-- [[component.template]] - Template para componentes
-- [[02-behavior]] - La capa anterior: Behavior (Commands, Queries, Use Cases)
-- [[04-verification]] - La capa siguiente: Verification
-- [[Introducción a KDD]] - Visión general de KDD
+> **"The best UI is invisible: it presents the system's capabilities naturally, without inventing its own behavior."**
 
 ---
 
-*Última actualización: 2025-01*
+## Related Artifacts
+
+- [[view.template]] - Template for views
+- [[component.template]] - Template for components
+- [[02-behavior]] - The previous layer: Behavior (Commands, Queries, Use Cases)
+- [[04-verification]] - The next layer: Verification
+- [[Introduction to KDD]] - KDD overview
+
+---
+
+*Last updated: 2025-01*

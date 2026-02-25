@@ -1,123 +1,123 @@
-# Validación de Especificaciones KDD
+# KDD Specification Validation
 
-> Guía completa del sistema de validación para documentación KDD (Knowledge-Driven Development).
+> Complete guide to the validation system for KDD (Knowledge-Driven Development) documentation.
 
-## Resumen
+## Summary
 
-El proyecto cuenta con un sistema de validación en tres niveles que asegura la calidad y consistencia de las especificaciones en `/specs`. Combina validación automática (script) con análisis inteligente (Claude Code).
+The project features a three-level validation system that ensures the quality and consistency of specifications in `/specs`. It combines automatic validation (script) with intelligent analysis (Claude Code).
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    FLUJO DE VALIDACIÓN                          │
+│                    VALIDATION FLOW                               │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
 │   bun run validate:specs     →    /analyze-entities    →    /fix-spec
 │   ─────────────────────           ─────────────────         ─────────
-│   Validación automática           Análisis IA               Corrección
-│   (regex, schemas)                (semántico)               automática
+│   Automatic validation            AI Analysis              Automatic
+│   (regex, schemas)                (semantic)               correction
 │                                                                 │
-│   Gratis, rápido                  Usa suscripción           Usa suscripción
-│   Pre-commit / CI                 Claude Code               Claude Code
+│   Free, fast                      Uses subscription        Uses subscription
+│   Pre-commit / CI                 Claude Code              Claude Code
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 1. Validador Automático (spec-validator)
+## 1. Automatic Validator (spec-validator)
 
-### Ubicación
+### Location
 ```
 scripts/spec-validator/
-├── index.ts                 # CLI principal
+├── index.ts                 # Main CLI
 ├── lib/
-│   ├── parser.ts            # Parser de markdown + frontmatter
-│   ├── entity-index.ts      # Índice de entidades conocidas
-│   ├── template-loader.ts   # Carga schemas desde plantillas
-│   └── reporter.ts          # Formateo de resultados
+│   ├── parser.ts            # Markdown + frontmatter parser
+│   ├── entity-index.ts      # Known entity index
+│   ├── template-loader.ts   # Loads schemas from templates
+│   └── reporter.ts          # Result formatting
 ├── validators/
-│   ├── frontmatter.ts       # Nivel 1: Validación de metadatos
-│   ├── structure.ts         # Nivel 2: Estructura del documento
-│   └── semantics.ts         # Nivel 3: Referencias y enlaces
+│   ├── frontmatter.ts       # Level 1: Metadata validation
+│   ├── structure.ts         # Level 2: Document structure
+│   └── semantics.ts         # Level 3: References and links
 └── schemas/
-    ├── frontmatter.ts       # Schemas Zod (legacy)
-    └── structure.ts         # Templates de secciones (legacy)
+    ├── frontmatter.ts       # Zod schemas (legacy)
+    └── structure.ts         # Section templates (legacy)
 ```
 
-### Niveles de Validación
+### Validation Levels
 
-#### Nivel 1: Frontmatter
-Valida que los metadatos YAML cumplan con el schema definido en las plantillas.
+#### Level 1: Frontmatter
+Validates that YAML metadata complies with the schema defined in the templates.
 
 ```yaml
 ---
-id: UC-001                    # Requerido, patrón específico
-kind: use-case                # Literal según tipo
+id: UC-001                    # Required, specific pattern
+kind: use-case                # Literal per type
 status: draft                 # Enum: draft|proposed|approved|deprecated
-actor: Usuario Registrado     # Requerido para use-cases
+actor: Registered Customer    # Required for use-cases
 ---
 ```
 
-**Errores típicos:**
-- Campo requerido faltante
-- Formato de ID incorrecto
-- Valor no permitido en enum
+**Typical errors:**
+- Missing required field
+- Incorrect ID format
+- Disallowed enum value
 
-#### Nivel 2: Estructura
-Verifica que el documento tenga las secciones requeridas según su tipo.
+#### Level 2: Structure
+Verifies that the document has the required sections according to its type.
 
-**Ejemplo para Use Case:**
-- `## Descripción` (requerido)
-- `## Precondiciones` (requerido)
-- `## Flujo Principal` (requerido)
-- `## Flujos Alternativos` (opcional)
-- `## Postcondiciones` (requerido)
+**Example for Use Case:**
+- `## Description` (required)
+- `## Preconditions` (required)
+- `## Main Flow` (required)
+- `## Alternative Flows` (optional)
+- `## Postconditions` (required)
 
-**Errores típicos:**
-- Sección requerida faltante
-- Múltiples H1
-- Sección vacía
+**Typical errors:**
+- Missing required section
+- Multiple H1s
+- Empty section
 
-#### Nivel 3: Semántico
-Analiza referencias cruzadas y enlaces wiki.
+#### Level 3: Semantic
+Analyzes cross-references and wiki links.
 
-**Validaciones:**
-- Wiki-links `[[entidad]]` apuntan a entidades existentes
-- Eventos mencionados (`EVT-*`) están documentados
-- Reglas referenciadas (`BR-XXX-NNN`) existen
-- Requisitos individuales (`REQ-NNN.M`) están definidos
+**Validations:**
+- Wiki-links `[[entity]]` point to existing entities
+- Mentioned events (`EVT-*`) are documented
+- Referenced rules (`BR-XXX-NNN`) exist
+- Individual requirements (`REQ-NNN.M`) are defined
 
-**Detección de sub-entidades:**
-El índice detecta automáticamente los requisitos individuales dentro de sus archivos padre (ej: `REQ-001.1`, `REQ-001.2`). Las reglas de negocio (`BR-XXX-NNN`) se detectan a partir de sus propios archivos en `specs/02-domain/rules/`.
+**Sub-entity detection:**
+The index automatically detects individual requirements within their parent files (e.g.: `REQ-001.1`, `REQ-001.2`). Business rules (`BR-XXX-NNN`) are detected from their own files in `specs/02-domain/rules/`.
 
-### Comandos
+### Commands
 
 ```bash
-# Validar todo /specs
+# Validate all of /specs
 bun run validate:specs
 
-# Validar con detalles (muestra info y sugerencias)
+# Validate with details (shows info and suggestions)
 bun run validate:specs -v
 
-# Validar solo un nivel
+# Validate only one level
 bun run validate:specs --level frontmatter
 bun run validate:specs --level structure
 bun run validate:specs --level semantics
 
-# Validar directorio específico
+# Validate specific directory
 bun run validate:specs specs/02-domain
 
-# Auto-corregir enlaces (nivel semántico)
+# Auto-fix links (semantic level)
 bun run validate:specs --fix
 
-# Formato para GitHub Actions
+# GitHub Actions format
 bun run validate:specs -o github
 
-# Formato JSON (para integración)
+# JSON format (for integration)
 bun run validate:specs -o json
 ```
 
-### Salida Ejemplo
+### Example Output
 
 ```
 🔍 Spec Validator - KDD Documentation Linter
@@ -128,159 +128,159 @@ bun run validate:specs -o json
 
   Found 56 spec files
 
-📊 Índice de Entidades:
-   Total: 159 entidades indexadas
-   Entidades: 11
-   Eventos: 9
-   Reglas: 53
-   Casos de Uso: 10
-   Requisitos: 75
-   └─ Requisitos individuales: 65
+📊 Entity Index:
+   Total: 159 indexed entities
+   Entities: 11
+   Events: 9
+   Rules: 53
+   Use Cases: 10
+   Requirements: 75
+   └─ Individual requirements: 65
 
-specs/02-domain/rules/BR-RONDA-003.md
-  ✗ Falta campo requerido "id" en frontmatter:1
-  ⚠ La sección "Implementación" parece estar vacía:45
+specs/02-domain/rules/BR-ORDERITEM-003.md
+  ✗ Missing required field "id" in frontmatter:1
+  ⚠ Section "Implementation" appears to be empty:45
 
-behavior/use-cases/UC-001-Crear-Reto.md
-  ⚠ El enlace [[EVT-Reto-Creado]] no corresponde a ninguna entidad:83
-  ℹ "Usuario" debería ser un enlace a [[Usuario]]:15
+behavior/use-cases/UC-001-PlaceOrder.md
+  ⚠ Link [[EVT-Order-Placed]] does not match any entity:83
+  ℹ "Customer" should be a link to [[Customer]]:15
 
 ──────────────────────────────────────────────────
-Resumen: 56 archivos, 3 errores, 12 warnings
+Summary: 56 files, 3 errors, 12 warnings
 
-✗ Validación fallida
+✗ Validation failed
 ```
 
 ---
 
-## 2. Análisis Inteligente con Claude Code
+## 2. Intelligent Analysis with Claude Code
 
-Para análisis más profundo que requiere comprensión semántica, usamos slash commands que aprovechan la suscripción de Claude Code.
+For deeper analysis requiring semantic understanding, we use slash commands that leverage the Claude Code subscription.
 
-### `/analyze-entities <archivo>`
+### `/analyze-entities <file>`
 
-Análisis IA profundo de un archivo para detectar:
+Deep AI analysis of a file to detect:
 
-- **Menciones explícitas**: Entidades conocidas sin enlazar
-- **Sinónimos y variaciones**: Plurales, tildes, términos equivalentes
-- **Referencias implícitas**: "el usuario" → `[[Usuario]]`
-- **Abreviaciones**: UC-001 → `[[UC-001-Crear-Reto]]`
-- **Entidades faltantes**: Conceptos que deberían documentarse
+- **Explicit mentions**: Known entities without links
+- **Synonyms and variations**: Plurals, accents, equivalent terms
+- **Implicit references**: "the customer" → `[[Customer]]`
+- **Abbreviations**: UC-001 → `[[UC-001-PlaceOrder]]`
+- **Missing entities**: Concepts that should be documented
 
-**Uso:**
+**Usage:**
 ```
 /analyze-entities specs/vision/charter.md
 ```
 
-**Cuándo usarlo:**
-- Después de crear un documento nuevo
-- Cuando el validador automático reporta muchos "info"
-- Para documentos complejos con muchas referencias
+**When to use it:**
+- After creating a new document
+- When the automatic validator reports many "info" entries
+- For complex documents with many references
 
 ### `/list-entities`
 
-Genera un índice completo de todas las entidades del sistema.
+Generates a complete index of all system entities.
 
-**Uso:**
+**Usage:**
 ```
 /list-entities
 ```
 
-**Cuándo usarlo:**
-- Para obtener visión general del dominio
-- Antes de crear nuevas entidades (evitar duplicados)
-- Para documentación o onboarding
+**When to use it:**
+- To get an overview of the domain
+- Before creating new entities (avoid duplicates)
+- For documentation or onboarding
 
-### `/fix-spec <archivo>`
+### `/fix-spec <file>`
 
-Corrige automáticamente problemas detectados.
+Automatically fixes detected problems.
 
-**Uso:**
+**Usage:**
 ```
 /fix-spec specs/vision/charter.md
 ```
 
-**Qué corrige:**
-- Enlaces rotos con nombre similar
-- Menciones sin enlazar (alta confianza)
-- Frontmatter incompleto
+**What it fixes:**
+- Broken links with similar names
+- Unlinked mentions (high confidence)
+- Incomplete frontmatter
 
-**Qué NO corrige:**
-- Entidades que no existen
-- Secciones faltantes
-- Problemas que requieren decisión humana
+**What it does NOT fix:**
+- Entities that don't exist
+- Missing sections
+- Problems that require human decision
 
 ---
 
-## 3. Plantillas KDD
+## 3. KDD Templates
 
-Las validaciones se basan en plantillas ubicadas en `/kdd/templates/`.
+Validations are based on templates located in `/kdd/templates/`.
 
-### Estructura de una Plantilla
+### Template Structure
 
 ```markdown
 ---
 # @type: use-case
-# @description: Caso de uso del sistema
+# @description: System use case
 # @file-pattern: ^UC-\d{3}.*\.md$
 
 id: UC-NNN                    # @required @pattern: ^UC-\d{3}$
 kind: use-case                # @literal: use-case
 status: draft                 # @enum: draft|proposed|approved|deprecated
-actor: Actor Principal        # @required
+actor: Primary Actor          # @required
 ---
 
-# UC-NNN: Nombre del Caso de Uso <!-- required pattern: ^UC-\d{3}: -->
+# UC-NNN: Use Case Name <!-- required pattern: ^UC-\d{3}: -->
 
-## Descripción <!-- required -->
+## Description <!-- required -->
 
-## Precondiciones <!-- required -->
+## Preconditions <!-- required -->
 
-## Flujo Principal <!-- required -->
+## Main Flow <!-- required -->
 <!-- expects: gherkin -->
 
-## Postcondiciones <!-- required -->
+## Postconditions <!-- required -->
 ```
 
-### Anotaciones Disponibles
+### Available Annotations
 
-**Para frontmatter:**
-- `@required` - Campo obligatorio
-- `@optional` - Campo opcional (por defecto)
-- `@pattern: regex` - Validar formato
-- `@enum: val1|val2|val3` - Valores permitidos
-- `@literal: value` - Valor exacto esperado
+**For frontmatter:**
+- `@required` - Mandatory field
+- `@optional` - Optional field (default)
+- `@pattern: regex` - Validate format
+- `@enum: val1|val2|val3` - Allowed values
+- `@literal: value` - Exact expected value
 - `@type: string|number|boolean|array|date`
-- `@contains: value` - Array debe contener valor
-- `@description: texto` - Descripción del campo
+- `@contains: value` - Array must contain value
+- `@description: text` - Field description
 
-**Para secciones:**
-- `<!-- required -->` - Sección obligatoria
-- `<!-- optional -->` - Sección opcional
-- `<!-- alias: "Alt1|Alt2" -->` - Nombres alternativos
-- `<!-- expects: mermaid|json|gherkin|typescript -->` - Contenido esperado
+**For sections:**
+- `<!-- required -->` - Mandatory section
+- `<!-- optional -->` - Optional section
+- `<!-- alias: "Alt1|Alt2" -->` - Alternative names
+- `<!-- expects: mermaid|json|gherkin|typescript -->` - Expected content
 
-### Plantillas Disponibles
+### Available Templates
 
-| Tipo | Archivo | Descripción |
-|------|---------|-------------|
-| use-case | `use-case.template.md` | Casos de uso |
-| requirement | `requirement.template.md` | Requisitos EARS |
-| entity | `entity.template.md` | Entidades de dominio |
-| event | `event.template.md` | Eventos del sistema |
-| rule | `rule.template.md` | Reglas de negocio |
-| process | `process.template.md` | Procesos/flujos |
+| Type | File | Description |
+|------|------|-------------|
+| use-case | `use-case.template.md` | Use cases |
+| requirement | `requirement.template.md` | EARS requirements |
+| entity | `entity.template.md` | Domain entities |
+| event | `event.template.md` | System events |
+| rule | `rule.template.md` | Business rules |
+| process | `process.template.md` | Processes/flows |
 | story | `story.template.md` | User stories |
-| nfr | `nfr.template.md` | Requisitos no funcionales |
+| nfr | `nfr.template.md` | Non-functional requirements |
 | adr | `adr.template.md` | Architecture Decision Records |
 | prd | `prd.template.md` | Product Requirements Document |
-| ui-component | `ui-component.template.md` | Componentes UI |
-| ui-view | `ui-view.template.md` | Vistas/páginas UI |
-| ui-flow | `ui-flow.template.md` | Flujos de navegación UI |
+| ui-component | `ui-component.template.md` | UI components |
+| ui-view | `ui-view.template.md` | UI views/pages |
+| ui-flow | `ui-flow.template.md` | UI navigation flows |
 
 ---
 
-## 4. Integración CI/CD
+## 4. CI/CD Integration
 
 ### Pre-commit Hook
 
@@ -288,15 +288,15 @@ actor: Actor Principal        # @required
 #!/bin/sh
 # .git/hooks/pre-commit
 
-# Validar solo archivos modificados en /specs
+# Validate only modified files in /specs
 CHANGED_SPECS=$(git diff --cached --name-only | grep "^specs/.*\.md$")
 
 if [ -n "$CHANGED_SPECS" ]; then
-  echo "Validando especificaciones modificadas..."
+  echo "Validating modified specifications..."
   bun run validate:specs $CHANGED_SPECS
 
   if [ $? -ne 0 ]; then
-    echo "❌ Validación fallida. Corrige los errores antes de commitear."
+    echo "❌ Validation failed. Fix the errors before committing."
     exit 1
   fi
 fi
@@ -332,86 +332,86 @@ jobs:
 
 ---
 
-## 5. Flujo de Trabajo Recomendado
+## 5. Recommended Workflow
 
-### Al Crear un Documento Nuevo
+### When Creating a New Document
 
 ```bash
-# 1. Copiar plantilla
-cp kdd/templates/use-case.template.md specs/03-behavior/use-cases/UC-011-Nuevo.md
+# 1. Copy template
+cp kdd/templates/use-case.template.md specs/03-behavior/use-cases/UC-011-New.md
 
-# 2. Editar contenido
-# ... escribir el caso de uso ...
+# 2. Edit content
+# ... write the use case ...
 
-# 3. Validar
-bun run validate:specs specs/03-behavior/use-cases/UC-011-Nuevo.md -v
+# 3. Validate
+bun run validate:specs specs/03-behavior/use-cases/UC-011-New.md -v
 
-# 4. Análisis profundo (opcional)
-/analyze-entities specs/03-behavior/use-cases/UC-011-Nuevo.md
+# 4. Deep analysis (optional)
+/analyze-entities specs/03-behavior/use-cases/UC-011-New.md
 
-# 5. Corregir
-/fix-spec specs/03-behavior/use-cases/UC-011-Nuevo.md
+# 5. Fix
+/fix-spec specs/03-behavior/use-cases/UC-011-New.md
 ```
 
-### Validación Periódica
+### Periodic Validation
 
 ```bash
-# 1. Validación completa
+# 1. Full validation
 bun run validate:specs -v
 
-# 2. Revisar warnings por tipo
+# 2. Review warnings by type
 bun run validate:specs --level frontmatter
 bun run validate:specs --level structure
 bun run validate:specs --level semantics
 
-# 3. Regenerar caché de entidades (si se añadieron/modificaron entidades)
+# 3. Regenerate entity cache (if entities were added/modified)
 bun run specs:index
 
-# 4. Generar listado para revisión manual
+# 4. Generate listing for manual review
 /list-entities
 ```
 
-### Antes de PR
+### Before PR
 
 ```bash
-# Validación estricta (debe pasar sin errores)
+# Strict validation (must pass with no errors)
 bun run validate:specs
 
-# Si hay warnings importantes, analizar
-/analyze-entities specs/archivo-con-warnings.md
+# If there are important warnings, analyze
+/analyze-entities specs/file-with-warnings.md
 ```
 
 ---
 
 ## 6. Troubleshooting
 
-### "No se pudieron cargar las plantillas KDD"
-- Verificar que existe `/kdd/templates/`
-- Los archivos deben terminar en `.template.md`
-- El frontmatter debe tener `# @type: nombre`
+### "Could not load KDD templates"
+- Verify that `/kdd/templates/` exists
+- Files must end in `.template.md`
+- Frontmatter must have `# @type: name`
 
-### "Entidad no encontrada" pero existe
-- Regenerar el índice: `bun run specs:index`
-- Verificar que el archivo está en directorio escaneado (`02-domain/`, `03-behavior/`)
-- El nombre debe coincidir (case-insensitive)
-- Ver [Índice de Entidades](./indice-entidades.md) para más detalles
+### "Entity not found" but it exists
+- Regenerate the index: `bun run specs:index`
+- Verify the file is in a scanned directory (`02-domain/`, `03-behavior/`)
+- The name must match (case-insensitive)
+- See [Entity Index](./entity-index.md) for more details
 
-### Validador muy lento
-- Usar `--level` para validar solo un nivel
-- Especificar directorio concreto en lugar de todo `/specs`
-- El índice de entidades se regenera en cada ejecución; considerar usar `specs/_index.json` como caché
+### Validator too slow
+- Use `--level` to validate only one level
+- Specify a concrete directory instead of all of `/specs`
+- The entity index is regenerated on each execution; consider using `specs/_index.json` as cache
 
-### Wiki-link no detectado
-- Formato correcto: `[[Nombre]]` o `[[Nombre|alias]]`
-- Sin espacios después de `[[` o antes de `]]`
-- El target debe existir como entidad
+### Wiki-link not detected
+- Correct format: `[[Name]]` or `[[Name|alias]]`
+- No spaces after `[[` or before `]]`
+- The target must exist as an entity
 
 ---
 
-## Referencias
+## References
 
-- [Índice de Entidades](./indice-entidades.md) - Sistema de indexación y caché de entidades
-- [Convenciones de Escritura](./convenciones-escritura.md) - Guía de estilo para especificaciones
-- [Plantillas KDD](/kdd/templates/_schema.md) - Guía de formato de plantillas
-- [spec-validator README](/scripts/spec-validator/README.md) - Documentación técnica del validador
-- [CLAUDE.md](/CLAUDE.md) - Instrucciones generales del proyecto
+- [Entity Index](./entity-index.md) - Entity indexing and caching system
+- [Writing Conventions](./writing-conventions.md) - Style guide for specifications
+- [KDD Templates](/kdd/templates/_schema.md) - Template format guide
+- [spec-validator README](/scripts/spec-validator/README.md) - Validator technical documentation
+- [CLAUDE.md](/CLAUDE.md) - General project instructions

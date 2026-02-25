@@ -1,41 +1,41 @@
-# Índice de Entidades KDD
+# KDD Entity Index
 
-> Sistema de indexación automática para entidades del dominio, optimizado para uso por Claude, scripts y humanos.
+> Automatic indexing system for domain entities, optimized for use by Claude, scripts, and humans.
 
-## Descripción General
+## General Description
 
-El índice de entidades es una caché estática que lista todas las entidades conocidas en el repositorio de especificaciones. Facilita:
+The entity index is a static cache that lists all known entities in the specifications repository. It facilitates:
 
-1. **Contexto rápido para Claude**: Cargar `specs/_index.md` proporciona visibilidad inmediata de todas las entidades
-2. **Auto-enlazado**: El validador usa el índice para detectar menciones sin enlazar
-3. **Navegación humana**: Referencia rápida para encontrar archivos de especificación
-4. **Validación semántica**: Verificar que las referencias apunten a entidades existentes
+1. **Quick context for Claude**: Loading `specs/_index.md` provides immediate visibility of all entities
+2. **Auto-linking**: The validator uses the index to detect unlinked mentions
+3. **Human navigation**: Quick reference to find specification files
+4. **Semantic validation**: Verifying that references point to existing entities
 
 ---
 
-## Archivos Generados
+## Generated Files
 
-| Archivo | Formato | Uso Principal |
-|---------|---------|---------------|
-| `specs/_index.md` | Markdown | Lectura humana, contexto de Claude |
-| `specs/_index.json` | JSON | Uso programático en scripts |
+| File | Format | Primary Use |
+|------|--------|-------------|
+| `specs/_index.md` | Markdown | Human reading, Claude context |
+| `specs/_index.json` | JSON | Programmatic use in scripts |
 
 ### specs/_index.md
 
-Documento Markdown con tablas organizadas por tipo de entidad:
+Markdown document with tables organized by entity type:
 
-- **Entidades de Dominio**: Aggregates, Entities, Value Objects
-- **Eventos**: Eventos del sistema (EVT-*)
-- **Reglas de Negocio**: Reglas de proceso (`BR-XXX-NNN`)
-- **Casos de Uso**: UC-NNN
-- **Requisitos**: Grupos (REQ-NNN-*) e individuales (REQ-NNN.M)
-- **Procesos**: PRC-NNN
+- **Domain Entities**: Aggregates, Entities, Value Objects
+- **Events**: System events (EVT-*)
+- **Business Rules**: Process rules (`BR-XXX-NNN`)
+- **Use Cases**: UC-NNN
+- **Requirements**: Groups (REQ-NNN-*) and individual (REQ-NNN.M)
+- **Processes**: PRC-NNN
 
-Incluye también una lista completa de **términos de búsqueda** reconocidos para auto-enlazado.
+Also includes a complete list of recognized **search terms** for auto-linking.
 
 ### specs/_index.json
 
-Estructura JSON para uso programático:
+JSON structure for programmatic use:
 
 ```json
 {
@@ -53,26 +53,26 @@ Estructura JSON para uso programático:
   },
   "entities": [
     {
-      "name": "Reto",
+      "name": "Order",
       "id": null,
-      "aliases": ["Retos", "Challenge", "Problema"],
+      "aliases": ["Orders", "Purchase", "Transaction"],
       "type": "entity",
       "subtype": null,
-      "path": "02-domain/entities/Reto.md",
+      "path": "02-domain/entities/Order.md",
       "line": null,
       "parentId": null,
-      "searchTerms": ["reto", "retos", "challenge", "problema"]
+      "searchTerms": ["order", "orders", "purchase", "transaction"]
     },
     {
-      "name": "Dependencia secuencial de rondas",
-      "id": "BR-RONDA-003",
-      "aliases": ["BR-RONDA-003"],
+      "name": "Sequential dependency of order items",
+      "id": "BR-ORDERITEM-003",
+      "aliases": ["BR-ORDERITEM-003"],
       "type": "rule",
       "subtype": "business-rule",
-      "path": "02-domain/rules/BR-RONDA-003.md",
+      "path": "02-domain/rules/BR-ORDERITEM-003.md",
       "line": 1,
       "parentId": null,
-      "searchTerms": ["br-ronda-003", "dependencia secuencial"]
+      "searchTerms": ["br-orderitem-003", "sequential dependency"]
     }
   ]
 }
@@ -80,30 +80,30 @@ Estructura JSON para uso programático:
 
 ---
 
-## Regeneración del Índice
+## Index Regeneration
 
-### Comando
+### Command
 
 ```bash
 bun run specs:index
 ```
 
-### Cuándo Regenerar
+### When to Regenerate
 
-El índice debe regenerarse cuando:
+The index must be regenerated when:
 
-| Situación | Acción |
+| Situation | Action |
 |-----------|--------|
-| Se crea una nueva entidad | Regenerar |
-| Se renombra una entidad | Regenerar |
-| Se añaden aliases en frontmatter | Regenerar |
-| Se añaden reglas/requisitos individuales | Regenerar |
-| Se modifica contenido sin cambiar estructura | No necesario |
-| Antes de ejecutar validación completa | Recomendado |
+| A new entity is created | Regenerate |
+| An entity is renamed | Regenerate |
+| Aliases are added in frontmatter | Regenerate |
+| Individual rules/requirements are added | Regenerate |
+| Content is modified without changing structure | Not necessary |
+| Before running full validation | Recommended |
 
-### Automatización Sugerida
+### Suggested Automation
 
-#### Pre-commit hook (opcional)
+#### Pre-commit hook (optional)
 
 ```bash
 # .husky/pre-commit
@@ -111,7 +111,7 @@ bun run specs:index
 git add specs/_index.md specs/_index.json
 ```
 
-#### En CI/CD
+#### In CI/CD
 
 ```yaml
 # .github/workflows/validate-specs.yml
@@ -122,15 +122,15 @@ git add specs/_index.md specs/_index.json
   run: bun run validate:specs:ci
 ```
 
-### Salida del Comando
+### Command Output
 
 ```
-🔍 Escaneando entidades en specs/...
-   Encontradas 159 entidades
-✅ Generado: specs/_index.json
-✅ Generado: specs/_index.md
+🔍 Scanning entities in specs/...
+   Found 159 entities
+✅ Generated: specs/_index.json
+✅ Generated: specs/_index.md
 
-📊 Resumen:
+📊 Summary:
    entity: 11
    event: 9
    individual-requirement: 65
@@ -143,36 +143,36 @@ git add specs/_index.md specs/_index.json
 
 ---
 
-## Uso en Claude y Comandos
+## Usage in Claude and Commands
 
-### Cargar Contexto de Entidades
+### Loading Entity Context
 
-Para que Claude tenga acceso rápido a todas las entidades al escribir o revisar especificaciones:
+For Claude to have quick access to all entities when writing or reviewing specifications:
 
 ```markdown
-<!-- En un comando .claude/commands/*.md -->
-Primero, lee el índice de entidades:
-- `specs/_index.md` para contexto completo
+<!-- In a command .claude/commands/*.md -->
+First, read the entity index:
+- `specs/_index.md` for complete context
 ```
 
-### Ejemplo: Comando /analyze-entities
+### Example: /analyze-entities Command
 
-El comando `/analyze-entities` usa el índice para detectar menciones de entidades sin enlazar en un archivo específico.
+The `/analyze-entities` command uses the index to detect unlinked entity mentions in a specific file.
 
-### Uso Programático
+### Programmatic Usage
 
 ```typescript
-// En un script
+// In a script
 import indexData from '../specs/_index.json'
 
-// Buscar entidad por nombre
-const reto = indexData.entities.find(e => e.name === 'Reto')
+// Find entity by name
+const order = indexData.entities.find(e => e.name === 'Order')
 
-// Filtrar por tipo
+// Filter by type
 const rules = indexData.entities.filter(e => e.type === 'rule')
 
-// Buscar por término
-const term = 'sesion'
+// Search by term
+const term = 'cart'
 const matches = indexData.entities.filter(e =>
   e.searchTerms.includes(term)
 )
@@ -180,49 +180,49 @@ const matches = indexData.entities.filter(e =>
 
 ---
 
-## Estructura de Entidades Indexadas
+## Indexed Entity Structure
 
-### Campos de EntityEntry
+### EntityEntry Fields
 
-| Campo | Tipo | Descripción |
+| Field | Type | Description |
 |-------|------|-------------|
-| `name` | string | Nombre canónico (del H1 o nombre de archivo) |
-| `id` | string? | ID único (BR-RONDA-003, REQ-001.1, etc.) |
-| `aliases` | string[] | Nombres alternativos del frontmatter |
+| `name` | string | Canonical name (from H1 or filename) |
+| `id` | string? | Unique ID (BR-ORDERITEM-003, REQ-001.1, etc.) |
+| `aliases` | string[] | Alternative names from frontmatter |
 | `type` | enum | entity, event, rule, use-case, requirement, process |
 | `subtype` | enum? | individual-rule, individual-requirement |
-| `path` | string | Ruta relativa desde specs/ |
-| `line` | number? | Línea donde se define (para sub-entidades) |
-| `parentId` | string? | Entidad padre (para sub-entidades) |
-| `searchTerms` | string[] | Términos normalizados para búsqueda |
+| `path` | string | Relative path from specs/ |
+| `line` | number? | Line where it is defined (for sub-entities) |
+| `parentId` | string? | Parent entity (for sub-entities) |
+| `searchTerms` | string[] | Normalized terms for search |
 
-### Detección de Sub-entidades
+### Sub-entity Detection
 
-El indexador detecta automáticamente reglas y requisitos individuales dentro de archivos padre:
+The indexer automatically detects individual rules and requirements within parent files:
 
 ```markdown
-<!-- En BR-RONDA-003.md -->
-## BR-RONDA-003: Dependencia secuencial
+<!-- In BR-ORDERITEM-003.md -->
+## BR-ORDERITEM-003: Sequential dependency
 ...
 ```
 
 ```markdown
-<!-- En REQ-001-Crear-Reto.md -->
-## REQ-001.1: Creación de Reto (Event-Driven)
+<!-- In REQ-001-Place-Order.md -->
+## REQ-001.1: Order Creation (Event-Driven)
 ...
 
-## REQ-001.2: Validación de Longitud de Título
+## REQ-001.2: Title Length Validation
 ...
 ```
 
 ---
 
-## Directorios Escaneados
+## Scanned Directories
 
-El indexador busca entidades en estos directorios:
+The indexer searches for entities in these directories:
 
-| Directorio | Tipo |
-|------------|------|
+| Directory | Type |
+|-----------|------|
 | `specs/02-domain/entities/` | entity |
 | `specs/02-domain/events/` | event |
 | `specs/02-domain/rules/` | rule |
@@ -230,54 +230,54 @@ El indexador busca entidades en estos directorios:
 | `specs/03-behavior/requirements/` | requirement |
 | `specs/03-behavior/processes/` | process |
 
-También soporta estructura legacy sin prefijos numéricos (`specs/domain/`, `specs/behavior/`).
+It also supports legacy structure without numeric prefixes (`specs/domain/`, `specs/behavior/`).
 
 ---
 
-## Integración con Validador
+## Validator Integration
 
-El validador semántico (`bun run validate:specs`) usa el índice para:
+The semantic validator (`bun run validate:specs`) uses the index to:
 
-1. **Verificar enlaces rotos**: `[[Entidad]]` debe apuntar a una entidad conocida
-2. **Detectar menciones sin enlazar**: Texto que coincide con entidades pero no está enlazado
-3. **Validar referencias cruzadas**: EVT-*, UC-*, BR-* deben existir
-4. **Sugerir correcciones**: Propone el enlace correcto basado en similitud
+1. **Verify broken links**: `[[Entity]]` must point to a known entity
+2. **Detect unlinked mentions**: Text that matches entities but is not linked
+3. **Validate cross-references**: EVT-*, UC-*, BR-* must exist
+4. **Suggest corrections**: Proposes the correct link based on similarity
 
 ---
 
 ## Troubleshooting
 
-### El índice muestra 0 entidades
+### The index shows 0 entities
 
-**Causa**: Los directorios de specs tienen una estructura diferente a la esperada.
+**Cause**: The specs directories have a different structure than expected.
 
-**Solución**: Verificar que existan los directorios `specs/02-domain/` y `specs/03-behavior/` con los subdirectorios correctos.
+**Solution**: Verify that the directories `specs/02-domain/` and `specs/03-behavior/` exist with the correct subdirectories.
 
-### Una entidad no aparece en el índice
+### An entity does not appear in the index
 
-**Causas posibles**:
-1. El archivo no tiene extensión `.md`
-2. El archivo empieza con `_` (ignorado por convención)
-3. El archivo está en un directorio no escaneado
+**Possible causes**:
+1. The file does not have a `.md` extension
+2. The file starts with `_` (ignored by convention)
+3. The file is in a non-scanned directory
 
-### Los términos de búsqueda no coinciden
+### Search terms don't match
 
-**Causa**: La normalización elimina tildes y convierte a minúsculas.
+**Cause**: Normalization removes accents and converts to lowercase.
 
-**Solución**: Añadir aliases en el frontmatter del archivo:
+**Solution**: Add aliases in the file's frontmatter:
 
 ```yaml
 ---
 aliases:
-  - Término alternativo
-  - Otro nombre
+  - Alternative term
+  - Other name
 ---
 ```
 
 ---
 
-## Referencias
+## References
 
-- [Validación de Especificaciones](./validacion-especificaciones.md)
-- [Convenciones de Escritura](./convenciones-escritura.md)
+- [Specification Validation](./validation.md)
+- [Writing Conventions](./writing-conventions.md)
 - [Script: generate-index.ts](/scripts/spec-validator/generate-index.ts)

@@ -5,56 +5,55 @@ kind: implementation-charter   # @required
 status: draft                  # @required @enum: [draft, review, approved, deprecated]
 stack_version: YYYY-MM         # @required
 supersedes: []                 # @optional
-adr_refs:                      # @optional @description: Lista de ADR tecnológicos relacionados
+adr_refs:                      # @optional @description: List of related technology ADRs
   - ADR-XXXX
 ---
 
 # Implementation Charter · {Scope}
 
-> Describe el alcance (API, Web, Data, etc.) y propósito del charter.
+> Describe the scope (API, Web, Data, etc.) and purpose of the charter.
 
-## 1. Stack oficial
+## 1. Official Stack
 
-| Capa | Tecnología | Versión mínima | ADR |
-|------|------------|----------------|-----|
+| Layer | Technology | Minimum Version | ADR |
+|-------|------------|-----------------|-----|
 | Runtime | ... | ... | [[ADR-XXXX]] |
 | Backend | ... | ... | [[ADR-XXXX]] |
 
-## 2. Topología del repositorio
+## 2. Repository Topology
 
 ```
-{Estructura relevante}
+{Relevant structure}
 ```
 
-Reglas de dependencia clave (enlaza ADRs o documentación).
+Key dependency rules (link to ADRs or documentation).
 
-## 3. Mapeo Artefacto KDD → Código
+## 3. KDD Artifact → Code Mapping
 
-| Artefacto KDD | Output mínimo | Ruta destino |
-|---------------|---------------|--------------|
+| KDD Artifact | Minimum Output | Destination Path |
+|--------------|----------------|------------------|
 | `CMD-*` | ... | ... |
 
-## 4. Convenciones de código
+## 4. Code Conventions
 
-- Resumen de estilo/naming.
-- Enlaces a ejemplos en el repositorio (ej. `CLAUDE.md`).
+- Style/naming summary.
+- Links to examples in the repository (e.g., `CLAUDE.md`).
 
 ## 5. Tooling & Pipelines
 
-| Acción | Comando |
+| Action | Command |
 |--------|---------|
 | ... | ... |
 
-## 6. Gobernanza
+## 6. Governance
 
-- Responsables y proceso de actualización.
-- Cómo versionar el charter y registrar supersedes.
+- Owners and update process.
+- How to version the charter and record supersedes.
 
-## 7. Compatibilidad con agentes
+## 7. Agent Compatibility
 
-Indica cómo deben leer este charter (metadatos, snippets, plantillas).
+Indicate how agents should read this charter (metadata, snippets, templates).
 
-## 8. Próximos pasos
+## 8. Next Steps
 
-Lista de tareas o enlaces posteriores.
-
+List of tasks or follow-up links.

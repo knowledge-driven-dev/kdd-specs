@@ -1,30 +1,30 @@
-# Capa 02: Behavior (Comportamiento)
+# Layer 02: Behavior
 
-## El Comportamiento del Sistema: ¿Cómo se Comporta?
+## System Behavior: How Does It Behave?
 
 ---
 
-## Introducción
+## Introduction
 
-La capa de Behavior responde a la pregunta: **¿Cómo se comporta el sistema?**
+The Behavior layer answers the question: **How does the system behave?**
 
-Aquí definimos las **operaciones posibles** sobre el dominio y los **flujos de interacción** con el usuario. Esta capa es el corazón de la orquestación: define Commands, Queries, Processes, Use Cases y Policies.
+Here we define the **possible operations** on the domain and the **interaction flows** with the user. This layer is the heart of orchestration: it defines Commands, Queries, Processes, Use Cases, and Policies.
 
-> **Nota importante**: Esta capa es la de **ORCHESTRATION**. Referencia a 01-Domain y es referenciada por 03-Experience y 04-Verification.
+> **Important note**: This layer is the **ORCHESTRATION** layer. It references 01-Domain and is referenced by 03-Experience and 04-Verification.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                              │
 │   00-Requirements  →  01-Domain   →  02-Behavior    →  03-Experience        │
 │                                                                              │
-│   "¿Por qué           "¿Qué           "¿CÓMO SE           "¿Cómo lo         │
-│    existe?"           existe?"         COMPORTA?"          ven?"            │
+│   "Why does            "What           "HOW DOES           "How do           │
+│    it exist?"          exists?"         IT BEHAVE?"         users see it?"   │
 │                                                                              │
 │   ──────────────────────────────────────────────────────────────────────────│
 │                                                                              │
-│   Motivación          Conceptual      FUNCIONAL           Experiencial       │
-│   Contexto            (entidades)     COMMANDS            (vistas)           │
-│   Objetivos           (reglas)        QUERIES                                │
+│   Motivation          Conceptual      FUNCTIONAL          Experiential       │
+│   Context             (entities)      COMMANDS            (views)            │
+│   Objectives          (rules)         QUERIES                                │
 │                                       PROCESSES                              │
 │                                       USE CASES                              │
 │                                       POLICIES                               │
@@ -34,186 +34,186 @@ Aquí definimos las **operaciones posibles** sobre el dominio y los **flujos de 
 
 ---
 
-## La Filosofía: CQRS Light + Use Cases
+## The Philosophy: CQRS Light + Use Cases
 
-KDD adopta el patrón **CQRS (Command Query Responsibility Segregation)** combinado con **Use Cases** que describen las interacciones actor-sistema:
+KDD adopts the **CQRS (Command Query Responsibility Segregation)** pattern combined with **Use Cases** that describe actor-system interactions:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                              │
-│   CQRS: Separar operaciones de ESCRITURA y LECTURA                          │
+│   CQRS: Separate WRITE and READ operations                                  │
 │                                                                              │
 │   ┌─────────────────────────────────────────────────────────────────────┐   │
 │   │                                                                     │   │
-│   │   COMMANDS (Escritura)          QUERIES (Lectura)                   │   │
+│   │   COMMANDS (Write)                QUERIES (Read)                    │   │
 │   │   ────────────────────          ─────────────────                   │   │
 │   │                                                                     │   │
-│   │   - Modifican estado            - Solo leen estado                  │   │
-│   │   - Validan reglas              - No validan (datos ya válidos)     │   │
-│   │   - Emiten eventos              - No emiten eventos                 │   │
-│   │   - Pueden fallar               - Siempre exitosas (o vacías)       │   │
-│   │   - Retornan poco/nada          - Retornan datos estructurados      │   │
-│   │                                                                     │   │
-│   │   Ejemplo:                      Ejemplo:                            │   │
-│   │   CMD-CreateChallenge           QRY-ListChallenges                  │   │
-│   │   CMD-InitiateSession           QRY-GetCreditBalance                │   │
+│   │   - Modify state                  - Only read state                 │   │
+│   │   - Validate rules                - No validation (data already     │   │
+│   │   - Emit events                     valid)                          │   │
+│   │   - Can fail                      - Do not emit events              │   │
+│   │   - Return little/nothing         - Always succeed (or empty)       │   │
+│   │                                   - Return structured data          │   │
+│   │   Example:                        Example:                          │   │
+│   │   CMD-PlaceOrder                  QRY-ListOrders                    │   │
+│   │   CMD-InitiateCart                QRY-GetBillingBalance             │   │
 │   │                                                                     │   │
 │   └─────────────────────────────────────────────────────────────────────┘   │
 │                                                                              │
-│   USE CASES: Flujos actor-sistema que invocan Commands y Queries            │
+│   USE CASES: Actor-system flows that invoke Commands and Queries            │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Por Qué Separar Commands y Queries
+### Why Separate Commands and Queries
 
-1. **Claridad mental**: Sabes exactamente qué operaciones modifican datos
-2. **Optimización**: Queries pueden usar réplicas de lectura, caches
-3. **Testing**: Commands se testean con rigor, Queries más ligero
-4. **Escalabilidad**: Puedes escalar lectura y escritura independientemente
+1. **Mental clarity**: You know exactly which operations modify data
+2. **Optimization**: Queries can use read replicas, caches
+3. **Testing**: Commands are tested rigorously, Queries more lightly
+4. **Scalability**: You can scale reads and writes independently
 
 ---
 
-## Los Artefactos de la Capa de Behavior
+## The Artifacts of the Behavior Layer
 
-### 1. Commands (Comandos)
+### 1. Commands
 
-Operaciones que **modifican el estado** del sistema.
+Operations that **modify the state** of the system.
 
-#### Características de un Command
+#### Characteristics of a Command
 
-- **Intención clara**: Nombre en imperativo (CreateChallenge, not ChallengeCreation)
-- **Input validado**: Schema de entrada con tipos y restricciones
-- **Precondiciones**: Estado requerido antes de ejecutar
-- **Postcondiciones**: Estado garantizado después
-- **Eventos**: Lo que emite al completarse
-- **Errores**: Casos de fallo documentados
+- **Clear intent**: Name in imperative form (PlaceOrder, not OrderPlacement)
+- **Validated input**: Input schema with types and constraints
+- **Preconditions**: Required state before execution
+- **Postconditions**: Guaranteed state afterwards
+- **Events**: What it emits upon completion
+- **Errors**: Documented failure cases
 
-#### Estructura de un Command
+#### Structure of a Command
 
 ```markdown
 ---
-id: CMD-001-CreateChallenge
+id: CMD-001-PlaceOrder
 kind: command
-title: Create Challenge
+title: Place Order
 status: approved
 ---
 
-# CMD-001-CreateChallenge
+# CMD-001-PlaceOrder
 
-## Propósito
-Crea un nuevo [[Reto]] en estado `borrador` para el [[Usuario]] actual.
+## Purpose
+Creates a new [[Order]] in `draft` state for the current [[Customer]].
 
 ## Input
-| Parámetro | Tipo | Requerido | Validación |
-|-----------|------|-----------|------------|
-| titulo | string | Sí | 1-100 caracteres |
-| descripcion | string | Sí | 1-10000 caracteres |
-| contexto | string | No | Máx 5000 caracteres |
-| userId | UUID | Sí | Usuario autenticado |
+| Parameter | Type | Required | Validation |
+|-----------|------|----------|------------|
+| title | string | Yes | 1-100 characters |
+| description | string | Yes | 1-10000 characters |
+| context | string | No | Max 5000 characters |
+| userId | UUID | Yes | Authenticated user |
 
-## Precondiciones
-- Usuario está autenticado
-- Usuario tiene estado `activo`
+## Preconditions
+- Customer is authenticated
+- Customer has `active` status
 
-## Postcondiciones
-- Existe un nuevo [[Reto]] con:
-  - ID único generado
-  - Estado = `borrador`
-  - creadorId = userId del input
-  - createdAt = timestamp actual
-- Evento [[EVT-Reto-Creado]] emitido
+## Postconditions
+- A new [[Order]] exists with:
+  - Unique generated ID
+  - Status = `draft`
+  - creatorId = userId from input
+  - createdAt = current timestamp
+- Event [[EVT-Order-Placed]] emitted
 
-## Reglas Validadas
-- [[BR-RETO-002]]: Título 1-100 caracteres
-- [[BR-RETO-005]]: Descripción requerida
+## Validated Rules
+- [[BR-ORDER-002]]: Title 1-100 characters
+- [[BR-ORDER-005]]: Description required
 
-## Eventos Generados
-- [[EVT-Reto-Creado]] (siempre, en éxito)
+## Generated Events
+- [[EVT-Order-Placed]] (always, on success)
 
-## Errores Posibles
-| Código | Condición | Mensaje |
-|--------|-----------|---------|
-| RETO-001 | Título vacío | "El título es requerido" |
-| RETO-002 | Título > 100 chars | "El título no puede exceder 100 caracteres" |
-| RETO-003 | Descripción vacía | "La descripción es requerida" |
-| AUTH-001 | No autenticado | "Debes iniciar sesión" |
+## Possible Errors
+| Code | Condition | Message |
+|------|-----------|---------|
+| ORDER-001 | Empty title | "Title is required" |
+| ORDER-002 | Title > 100 chars | "Title cannot exceed 100 characters" |
+| ORDER-003 | Empty description | "Description is required" |
+| AUTH-001 | Not authenticated | "You must log in" |
 
 ## Output
 ```typescript
-interface CreateChallengeOutput {
-  retoId: string      // UUID del reto creado
-  estado: 'borrador'  // Estado inicial
-  createdAt: string   // ISO 8601
+interface PlaceOrderOutput {
+  orderId: string      // UUID of the created order
+  status: 'draft'      // Initial status
+  createdAt: string    // ISO 8601
 }
 ```
 ```
 
-#### Naming Conventions para Commands
+#### Naming Conventions for Commands
 
 ```
-PATRÓN: CMD-{NNN}-{Verbo}{Sustantivo}
+PATTERN: CMD-{NNN}-{Verb}{Noun}
 
-Verbos comunes:
-- Create    → Crear algo nuevo
-- Update    → Modificar existente
-- Delete    → Eliminar
-- Initiate  → Comenzar un proceso
-- Complete  → Finalizar un proceso
-- Cancel    → Abortar un proceso
-- Generate  → Crear via IA/algoritmo
-- Purchase  → Transacción de compra
-- Consume   → Gastar un recurso
-- Refund    → Devolver un recurso
+Common verbs:
+- Create    → Create something new
+- Update    → Modify existing
+- Delete    → Remove
+- Initiate  → Start a process
+- Complete  → Finish a process
+- Cancel    → Abort a process
+- Generate  → Create via AI/algorithm
+- Purchase  → Purchase transaction
+- Consume   → Spend a resource
+- Refund    → Return a resource
 
-Ejemplos:
-- CMD-001-CreateChallenge
-- CMD-009-InitiateSession
+Examples:
+- CMD-001-PlaceOrder
+- CMD-009-InitiateCart
 - CMD-013-GenerateAnalysis
 ```
 
 ---
 
-### 2. Queries (Consultas)
+### 2. Queries
 
-Operaciones que **leen estado** sin modificarlo.
+Operations that **read state** without modifying it.
 
-#### Características de una Query
+#### Characteristics of a Query
 
-- **Solo lectura**: Nunca modifica datos
-- **Idempotente**: Llamar N veces da el mismo resultado
-- **Sin efectos secundarios**: No emite eventos ni notificaciones
-- **Puede retornar vacío**: Resultado vacío es válido, no error
+- **Read-only**: Never modifies data
+- **Idempotent**: Calling N times yields the same result
+- **No side effects**: Does not emit events or notifications
+- **Can return empty**: Empty result is valid, not an error
 
-#### Estructura de una Query
+#### Structure of a Query
 
 ```markdown
 ---
-id: QRY-002-ListChallenges
+id: QRY-002-ListOrders
 kind: query
-title: List Challenges
+title: List Orders
 status: approved
 ---
 
-# QRY-002-ListChallenges
+# QRY-002-ListOrders
 
-## Propósito
-Obtiene la lista de [[Reto|Retos]] del [[Usuario]] actual,
-con filtros y paginación.
+## Purpose
+Retrieves the list of [[Order|Orders]] for the current [[Customer]],
+with filters and pagination.
 
 ## Input
-| Parámetro | Tipo | Requerido | Default | Descripción |
-|-----------|------|-----------|---------|-------------|
-| userId | UUID | Sí | - | Usuario autenticado |
-| estado | RetoEstado | No | todos | Filtrar por estado |
-| search | string | No | - | Buscar en título/descripción |
-| limit | number | No | 20 | Máx resultados (1-100) |
-| offset | number | No | 0 | Para paginación |
+| Parameter | Type | Required | Default | Description |
+|-----------|------|----------|---------|-------------|
+| userId | UUID | Yes | - | Authenticated user |
+| status | OrderStatus | No | all | Filter by status |
+| search | string | No | - | Search in title/description |
+| limit | number | No | 20 | Max results (1-100) |
+| offset | number | No | 0 | For pagination |
 
 ## Output
 ```typescript
-interface ListChallengesOutput {
-  items: RetoSummary[]
+interface ListOrdersOutput {
+  items: OrderSummary[]
   total: number
   limit: number
   offset: number
@@ -221,243 +221,243 @@ interface ListChallengesOutput {
 }
 ```
 
-## Casos Especiales
-| Caso | Resultado |
-|------|-----------|
-| Usuario sin retos | `{ items: [], total: 0, hasMore: false }` |
-| Filtro sin matches | `{ items: [], total: 0, hasMore: false }` |
+## Special Cases
+| Case | Result |
+|------|--------|
+| Customer with no orders | `{ items: [], total: 0, hasMore: false }` |
+| Filter with no matches | `{ items: [], total: 0, hasMore: false }` |
 ```
 
-#### Naming Conventions para Queries
+#### Naming Conventions for Queries
 
 ```
-PATRÓN: QRY-{NNN}-{Verbo}{Sustantivo}
+PATTERN: QRY-{NNN}-{Verb}{Noun}
 
-Verbos comunes:
-- Get       → Obtener uno por ID
-- List      → Obtener colección con filtros
-- Search    → Búsqueda full-text
-- Count     → Solo cantidad
-- Exists    → Boolean de existencia
+Common verbs:
+- Get       → Retrieve one by ID
+- List      → Retrieve collection with filters
+- Search    → Full-text search
+- Count     → Only quantity
+- Exists    → Boolean existence check
 
-Ejemplos:
-- QRY-001-GetChallenge
-- QRY-002-ListChallenges
-- QRY-006-GetCreditBalance
+Examples:
+- QRY-001-GetOrder
+- QRY-002-ListOrders
+- QRY-006-GetBillingBalance
 ```
 
 ---
 
-### 3. Use Cases (Casos de Uso)
+### 3. Use Cases
 
-**Flujos de interacción** actor-sistema que describen cómo se logra un objetivo.
+**Interaction flows** between actor and system that describe how an objective is achieved.
 
-#### Características de un Use Case
+#### Characteristics of a Use Case
 
-- **Actor claro**: Quién inicia el flujo
-- **Objetivo definido**: Qué quiere lograr el actor
-- **Flujo principal**: Secuencia de pasos felices
-- **Flujos alternativos**: Variaciones válidas
-- **Excepciones**: Manejo de errores
+- **Clear actor**: Who initiates the flow
+- **Defined objective**: What the actor wants to achieve
+- **Main flow**: Happy path step sequence
+- **Alternative flows**: Valid variations
+- **Exceptions**: Error handling
 
-#### Estructura de un Use Case
+#### Structure of a Use Case
 
 ```markdown
 ---
-id: UC-001-CrearReto
+id: UC-001-PlaceOrder
 kind: use-case
-title: Crear Reto
-actor: Usuario
+title: Place Order
+actor: Customer
 status: approved
 ---
 
-# UC-001: Crear Reto
+# UC-001: Place Order
 
-## Contexto
-| Elemento | Descripción |
-|----------|-------------|
-| Actor | [[Usuario]] autenticado |
-| Objetivo | Crear un nuevo Reto para analizar |
-| Precondición | Usuario ha iniciado sesión |
-| Postcondición | Existe un nuevo Reto en estado `borrador` |
-| Trigger | Usuario accede a "Nuevo Reto" |
+## Context
+| Element | Description |
+|---------|-------------|
+| Actor | Authenticated [[Customer]] |
+| Objective | Create a new Order to process |
+| Precondition | Customer has logged in |
+| Postcondition | A new Order exists in `draft` state |
+| Trigger | Customer navigates to "New Order" |
 
-## Flujo Principal
-1. El Usuario accede a la pantalla de creación de Reto
-2. El Sistema muestra el formulario de creación
-3. El Usuario ingresa título y descripción del Reto
-4. El Usuario opcionalmente añade contexto adicional
-5. El Usuario hace clic en "Crear Reto"
-6. El Sistema valida los datos ([[BR-RETO-002]], [[BR-RETO-005]])
-7. El Sistema crea el [[Reto]] con estado `borrador`
-8. El Sistema emite [[EVT-Reto-Creado]]
-9. El Sistema redirige a la configuración de [[Persona Sintética|Personas]]
+## Main Flow
+1. The Customer navigates to the order creation screen
+2. The System displays the creation form
+3. The Customer enters the title and description of the Order
+4. The Customer optionally adds additional context
+5. The Customer clicks "Place Order"
+6. The System validates the data ([[BR-ORDER-002]], [[BR-ORDER-005]])
+7. The System creates the [[Order]] with `draft` status
+8. The System emits [[EVT-Order-Placed]]
+9. The System redirects to the [[Product|Products]] configuration
 
-## Flujos Alternativos
+## Alternative Flows
 
-### A1: Usuario solicita asistencia IA para título
-En el paso 3:
-1. El Usuario hace clic en "Sugerir título"
-2. El Sistema invoca [[CMD-GenerateTitleSuggestions]]
-3. El Sistema muestra 3 sugerencias
-4. El Usuario selecciona una o escribe su propio título
-5. Continúa en paso 4
+### A1: Customer requests AI assistance for title
+At step 3:
+1. The Customer clicks "Suggest title"
+2. The System invokes [[CMD-GenerateTitleSuggestions]]
+3. The System displays 3 suggestions
+4. The Customer selects one or types their own title
+5. Continues at step 4
 
-## Excepciones
+## Exceptions
 
-### E1: Validación falla
-En el paso 6, si la validación falla:
-1. El Sistema muestra mensajes de error específicos
-2. El Usuario corrige los campos
-3. Continúa en paso 5
+### E1: Validation fails
+At step 6, if validation fails:
+1. The System displays specific error messages
+2. The Customer corrects the fields
+3. Continues at step 5
 
-## Commands Invocados
-- [[CMD-001-CreateChallenge]]
-- [[CMD-GenerateTitleSuggestions]] (opcional)
+## Commands Invoked
+- [[CMD-001-PlaceOrder]]
+- [[CMD-GenerateTitleSuggestions]] (optional)
 
-## Queries Invocados
-- Ninguna
+## Queries Invoked
+- None
 
-## Vistas Relacionadas
-- [[UI-CrearReto]] - Formulario de creación
+## Related Views
+- [[UI-PlaceOrder]] - Creation form
 
-## Verificación
-- [[crear-reto.feature]]
+## Verification
+- [[place-order.feature]]
 ```
 
-#### Naming Conventions para Use Cases
+#### Naming Conventions for Use Cases
 
 ```
-PATRÓN: UC-{NNN}-{VerboInfinitivo}{Sustantivo}
+PATTERN: UC-{NNN}-{VerbNoun}
 
-Ejemplos:
-- UC-001-CrearReto
-- UC-002-ConfigurarPersonas
-- UC-003-IniciarSesion
-- UC-004-VerAnalisis
+Examples:
+- UC-001-PlaceOrder
+- UC-002-ConfigureProducts
+- UC-003-InitiateCart
+- UC-004-ViewAnalysis
 ```
 
 ---
 
-### 4. Processes (Procesos de Negocio)
+### 4. Processes (Business Processes)
 
-**Flujos que orquestan** múltiples Commands y reaccionan a Eventos.
+**Flows that orchestrate** multiple Commands and react to Events.
 
-#### Características de un Proceso
+#### Characteristics of a Process
 
-- **Orquestador**: Coordina múltiples operaciones
-- **Reactivo**: Se dispara por eventos o triggers temporales
-- **Con estado**: Puede tener pasos y checkpoints
-- **Compensable**: Define qué hacer si algo falla
+- **Orchestrator**: Coordinates multiple operations
+- **Reactive**: Triggered by events or temporal triggers
+- **Stateful**: Can have steps and checkpoints
+- **Compensable**: Defines what to do if something fails
 
-#### Estructura de un Proceso
+#### Structure of a Process
 
 ```markdown
 ---
-id: PROC-001-StartSession
+id: PROC-001-StartCart
 kind: process
-title: Start Session
-trigger: EVT-Sesion-Iniciada
+title: Start Cart
+trigger: EVT-Cart-Initiated
 status: approved
 ---
 
-# PROC-001-StartSession
+# PROC-001-StartCart
 
-## Descripción
-Proceso que inicia una [[Sesión]] de análisis completa,
-creando la estructura de [[Ronda|Rondas]] y ejecutándolas secuencialmente.
+## Description
+Process that initiates a complete analysis [[Cart]],
+creating the [[CartItem|CartItems]] structure and executing them sequentially.
 
-## Disparador
-- [[CMD-009-InitiateSession]] exitoso → [[EVT-Sesion-Iniciada]]
+## Trigger
+- [[CMD-009-InitiateCart]] successful → [[EVT-Cart-Initiated]]
 
-## Diagrama de Flujo
+## Flow Diagram
 ```mermaid
 graph TD
-    A[EVT-Sesion-Iniciada] --> B{Verificar créditos}
-    B -->|Insuficientes| C[Error: Sin créditos]
-    B -->|OK| D[Consumir 1 crédito]
-    D --> E[Crear estructura de Rondas]
-    E --> F[Iniciar Ronda 1]
-    F --> G{Ronda completada?}
-    G -->|Sí| H{¿Más rondas?}
-    H -->|Sí| I[Siguiente ronda]
+    A[EVT-Cart-Initiated] --> B{Verify billing}
+    B -->|Insufficient| C[Error: No balance]
+    B -->|OK| D[Consume 1 credit]
+    D --> E[Create CartItems structure]
+    E --> F[Start CartItem 1]
+    F --> G{CartItem completed?}
+    G -->|Yes| H{More items?}
+    H -->|Yes| I[Next item]
     I --> G
-    H -->|No| J[Generar Análisis Final]
-    J --> K[EVT-Sesion-Completada]
+    H -->|No| J[Generate Final Analysis]
+    J --> K[EVT-Cart-Completed]
 ```
 
-## Pasos del Proceso
+## Process Steps
 
-### 1. Verificar Créditos
-- Invocar: [[QRY-006-GetCreditBalance]]
-- Precondición: balance >= 1
-- Si falla: Abortar con error CREDIT-001
+### 1. Verify Billing
+- Invoke: [[QRY-006-GetBillingBalance]]
+- Precondition: balance >= 1
+- If fails: Abort with error BILLING-001
 
-### 2. Consumir Crédito
-- Invocar: [[CMD-015-ConsumeCredit]]
-- Registrar transacción vinculada a sesionId
+### 2. Consume Credit
+- Invoke: [[CMD-015-ConsumeCredit]]
+- Record transaction linked to cartId
 
-### 3. Ejecutar Rondas (loop)
-- Para cada Ronda en orden:
-  - Invocar: [[CMD-011-ExecuteRound]]
-  - Emitir: [[EVT-Ronda-Completada]]
+### 3. Execute CartItems (loop)
+- For each CartItem in order:
+  - Invoke: [[CMD-011-ExecuteCartItem]]
+  - Emit: [[EVT-CartItem-Completed]]
 
-### 4. Generar Análisis
-- Invocar: [[CMD-013-GenerateAnalysis]]
-- Emitir: [[EVT-Sesion-Completada]]
+### 4. Generate Analysis
+- Invoke: [[CMD-013-GenerateAnalysis]]
+- Emit: [[EVT-Cart-Completed]]
 
-## Compensación (Rollback)
-| Paso fallido | Compensación |
-|--------------|--------------|
-| Ejecutar ronda | [[CMD-016-RefundCredit]], marcar sesión como `fallida` |
-| Generar análisis | Reintentar 3 veces, luego refund |
+## Compensation (Rollback)
+| Failed Step | Compensation |
+|-------------|--------------|
+| Execute item | [[CMD-016-RefundCredit]], mark cart as `failed` |
+| Generate analysis | Retry 3 times, then refund |
 
 ## Timeout
-- Proceso completo: 15 minutos
-- Al timeout: Compensación + [[EVT-Sesion-Timeout]]
+- Full process: 15 minutes
+- On timeout: Compensation + [[EVT-Cart-Timeout]]
 ```
 
 ---
 
-### 5. Policies (Políticas)
+### 5. Policies
 
-**Comportamientos condicionados** del sistema: qué pasa cuando se ejecutan ciertas acciones.
+**Conditioned behaviors** of the system: what happens when certain actions are executed.
 
-#### Tipos de Policies
+#### Types of Policies
 
-| Tipo | Prefijo | Scope | Descripción |
-|------|---------|-------|-------------|
-| Business Policy | `BP-{TOPIC}-NNN` | Entidad específica | Política de negocio configurable |
-| Cross-Policy | `XP-{TOPIC}-NNN` | Transversal | Aplica a múltiples Commands/Queries |
+| Type | Prefix | Scope | Description |
+|------|--------|-------|-------------|
+| Business Policy | `BP-{TOPIC}-NNN` | Specific entity | Configurable business policy |
+| Cross-Policy | `XP-{TOPIC}-NNN` | Cross-cutting | Applies to multiple Commands/Queries |
 
-#### Características
+#### Characteristics
 
-- **Comportamiento condicionado**: "WHEN X happens, THEN do Y"
-- **Configurables**: Parámetros que pueden cambiar
-- **Interceptoras**: Se evalúan antes o después de operaciones
+- **Conditioned behavior**: "WHEN X happens, THEN do Y"
+- **Configurable**: Parameters that can change
+- **Intercepting**: Evaluated before or after operations
 
-#### Estructura de una Policy
+#### Structure of a Policy
 
 ```markdown
 ---
 id: XP-AUTH-001
 kind: cross-policy
-title: Autenticación Requerida
+title: Authentication Required
 scope: [CMD-*, QRY-*]
 status: approved
 ---
 
-# XP-AUTH-001: Autenticación Requerida
+# XP-AUTH-001: Authentication Required
 
-## Descripción
-Todos los Commands y Queries requieren un usuario autenticado,
-excepto los explícitamente marcados como públicos.
+## Description
+All Commands and Queries require an authenticated user,
+except those explicitly marked as public.
 
-## Aplica a
-- Todos los `CMD-*` excepto: CMD-RegisterUser, CMD-LoginUser
-- Todos los `QRY-*` excepto: QRY-GetPublicChallenge
+## Applies To
+- All `CMD-*` except: CMD-RegisterUser, CMD-LoginUser
+- All `QRY-*` except: QRY-GetPublicOrder
 
-## Evaluación
+## Evaluation
 ```
 BEFORE command/query execution:
   IF operation NOT IN [public_operations]
@@ -466,252 +466,252 @@ BEFORE command/query execution:
 ```
 
 ## Error
-| Código | Mensaje |
-|--------|---------|
-| AUTH-001 | "Debes iniciar sesión para realizar esta acción" |
+| Code | Message |
+|------|---------|
+| AUTH-001 | "You must log in to perform this action" |
 
-## Parámetros
-| Parámetro | Valor | Configurable |
+## Parameters
+| Parameter | Value | Configurable |
 |-----------|-------|--------------|
-| public_operations | [CMD-Register, CMD-Login, QRY-Public*] | Sí |
+| public_operations | [CMD-Register, CMD-Login, QRY-Public*] | Yes |
 ```
 
-#### Naming Conventions para Policies
+#### Naming Conventions for Policies
 
 ```
-PATRÓN BP: BP-{TOPIC}-{NNN}  (Business Policy - scope específico)
-PATRÓN XP: XP-{TOPIC}-{NNN}  (Cross-Policy - scope transversal)
+BP PATTERN: BP-{TOPIC}-{NNN}  (Business Policy - specific scope)
+XP PATTERN: XP-{TOPIC}-{NNN}  (Cross-Policy - cross-cutting scope)
 
-Topics comunes BP:
-- CREDITO    → Comportamiento de créditos
-- TIMEOUT    → Gestión de inactividad
-- SUSCRIPCION → Ciclo de suscripciones
-- IA         → SLAs de integraciones IA
+Common BP Topics:
+- BILLING     → Billing behavior
+- TIMEOUT     → Inactivity management
+- SUBSCRIPTION → Subscription lifecycle
+- AI          → AI integration SLAs
 
-Topics comunes XP:
-- CREDITOS → Verificación transversal de créditos
-- AUTH     → Autenticación/Autorización
+Common XP Topics:
+- BILLING  → Cross-cutting billing verification
+- AUTH     → Authentication/Authorization
 - RATE     → Rate limiting
-- AUDIT    → Auditoría/Logging
+- AUDIT    → Auditing/Logging
 
-Ejemplos:
-- BP-CREDITO-001 (Descuento atómico)
-- BP-TIMEOUT-001 (Inactividad 30+15 min)
-- XP-CREDITOS-001 (Verificación en comandos billable)
-- XP-AUTH-001 (Autenticación requerida)
+Examples:
+- BP-BILLING-001 (Atomic deduction)
+- BP-TIMEOUT-001 (Inactivity 30+15 min)
+- XP-BILLING-001 (Verification in billable commands)
+- XP-AUTH-001 (Authentication required)
 ```
 
 ---
 
-## El Principio de Dependencia
+## The Dependency Principle
 
-La capa de Behavior:
-- **REFERENCIA**: Entidades, Value Objects, Reglas, Eventos (01-Domain)
-- **NO REFERENCIA**: Vistas (03-Experience)
+The Behavior layer:
+- **REFERENCES**: Entities, Value Objects, Rules, Events (01-Domain)
+- **DOES NOT REFERENCE**: Views (03-Experience)
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                              │
 │   02-CAPABILITIES                                                            │
 │                                                                              │
-│   [[CMD-001-CreateChallenge]]                                                │
+│   [[CMD-001-PlaceOrder]]                                                     │
 │     │                                                                        │
-│     ├── referencia → [[Reto]]           (entidad)                           │
-│     ├── referencia → [[BR-RETO-002]]    (regla)                             │
-│     ├── referencia → [[EVT-Reto-Creado]] (evento)                           │
+│     ├── references → [[Order]]             (entity)                          │
+│     ├── references → [[BR-ORDER-002]]      (rule)                            │
+│     ├── references → [[EVT-Order-Placed]]  (event)                           │
 │     │                                                                        │
-│     └── NO referencia → [[UI-RetoEditor]]  ❌                               │
+│     └── DOES NOT reference → [[UI-OrderEditor]]  ❌                          │
 │                                                                              │
-│   [[UC-001-CrearReto]]                                                       │
+│   [[UC-001-PlaceOrder]]                                                      │
 │     │                                                                        │
-│     ├── referencia → [[CMD-001-CreateChallenge]]  (command)                 │
-│     ├── referencia → [[Reto]]                     (entidad)                 │
+│     ├── references → [[CMD-001-PlaceOrder]]      (command)                   │
+│     ├── references → [[Order]]                   (entity)                    │
 │     │                                                                        │
-│     └── referencia → [[UI-CrearReto]]  ✅ (vista relacionada, no dependencia)│
+│     └── references → [[UI-PlaceOrder]]  ✅ (related view, not dependency)    │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-> **Nota**: Los Use Cases pueden **mencionar** vistas en "Vistas Relacionadas" para navegación, pero no dependen de ellas funcionalmente.
+> **Note**: Use Cases can **mention** views in "Related Views" for navigation purposes, but they do not depend on them functionally.
 
 ---
 
-## Estructura de Carpetas
+## Folder Structure
 
 ```
 /specs/02-behavior/
 ├── /commands/
-│   ├── CMD-001-CreateChallenge.md
-│   ├── CMD-002-UpdateChallenge.md
-│   ├── CMD-003-DeleteChallenge.md
-│   ├── CMD-009-InitiateSession.md
+│   ├── CMD-001-PlaceOrder.md
+│   ├── CMD-002-UpdateOrder.md
+│   ├── CMD-003-DeleteOrder.md
+│   ├── CMD-009-InitiateCart.md
 │   ├── CMD-013-GenerateAnalysis.md
 │   └── ...
 │
 ├── /queries/
-│   ├── QRY-001-GetChallenge.md
-│   ├── QRY-002-ListChallenges.md
-│   ├── QRY-006-GetCreditBalance.md
+│   ├── QRY-001-GetOrder.md
+│   ├── QRY-002-ListOrders.md
+│   ├── QRY-006-GetBillingBalance.md
 │   └── ...
 │
 ├── /processes/
-│   ├── PROC-001-StartSession.md
+│   ├── PROC-001-StartCart.md
 │   └── PROC-002-MonthlyBilling.md
 │
 ├── /use-cases/
-│   ├── UC-001-CrearReto.md
-│   ├── UC-002-ConfigurarPersonas.md
-│   ├── UC-003-IniciarSesion.md
-│   ├── UC-004-VerAnalisis.md
+│   ├── UC-001-PlaceOrder.md
+│   ├── UC-002-ConfigureProducts.md
+│   ├── UC-003-InitiateCart.md
+│   ├── UC-004-ViewAnalysis.md
 │   └── ...
 │
 └── /policies/
-    ├── BP-CREDITO-001.md     # Business Policy (comportamiento específico)
+    ├── BP-BILLING-001.md     # Business Policy (specific behavior)
     ├── BP-TIMEOUT-001.md
-    ├── XP-CREDITOS-001.md    # Cross-Policy (transversal)
+    ├── XP-BILLING-001.md     # Cross-Policy (cross-cutting)
     └── XP-AUTH-001.md
 ```
 
 ---
 
-## Checklist: Especificando Behavior
+## Checklist: Specifying Behavior
 
-### Para Commands
-- [ ] ID en formato `CMD-{NNN}-{Verbo}{Sustantivo}`
-- [ ] Nombre en imperativo (Create, Update, Delete)
-- [ ] Input con tipos y validaciones
-- [ ] Precondiciones claras
-- [ ] Postcondiciones garantizadas
-- [ ] Reglas de dominio que valida
-- [ ] Eventos que emite
-- [ ] Errores posibles con códigos
-- [ ] Output estructurado
+### For Commands
+- [ ] ID in `CMD-{NNN}-{Verb}{Noun}` format
+- [ ] Name in imperative form (Create, Update, Delete)
+- [ ] Input with types and validations
+- [ ] Clear preconditions
+- [ ] Guaranteed postconditions
+- [ ] Domain rules it validates
+- [ ] Events it emits
+- [ ] Possible errors with codes
+- [ ] Structured output
 
-### Para Queries
-- [ ] ID en formato `QRY-{NNN}-{Verbo}{Sustantivo}`
-- [ ] Nombre describe qué retorna (Get, List)
-- [ ] Input con filtros y paginación
-- [ ] Output con tipos exactos
-- [ ] Casos especiales (vacío, no encontrado)
+### For Queries
+- [ ] ID in `QRY-{NNN}-{Verb}{Noun}` format
+- [ ] Name describes what it returns (Get, List)
+- [ ] Input with filters and pagination
+- [ ] Output with exact types
+- [ ] Special cases (empty, not found)
 
-### Para Use Cases
-- [ ] ID en formato `UC-{NNN}-{Verbo}{Sustantivo}`
-- [ ] Actor claramente identificado
-- [ ] Objetivo definido
-- [ ] Flujo principal paso a paso
-- [ ] Flujos alternativos documentados
-- [ ] Excepciones con manejo
-- [ ] Commands/Queries que invoca
-- [ ] Vistas relacionadas (opcional)
+### For Use Cases
+- [ ] ID in `UC-{NNN}-{Verb}{Noun}` format
+- [ ] Clearly identified actor
+- [ ] Defined objective
+- [ ] Step-by-step main flow
+- [ ] Documented alternative flows
+- [ ] Exceptions with handling
+- [ ] Commands/Queries it invokes
+- [ ] Related views (optional)
 
-### Para Processes
-- [ ] ID en formato `PROC-{NNN}-{Nombre}`
-- [ ] Trigger que lo inicia
-- [ ] Diagrama de flujo
-- [ ] Pasos con Commands/Queries involucrados
-- [ ] Estrategia de compensación
-- [ ] Timeouts definidos
+### For Processes
+- [ ] ID in `PROC-{NNN}-{Name}` format
+- [ ] Trigger that initiates it
+- [ ] Flow diagram
+- [ ] Steps with involved Commands/Queries
+- [ ] Compensation strategy
+- [ ] Defined timeouts
 
-### Para Policies
-- [ ] ID en formato `BP-{TOPIC}-NNN` (específica) o `XP-{TOPIC}-NNN` (transversal)
-- [ ] Scope de aplicación claro (entidad o comandos afectados)
-- [ ] Lógica de evaluación (WHEN/BEFORE/AFTER)
-- [ ] Parámetros configurables
-- [ ] Errores que genera
+### For Policies
+- [ ] ID in `BP-{TOPIC}-NNN` (specific) or `XP-{TOPIC}-NNN` (cross-cutting) format
+- [ ] Clear application scope (entity or affected commands)
+- [ ] Evaluation logic (WHEN/BEFORE/AFTER)
+- [ ] Configurable parameters
+- [ ] Errors it generates
 
 ---
 
-## Anti-patrones a Evitar
+## Anti-patterns to Avoid
 
-### 1. Command que Conoce la Vista
+### 1. Command that Knows the View
 
 ```yaml
-# ❌ INCORRECTO
-# CMD-001-CreateChallenge.md
-## Usado por:
-- UI-RetoEditor  # El command no debe saber esto
+# ❌ INCORRECT
+# CMD-001-PlaceOrder.md
+## Used by:
+- UI-OrderEditor  # The command should not know this
 
-# ✅ CORRECTO
-# (Sin sección "Usado por" - la vista conoce al command, no al revés)
+# ✅ CORRECT
+# (No "Used by" section - the view knows the command, not the other way around)
 ```
 
-### 2. Query que Modifica Estado
+### 2. Query that Modifies State
 
 ```typescript
-// ❌ INCORRECTO
-class GetChallengeQuery {
+// ❌ INCORRECT
+class GetOrderQuery {
   async execute(id: string) {
-    const reto = await this.repo.findById(id)
-    reto.viewCount++  // ¡Modificando en una query!
-    return reto
+    const order = await this.repo.findById(id)
+    order.viewCount++  // Modifying in a query!
+    return order
   }
 }
 
-// ✅ CORRECTO
-class GetChallengeQuery {
+// ✅ CORRECT
+class GetOrderQuery {
   async execute(id: string) {
-    return await this.repo.findById(id)  // Solo lectura
+    return await this.repo.findById(id)  // Read-only
   }
 }
 ```
 
-### 3. Use Case sin Commands
+### 3. Use Case without Commands
 
 ```yaml
-# ❌ INCORRECTO
+# ❌ INCORRECT
 # UC-001.md
-## Commands Invocados
-(ninguno)  # ¿Entonces qué hace?
+## Commands Invoked
+(none)  # Then what does it do?
 
-# ✅ CORRECTO
-## Commands Invocados
-- [[CMD-001-CreateChallenge]]
+# ✅ CORRECT
+## Commands Invoked
+- [[CMD-001-PlaceOrder]]
 ```
 
-### 4. Process sin Compensación
+### 4. Process without Compensation
 
 ```yaml
-# ❌ INCORRECTO
+# ❌ INCORRECT
 # PROC-001.md
-## Compensación
-(no definida)
+## Compensation
+(not defined)
 
-# ✅ CORRECTO
-## Compensación
-| Paso fallido | Acción |
-|--------------|--------|
-| Paso 3 | Refund crédito, notificar usuario |
+# ✅ CORRECT
+## Compensation
+| Failed Step | Action |
+|-------------|--------|
+| Step 3 | Refund credit, notify user |
 ```
 
 ---
 
-## Resumen
+## Summary
 
-La capa de Behavior en KDD:
+The Behavior layer in KDD:
 
-1. **Define operaciones**: Commands (escritura) y Queries (lectura)
-2. **Describe interacciones**: Use Cases con flujos actor-sistema
-3. **Orquesta procesos**: Flujos complejos de múltiples pasos
-4. **Aplica políticas**: Cross-Policies transversales
-5. **Referencia al dominio**: Usa entidades, valida reglas, emite eventos
-6. **Es agnóstica de UI**: No depende de las vistas
-7. **Es testeable**: Input → Output bien definido
+1. **Defines operations**: Commands (write) and Queries (read)
+2. **Describes interactions**: Use Cases with actor-system flows
+3. **Orchestrates processes**: Complex multi-step flows
+4. **Applies policies**: Cross-cutting Cross-Policies
+5. **References the domain**: Uses entities, validates rules, emits events
+6. **Is UI-agnostic**: Does not depend on views
+7. **Is testable**: Well-defined Input → Output
 
-> **"Un sistema bien diseñado tiene Commands claros, Use Cases que los orquestan, y Policies que los gobiernan."**
-
----
-
-## Artefactos Relacionados
-
-- [[command.template]] - Template para commands
-- [[query.template]] - Template para queries
-- [[use-case.template]] - Template para use cases
-- [[process.template]] - Template para procesos
-- [[policy.template]] - Template para policies
-- [[01-domain]] - La capa anterior: Domain
-- [[03-experience]] - La capa siguiente: Experience
-- [[Introducción a KDD]] - Visión general de KDD
+> **"A well-designed system has clear Commands, Use Cases that orchestrate them, and Policies that govern them."**
 
 ---
 
-*Última actualización: 2025-01*
+## Related Artifacts
+
+- [[command.template]] - Template for commands
+- [[query.template]] - Template for queries
+- [[use-case.template]] - Template for use cases
+- [[process.template]] - Template for processes
+- [[policy.template]] - Template for policies
+- [[01-domain]] - The previous layer: Domain
+- [[03-experience]] - The next layer: Experience
+- [[Introduction to KDD]] - KDD overview
+
+---
+
+*Last updated: 2025-01*

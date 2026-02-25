@@ -1,251 +1,251 @@
-# Convenciones de Escritura KDD
+# KDD Writing Conventions
 
-> Guía de estilo para escribir especificaciones en el sistema KDD (Knowledge-Driven Development).
+> Style guide for writing specifications in the KDD (Knowledge-Driven Development) system.
 
-## 1. Capitalización de Entidades de Dominio
+## 1. Domain Entity Capitalization
 
-### Regla Principal
+### Main Rule
 
-**Las entidades de dominio (Aggregates, Entities, Value Objects) SIEMPRE se escriben con la primera letra en mayúscula**, incluso en medio de una oración.
+**Domain entities (Aggregates, Entities, Value Objects) are ALWAYS written with the first letter capitalized**, even in the middle of a sentence.
 
 ```markdown
-# Correcto
-El Usuario crea un Reto y configura las Personas Sintéticas.
-Cada Sesión contiene múltiples Rondas.
-El Sombrero Azul controla el proceso.
+# Correct
+The Customer creates an Order and configures the Products.
+Each Cart contains multiple CartItems.
+The Admin controls the process.
 
-# Incorrecto
-El usuario crea un reto y configura las personas sintéticas.
-Cada sesión contiene múltiples rondas.
-El sombrero azul controla el proceso.
+# Incorrect
+The customer creates an order and configures the products.
+Each cart contains multiple cart items.
+The admin controls the process.
 ```
 
-### Justificación
+### Rationale
 
-1. **Intencionalidad**: Indica que el término es un concepto de dominio definido, no una palabra casual
-2. **Legibilidad**: Destaca visualmente los conceptos importantes al leer
-3. **Consistencia**: Facilita la búsqueda y el enlazado automático
-4. **Ubiquitous Language**: Refuerza el lenguaje compartido del dominio (DDD)
+1. **Intentionality**: Indicates that the term is a defined domain concept, not a casual word
+2. **Readability**: Visually highlights important concepts when reading
+3. **Consistency**: Facilitates search and automatic linking
+4. **Ubiquitous Language**: Reinforces the shared domain language (DDD)
 
-### Excepciones
+### Exceptions
 
-- **Plurales**: Mantienen la mayúscula → "los Retos", "las Sesiones"
-- **Con artículos**: El artículo va en minúscula → "el Reto", "una Sesión"
-- **Código/variables**: En código se usa camelCase → `reto`, `sesion`, `personaSintetica`
+- **Plurals**: Keep capitalization → "the Orders", "the Carts"
+- **With articles**: The article is lowercase → "the Order", "a Cart"
+- **Code/variables**: In code use camelCase → `order`, `cart`, `product`
 
 ---
 
 ## 2. Wiki-Links
 
-### Formato
+### Format
 
 ```markdown
-[[Nombre de Entidad]]           # Link simple
-[[Entidad|texto alternativo]]   # Link con alias
+[[Entity Name]]                 # Simple link
+[[Entity|alternative text]]     # Link with alias
 ```
 
-### Cuándo Enlazar
+### When to Link
 
-| Situación | Acción | Ejemplo |
+| Situation | Action | Example |
 |-----------|--------|---------|
-| Primera mención en sección | Enlazar | `El [[Usuario]] puede...` |
-| Menciones posteriores | Opcional | `El Usuario también...` |
-| En títulos/headers | NO enlazar | `## Flujo del Usuario` |
-| En código | NO enlazar | `` `usuario.create()` `` |
-| En tablas | Sí enlazar | `\| [[Reto]] \| Borrador \|` |
+| First mention in section | Link | `The [[Customer]] can...` |
+| Subsequent mentions | Optional | `The Customer also...` |
+| In titles/headers | DO NOT link | `## Customer Flow` |
+| In code | DO NOT link | `` `customer.create()` `` |
+| In tables | Do link | `\| [[Order]] \| Draft \|` |
 
-### Alias para Plurales y Variaciones
+### Aliases for Plurals and Variations
 
 ```markdown
-[[Sesión|sesiones]]              # Plural
-[[Persona Sintética|participante]]  # Sinónimo contextual
-[[Método Seis Sombreros|Six Thinking Hats]]  # Traducción
+[[Cart|carts]]                   # Plural
+[[Product|item]]                 # Contextual synonym
+[[OrderItem|line item]]          # Alternative name
 ```
 
 ---
 
-## 3. Identificadores
+## 3. Identifiers
 
-### Patrones por Tipo
+### Patterns by Type
 
-| Tipo | Patrón | Ejemplo |
-|------|--------|---------|
+| Type | Pattern | Example |
+|------|---------|---------|
 | Use Case | `UC-NNN` | UC-001, UC-012 |
 | Requirement | `REQ-NNN` | REQ-001, REQ-015 |
-| Requirement individual | `REQ-NNN.M` | REQ-001.1, REQ-001.2 |
-| Event | `EVT-Entidad-Accion` | EVT-Reto-Creado |
-| Business Rule | `BR-ENTIDAD-NNN` | BR-RONDA-003, BR-SESION-001 |
+| Individual Requirement | `REQ-NNN.M` | REQ-001.1, REQ-001.2 |
+| Event | `EVT-Entity-Action` | EVT-Order-Placed |
+| Business Rule | `BR-ENTITY-NNN` | BR-CART-001, BR-ORDER-001 |
 | Process | `PRC-NNN` | PRC-001 |
 | ADR | `ADR-NNNN` | ADR-0001 |
 | NFR | `NFR-NNN` | NFR-001 |
 
-### En Texto
+### In Text
 
-Los identificadores siempre van en mayúsculas y pueden enlazarse:
+Identifiers are always uppercase and can be linked:
 
 ```markdown
-# Correcto
-Este requisito deriva de [[UC-001-Crear-Reto]].
-Aplica la regla [[BR-RONDA-003]].
+# Correct
+This requirement derives from [[UC-001-PlaceOrder]].
+Rule [[BR-CART-001]] applies.
 
-# Incorrecto
-Este requisito deriva de uc-001.
-Aplica la regla br-ronda-003.
+# Incorrect
+This requirement derives from uc-001.
+Rule br-cart-001 applies.
 ```
 
 ---
 
-## 4. Estructura de Oraciones
+## 4. Sentence Structure
 
-### Voz Activa vs Pasiva
+### Active vs Passive Voice
 
-Preferir voz activa para claridad:
+Prefer active voice for clarity:
 
 ```markdown
-# Preferido (activa)
-El Sistema crea una nueva Sesión.
-El Usuario configura las Personas Sintéticas.
+# Preferred (active)
+The System creates a new Cart.
+The Customer configures the Products.
 
-# Evitar (pasiva)
-Una nueva Sesión es creada por el Sistema.
-Las Personas Sintéticas son configuradas por el Usuario.
+# Avoid (passive)
+A new Cart is created by the System.
+The Products are configured by the Customer.
 ```
 
-### Sujetos Claros
+### Clear Subjects
 
-Siempre especificar quién realiza la acción:
+Always specify who performs the action:
 
 ```markdown
-# Correcto
-El Sistema SHALL rechazar la solicitud.
-El Usuario DEBE confirmar la acción.
+# Correct
+The System SHALL reject the request.
+The Customer MUST confirm the action.
 
-# Incorrecto
-Se rechaza la solicitud.
-La acción debe confirmarse.
+# Incorrect
+The request is rejected.
+The action must be confirmed.
 ```
 
 ---
 
-## 5. Patrones EARS para Requisitos
+## 5. EARS Patterns for Requirements
 
 ### Keywords
 
-Las palabras clave EARS van en **MAYÚSCULAS**:
+EARS keywords are written in **UPPERCASE**:
 
-- `WHEN` - Evento disparador
-- `IF` - Condición (comportamiento no deseado)
-- `WHILE` - Estado continuo
-- `WHERE` - Característica opcional
-- `SHALL` - Obligación del sistema
-- `SHALL NOT` - Prohibición
+- `WHEN` - Triggering event
+- `IF` - Condition (unwanted behavior)
+- `WHILE` - Continuous state
+- `WHERE` - Optional feature
+- `SHALL` - System obligation
+- `SHALL NOT` - Prohibition
 
 ```markdown
-WHEN the Usuario submits the form,
-the Sistema SHALL create a new Reto
-  AND SHALL emit EVT-Reto-Creado.
+WHEN the Customer submits the form,
+the System SHALL create a new Order
+  AND SHALL emit EVT-Order-Placed.
 ```
 
 ---
 
-## 6. Bloques de Código
+## 6. Code Blocks
 
-### Especificar Lenguaje
+### Specify Language
 
-Siempre indicar el lenguaje para syntax highlighting:
+Always indicate the language for syntax highlighting:
 
 ````markdown
 ```typescript
-const reto = await createReto(input)
+const order = await placeOrder(input)
 ```
 
 ```gherkin
-Given a logged-in Usuario
-When the Usuario creates a Reto
-Then the Reto status should be "borrador"
+Given a logged-in Customer
+When the Customer places an Order
+Then the Order status should be "draft"
 ```
 
 ```mermaid
 stateDiagram-v2
-    [*] --> borrador
-    borrador --> configurado
+    [*] --> draft
+    draft --> confirmed
 ```
 ````
 
-### Entidades en Código
+### Entities in Code
 
-En bloques de código, usar convenciones del lenguaje (camelCase/snake_case), no capitalización de dominio:
+In code blocks, use language conventions (camelCase/snake_case), not domain capitalization:
 
 ```typescript
-// En código: camelCase
-const personaSintetica = await createPersona(input)
-const sesionActiva = await getSesionActiva(retoId)
+// In code: camelCase
+const product = await createProduct(input)
+const activeCart = await getActiveCart(customerId)
 
-// En documentación: Capitalizado
-// La Persona Sintética participa en la Sesión activa
+// In documentation: Capitalized
+// The Product is added to the active Cart
 ```
 
 ---
 
-## 7. Tablas
+## 7. Tables
 
-### Headers Claros
+### Clear Headers
 
 ```markdown
-| Campo | Tipo | Requerido | Descripción |
-|-------|------|-----------|-------------|
-| titulo | string | Sí | Título del [[Reto]] |
-| estado | enum | Sí | Estado actual |
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| title | string | Yes | Title of the [[Order]] |
+| status | enum | Yes | Current status |
 ```
 
-### Alineación
+### Alignment
 
-- Texto: Izquierda (default)
-- Números: Derecha
-- Estados/Enums: Centro
+- Text: Left (default)
+- Numbers: Right
+- States/Enums: Center
 
 ---
 
-## 8. Frontmatter YAML
+## 8. YAML Frontmatter
 
-### Orden de Campos
+### Field Order
 
 ```yaml
 ---
-id: UC-001                    # Identificador primero
-kind: use-case                # Tipo de documento
-status: draft                 # Estado
-actor: Usuario                # Campos específicos del tipo
-tags:                         # Metadatos al final
+id: UC-001                    # Identifier first
+kind: use-case                # Document type
+status: draft                 # Status
+actor: Customer               # Type-specific fields
+tags:                         # Metadata at the end
   - core
-  - reto
+  - order
 ---
 ```
 
-### Valores
+### Values
 
-- Strings sin comillas (excepto si contienen caracteres especiales)
-- Arrays en formato lista con guiones
-- Booleanos en minúscula: `true`, `false`
-
----
-
-## 9. Checklist de Revisión
-
-Antes de commitear una especificación, verificar:
-
-- [ ] Entidades de dominio capitalizadas
-- [ ] Primera mención de cada entidad enlazada
-- [ ] Identificadores en formato correcto (UC-NNN, REQ-NNN, etc.)
-- [ ] Frontmatter completo según plantilla
-- [ ] Secciones requeridas presentes
-- [ ] Bloques de código con lenguaje especificado
-- [ ] Sin enlaces rotos (ejecutar `bun run validate:specs`)
+- Strings without quotes (unless they contain special characters)
+- Arrays in list format with dashes
+- Booleans in lowercase: `true`, `false`
 
 ---
 
-## Referencias
+## 9. Review Checklist
 
-- [Validación de Especificaciones](./validacion-especificaciones.md)
-- [Plantillas KDD](/kdd_templates/_schema.md)
+Before committing a specification, verify:
+
+- [ ] Domain entities capitalized
+- [ ] First mention of each entity linked
+- [ ] Identifiers in correct format (UC-NNN, REQ-NNN, etc.)
+- [ ] Frontmatter complete per template
+- [ ] Required sections present
+- [ ] Code blocks with language specified
+- [ ] No broken links (run `bun run validate:specs`)
+
+---
+
+## References
+
+- [Specification Validation](./validacion-especificaciones.md)
+- [KDD Templates](/kdd_templates/_schema.md)
 - [Domain-Driven Design - Ubiquitous Language](https://martinfowler.com/bliki/UbiquitousLanguage.html)

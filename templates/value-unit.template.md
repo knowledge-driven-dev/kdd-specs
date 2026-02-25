@@ -3,15 +3,15 @@
 # @description: Value Unit (end-to-end delivery)
 id: UV-NNN            # @required @pattern: ^UV-\d{3}$
 kind: value-unit      # @required @literal: value-unit
-title: Nombre de la unidad   # @required
+title: Unit name              # @required
 status: draft         # @enum: draft|review|approved|deprecated
-owner: Nombre o rol   # @required
+owner: Name or role   # @required
 release: REL-NNN      # @optional
 tags:                # @type: array
   - value-unit
 ---
 
-# UV-NNN: Nombre de la unidad
+# UV-NNN: Unit name
 
 ## Objective <!-- required -->
 

@@ -1,80 +1,80 @@
-# Guía de Plantillas KDD
+# KDD Template Guide
 
-Este directorio contiene las plantillas canónicas para cada tipo de documento de especificación.
+This directory contains the canonical templates for each type of specification document.
 
-## Estructura de una plantilla
+## Template structure
 
-Cada plantilla usa un formato especial que permite al validador extraer:
-1. **Schema de frontmatter** - Desde el bloque YAML con anotaciones de tipo
-2. **Secciones requeridas** - Desde los headings marcados con `<!-- required -->`
-3. **Contenido esperado** - Desde bloques marcados con `<!-- expects: tipo -->`
+Each template uses a special format that allows the validator to extract:
+1. **Frontmatter schema** - From the YAML block with type annotations
+2. **Required sections** - From headings marked with `<!-- required -->`
+3. **Expected content** - From blocks marked with `<!-- expects: type -->`
 
-## Convenciones de anotación
+## Annotation conventions
 
 ### Frontmatter
 
 ```yaml
 ---
 # @type: use-case
-# @description: Plantilla para casos de uso
+# @description: Template for use cases
 id: UC-NNN           # @required @pattern: ^UC-\d{3}$
 version: 1           # @type: number @default: 1
 status: draft        # @enum: draft|proposed|approved|deprecated
 actor: Actor         # @required
-domain: six-hats     # @optional
+domain: store        # @optional
 tags:                # @type: array
   - use-case
 ---
 ```
 
-### Secciones
+### Sections
 
 ```markdown
-## Descripción <!-- required -->
+## Description <!-- required -->
 
-## Flujo Principal <!-- required alias: "Happy Path|Main Flow" -->
+## Main Flow <!-- required alias: "Happy Path|Main Flow" -->
 
-## Extensiones <!-- optional -->
+## Extensions <!-- optional -->
 ```
 
-### Contenido esperado
+### Expected content
 
 ```markdown
-## Ciclo de Vida
+## Lifecycle
 
 <!-- expects: mermaid:stateDiagram-v2 -->
 
-## Ejemplo
+## Example
 
 <!-- expects: json -->
 ```
 
-## Archivos de plantilla
+## Template files
 
-| Archivo | Tipo | Descripción |
-|---------|------|-------------|
-| `use-case.template.md` | use-case | Casos de uso (Cockburn-lite) |
-| `requirement.template.md` | requirement | Requisitos EARS |
-| `entity.template.md` | entity | Entidades del dominio (ver variantes abajo) |
-| `event.template.md` | event | Eventos de dominio |
+| File | Type | Description |
+|------|------|-------------|
+| `use-case.template.md` | use-case | Use cases (Cockburn-lite) |
+| `requirement.template.md` | requirement | EARS requirements |
+| `entity.template.md` | entity | Domain entities (see variants below) |
+| `event.template.md` | event | Domain events |
 
-### Variantes de entity.template.md
+### entity.template.md variants
 
-La plantilla de entidad soporta múltiples `kind`:
+The entity template supports multiple `kind` values:
 
-| Kind | Uso | Ejemplo | Convención de nombre |
-|------|-----|---------|---------------------|
-| `entity` | Entidad de dominio con ciclo de vida | Reto, Sesión, Plan | PascalCase: `Reto.md` |
-| `role` | Rol/actor que interactúa con el sistema | Propietario, Usuario, Moderador | PascalCase: `Propietario.md` |
-| `system` | Sistema externo / integración | ORACLE, SAP, STRIPE | MAYÚSCULAS: `ORACLE.md` |
-| `rule.template.md` | rule | Reglas de negocio |
-| `process.template.md` | process | Procesos (BPMN-lite) |
-| `command.template.md` | command | Comandos CQRS (modifican estado) |
-| `query.template.md` | query | Queries CQRS (solo lectura) |
+| Kind | Use | Example | Naming convention |
+|------|-----|---------|-------------------|
+| `entity` | Domain entity with lifecycle | Order, Cart, Product | PascalCase: `Order.md` |
+| `role` | Role/actor that interacts with the system | Customer, Admin | PascalCase: `Customer.md` |
+| `system` | External system / integration | STRIPE, WAREHOUSE | UPPERCASE: `STRIPE.md` |
+| `rule.template.md` | rule | Business rules |
+| `process.template.md` | process | Processes (BPMN-lite) |
+| `command.template.md` | command | CQRS commands (state-changing) |
+| `query.template.md` | query | CQRS queries (read-only) |
 | `prd.template.md` | prd | Product Requirements Document |
-| `story.template.md` | story | Historias de usuario |
-| `nfr.template.md` | nfr | Requisitos no funcionales |
+| `story.template.md` | story | User stories |
+| `nfr.template.md` | nfr | Non-functional requirements |
 | `adr.template.md` | adr | Architecture Decision Records |
-| `idea.template.md` | idea | Ideas y propuestas |
-| `value-unit.template.md` | value-unit | Unidades de Valor (entregas end-to-end) |
-| `release.template.md` | release | Planes de release (agrupan Unidades de Valor) |
+| `idea.template.md` | idea | Ideas and proposals |
+| `value-unit.template.md` | value-unit | Value Units (end-to-end deliverables) |
+| `release.template.md` | release | Release plans (group Value Units) |

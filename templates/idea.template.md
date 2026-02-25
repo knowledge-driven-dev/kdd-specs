@@ -1,6 +1,6 @@
 ---
 # @type: idea
-# @description: Captura ligera de una idea o característica antes de formalizar
+# @description: Lightweight capture of an idea or feature before formalizing
 # @file-pattern: ^IDEA-\d{4}-\d{2}-\d{2}-.+\.md$
 # @path-pattern: 00-inbox/
 
@@ -11,52 +11,52 @@ priority: medium               # @enum: low|medium|high|critical @optional
 tags: []                       # @type: array @optional
 ---
 
-# Título de la Idea <!-- title-is-name -->
+# Idea Title <!-- title-is-name -->
 
-## El Problema <!-- required -->
+## The Problem <!-- required -->
 
-<!-- Describe el problema o necesidad que motiva esta idea -->
-<!-- Preguntas guía:
-     - ¿Qué situación actual es problemática?
-     - ¿Quién tiene este problema?
-     - ¿Con qué frecuencia ocurre?
-     - ¿Qué impacto tiene?
+<!-- Describe the problem or need that motivates this idea -->
+<!-- Guiding questions:
+     - What current situation is problematic?
+     - Who has this problem?
+     - How often does it occur?
+     - What is the impact?
 -->
 
 
 
-## La Idea <!-- required -->
+## The Idea <!-- required -->
 
-<!-- Describe tu propuesta de solución en lenguaje natural -->
-<!-- No te preocupes por el formato, solo captura la esencia -->
-
-
-
-## Ejemplos <!-- optional but-recommended -->
-
-<!-- Dame un ejemplo concreto de cómo funcionaría -->
-<!-- Ejemplo: "El usuario está en una sesión, hace clic en 'Pausar',
-     y puede volver mañana para continuar donde lo dejó" -->
+<!-- Describe your proposed solution in natural language -->
+<!-- Don't worry about format, just capture the essence -->
 
 
 
-## Preguntas Abiertas <!-- optional -->
+## Examples <!-- optional but-recommended -->
 
-<!-- ¿Hay algo que no tengas claro o que necesite discutirse? -->
+<!-- Give a concrete example of how it would work -->
+<!-- Example: "The user is in a session, clicks 'Pause',
+     and can come back tomorrow to continue where they left off" -->
+
+
+
+## Open Questions <!-- optional -->
+
+<!-- Is there anything unclear or that needs to be discussed? -->
 
 -
 
-## Contexto Adicional <!-- optional -->
+## Additional Context <!-- optional -->
 
-<!-- Enlaces, capturas, conversaciones relevantes, etc. -->
+<!-- Links, screenshots, relevant conversations, etc. -->
 
 
 ---
 
 <!--
-PRÓXIMOS PASOS:
-1. Guarda este archivo en /specs/00-inbox/
-2. Usa el comando /feature en Claude Code
-3. Claude te guiará para refinar esta idea
-4. Al final se generarán los artefactos KDD formales
+NEXT STEPS:
+1. Save this file in /specs/00-inbox/
+2. Use the /feature command in Claude Code
+3. Claude will guide you to refine this idea
+4. At the end, formal KDD artifacts will be generated
 -->

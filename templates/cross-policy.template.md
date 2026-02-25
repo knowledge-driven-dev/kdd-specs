@@ -6,13 +6,13 @@
 
 id: XP-{DOMAIN}-NNN            # @required @pattern: ^XP-[A-Z]+-\d{3}$
 kind: cross-policy             # @required @literal: cross-policy
-title: "{Título descriptivo}"  # @required
+title: "{Descriptive title}"  # @required
 status: draft                  # @enum: draft|review|approved|deprecated @default: draft
 owner: "@team"                 # @optional
 created: "2024-01-01"          # @optional
 ---
 
-# XP-{DOMAIN}-NNN: {Título}
+# XP-{DOMAIN}-NNN: {Title}
 
 ## Purpose <!-- required -->
 

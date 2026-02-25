@@ -1,58 +1,58 @@
 # KDD: Knowledge-Driven Development
 
-## Prefacio: El Problema que Resolvemos
+## Preface: The Problem We Solve
 
-Existe una paradoja en el desarrollo de software: invertimos enormes esfuerzos en escribir código, pero el conocimiento que lo justifica—el *porqué*, el *qué* y el *cómo*—vive fragmentado en la cabeza de las personas, en tickets de Jira abandonados, en conversaciones de Slack perdidas, en wikis que nadie actualiza.
+There is a paradox in software development: we invest enormous effort in writing code, but the knowledge that justifies it—the *why*, the *what*, and the *how*—lives fragmented in people's heads, in abandoned Jira tickets, in lost Slack conversations, in wikis that nobody updates.
 
-Cuando un desarrollador nuevo se incorpora al equipo, no le entregamos conocimiento: le entregamos código y le deseamos suerte. Cuando un analista de negocio necesita entender una regla, no consulta una fuente de verdad: pregunta al desarrollador que "estuvo ahí". Cuando queremos verificar que el sistema hace lo que debe, no tenemos especificaciones ejecutables: tenemos esperanzas y pruebas manuales.
+When a new developer joins the team, we don't hand them knowledge: we hand them code and wish them luck. When a business analyst needs to understand a rule, they don't consult a source of truth: they ask the developer who "was there." When we want to verify that the system does what it should, we don't have executable specifications: we have hopes and manual tests.
 
-**KDD propone invertir esta realidad**: el conocimiento documentado es el artefacto primario; el código es una consecuencia derivada, una caché que puede regenerarse.
+**KDD proposes to invert this reality**: documented knowledge is the primary artifact; code is a derived consequence, a cache that can be regenerated.
 
 ---
 
-## Parte I: Fundamentos
+## Part I: Fundamentals
 
-### 1.1 ¿Qué es KDD?
+### 1.1 What is KDD?
 
-**Knowledge-Driven Development** es una metodología que trata la documentación como código: artefactos pequeños y atómicos (Markdown, YAML), versionados en Git, con linters, revisiones de código y pipelines de CI/CD.
+**Knowledge-Driven Development** is a methodology that treats documentation as code: small, atomic artifacts (Markdown, YAML), versioned in Git, with linters, code reviews, and CI/CD pipelines.
 
-Pero KDD es más que una práctica técnica. Es una declaración de intenciones:
+But KDD is more than a technical practice. It is a statement of intent:
 
-> *"El conocimiento del dominio es más valioso y duradero que cualquier implementación concreta. Las tecnologías cambian, los frameworks mueren, las arquitecturas evolucionan. Pero las reglas de negocio, las entidades del dominio, los procesos fundamentales—esos perduran."*
+> *"Domain knowledge is more valuable and enduring than any concrete implementation. Technologies change, frameworks die, architectures evolve. But business rules, domain entities, fundamental processes—those endure."*
 
-### 1.2 El Manifiesto KDD
+### 1.2 The KDD Manifesto
 
-1. **Conocimiento explícito** sobre conocimiento tácito
-2. **Documentación** sobre código (el código es derivado, regenerable)
-3. **Documentos pequeños y conectados** sobre documentos monolíticos
-4. **Ejemplos concretos** sobre descripciones abstractas
-5. **Automatización** sobre procesos manuales
+1. **Explicit knowledge** over tacit knowledge
+2. **Documentation** over code (code is derived, regenerable)
+3. **Small, connected documents** over monolithic documents
+4. **Concrete examples** over abstract descriptions
+5. **Automation** over manual processes
 
-### 1.3 Los Tres Principios Fundamentales
+### 1.3 The Three Fundamental Principles
 
-KDD se sostiene sobre tres principios que, juntos, transforman la documentación de un artefacto secundario a la pieza central del desarrollo de software.
+KDD rests on three principles that, together, transform documentation from a secondary artifact into the centerpiece of software development.
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                                                                 │
-│                    LOS TRES PRINCIPIOS                          │
+│                    THE THREE PRINCIPLES                          │
 │                                                                 │
 │   ┌─────────────────┐                                           │
-│   │  DOCUMENTACIÓN  │                                           │
-│   │  COMO VERDAD    │  ← El código deriva de aquí               │
+│   │  DOCUMENTATION  │                                           │
+│   │  AS TRUTH    │  ← Code derives from here               │
 │   └────────┬────────┘                                           │
 │            │                                                    │
 │            ▼                                                    │
 │   ┌─────────────────┐                                           │
-│   │  DOCUMENTACIÓN  │  ← Humanos y máquinas la consultan        │
-│   │  COMO           │                                           │
-│   │  CONOCIMIENTO   │                                           │
+│   │  DOCUMENTATION  │  ← Humans and machines query it        │
+│   │  AS             │                                           │
+│   │  KNOWLEDGE   │                                           │
 │   └────────┬────────┘                                           │
 │            │                                                    │
 │            ▼                                                    │
 │   ┌─────────────────┐                                           │
-│   │  DOCUMENTACIÓN  │  ← Se versiona, testea, despliega         │
-│   │  COMO CÓDIGO    │                                           │
+│   │  DOCUMENTATION  │  ← Versioned, tested, deployed         │
+│   │  AS CODE    │                                           │
 │   └─────────────────┘                                           │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
@@ -60,173 +60,173 @@ KDD se sostiene sobre tres principios que, juntos, transforman la documentación
 
 ---
 
-#### Principio 1: Documentación como Fuente de Verdad
+#### Principle 1: Documentation as Source of Truth
 
-> *"El código es una caché de la especificación. La especificación es la verdad."*
+> *"Code is a cache of the specification. The specification is the truth."*
 
-En el desarrollo tradicional, el código es el artefacto primario y la documentación es un subproducto que intenta (y fracasa) mantenerse al día. KDD invierte esta relación:
+In traditional development, code is the primary artifact and documentation is a byproduct that tries (and fails) to stay up to date. KDD inverts this relationship:
 
-| Enfoque Tradicional | Enfoque KDD |
+| Traditional Approach | KDD Approach |
 |---------------------|-------------|
-| El código define qué hace el sistema | La documentación define qué debe hacer el sistema |
-| La documentación describe el código | El código implementa la documentación |
-| Si divergen, el código tiene razón | Si divergen, hay un bug (en código o en docs) |
-| Cambiar comportamiento = cambiar código | Cambiar comportamiento = cambiar spec → regenerar código |
+| Code defines what the system does | Documentation defines what the system should do |
+| Documentation describes the code | Code implements the documentation |
+| If they diverge, code is right | If they diverge, there is a bug (in code or in docs) |
+| Change behavior = change code | Change behavior = change spec → regenerate code |
 
-**Implicaciones prácticas:**
+**Practical implications:**
 
-1. **Single Source of Truth (SSoT)**: Cada concepto, cada regla, cada decisión tiene un único lugar donde vive. No hay duplicación.
+1. **Single Source of Truth (SSoT)**: Every concept, every rule, every decision has a single place where it lives. No duplication.
 
 ```
-/Dominio/Reglas/RD-012-LimiteCredito.md  ← Definición canónica
+/Domain/Rules/BR-012-CreditLimit.md  ← Canonical definition
     ↑
-    └── El código, los tests, la UI... todo deriva de aquí
+    └── Code, tests, UI... everything derives from here
 ```
 
-2. **El código es derivable**: En el límite, si tienes la especificación completa, podrías regenerar el código. Hoy esto es parcialmente posible (generación de schemas, contratos, scaffolding). Mañana, con IA generativa, será cada vez más real.
+2. **Code is derivable**: In the limit, if you have the complete specification, you could regenerate the code. Today this is partially possible (schema generation, contracts, scaffolding). Tomorrow, with generative AI, it will become increasingly real.
 
-3. **La documentación se revisa primero**: Antes de un code review, revisamos si la especificación es correcta. El código es "solo" una implementación de esa especificación.
+3. **Documentation is reviewed first**: Before a code review, we review whether the specification is correct. The code is "just" an implementation of that specification.
 
 ```
 ┌──────────────────────────────────────────────────────────┐
 │                                                          │
-│   FLUJO DE CAMBIO EN KDD                                 │
+│   CHANGE FLOW IN KDD                                 │
 │                                                          │
-│   Requisito nuevo                                        │
+│   New requirement                                        │
 │        │                                                 │
 │        ▼                                                 │
 │   ┌─────────────┐    PR #1                               │
-│   │ Actualizar  │ ──────────► Review de especificación   │
-│   │ docs KDD    │             (¿Es correcto el cambio?)  │
+│   │ Update      │ ──────────► Specification review   │
+│   │ KDD docs    │             (Is the change correct?)  │
 │   └─────────────┘                                        │
 │        │                                                 │
 │        ▼                                                 │
 │   ┌─────────────┐    PR #2                               │
-│   │ Implementar │ ──────────► Review de código           │
-│   │ en código   │             (¿Implementa la spec?)     │
+│   │ Implement   │ ──────────► Code review           │
+│   │ in code     │             (Does it implement spec?)     │
 │   └─────────────┘                                        │
 │        │                                                 │
 │        ▼                                                 │
-│   Tests verifican que código = especificación            │
+│   Tests verify that code = specification            │
 │                                                          │
 └──────────────────────────────────────────────────────────┘
 ```
 
-**¿Por qué es importante?**
+**Why is this important?**
 
-Porque el código miente. El código te dice *cómo* funciona algo, pero no te dice:
-- *Por qué* funciona así
-- *Qué problema* resuelve
-- *Qué alternativas* se descartaron
-- *Qué restricciones* de negocio aplican
+Because code lies. Code tells you *how* something works, but it doesn't tell you:
+- *Why* it works that way
+- *What problem* it solves
+- *What alternatives* were discarded
+- *What business constraints* apply
 
-La documentación KDD captura todo esto. Es la memoria institucional que sobrevive a la rotación de personal, a los refactors, a los cambios de tecnología.
+KDD documentation captures all of this. It is the institutional memory that survives staff turnover, refactors, and technology changes.
 
 ---
 
-#### Principio 2: Documentación como Conocimiento
+#### Principle 2: Documentation as Knowledge
 
-> *"La documentación no es texto muerto. Es conocimiento vivo, consultable por humanos y máquinas."*
+> *"Documentation is not dead text. It is living knowledge, queryable by humans and machines."*
 
-La documentación tradicional tiene un problema: se escribe para humanos, pero los humanos no la leen. Se pudre en wikis abandonadas, en Confluence olvidado, en README.md que nadie actualiza.
+Traditional documentation has a problem: it is written for humans, but humans don't read it. It rots in abandoned wikis, in forgotten Confluence, in README.md files that nobody updates.
 
-KDD resuelve esto diseñando la documentación para ser **consumida activamente**, no solo almacenada:
+KDD solves this by designing documentation to be **actively consumed**, not just stored:
 
-**Para humanos:**
-- **Navegable**: enlaces bidireccionales forman un grafo explorable
-- **Descubrible**: búsqueda, índices, visualización de conexiones
-- **Contextual**: cada documento enlaza a sus dependencias y dependientes
+**For humans:**
+- **Navigable**: bidirectional links form an explorable graph
+- **Discoverable**: search, indexes, connection visualization
+- **Contextual**: each document links to its dependencies and dependents
 
 ```markdown
-# RD-001: Descuento Cliente VIP
+# BR-001: VIP Customer Discount
 
-## Declaración
-Cuando un [[Cliente]] tiene categoría "VIP", 
-se aplica un descuento del 15% sobre el [[Pedido]].
+## Declaration
+When a [[Customer]] has "VIP" category,
+a 15% discount is applied to the [[Order]].
 
-## Entidades involucradas
-- [[Cliente]]
-- [[Pedido]]
-- [[Descuento]]
+## Involved entities
+- [[Customer]]
+- [[Order]]
+- [[Discount]]
 
-## Casos de uso relacionados
-- [[CU-003-RealizarCompra]]
+## Related use cases
+- [[UC-003-PlaceOrder]]
 
-## Verificado por
-- [[descuentos.feature#Escenario: Descuento VIP aplicado]]
+## Verified by
+- [[discounts.feature#Scenario: VIP Discount applied]]
 ```
 
-**Para máquinas (agentes, asistentes, herramientas):**
+**For machines (agents, assistants, tools):**
 
-En la era de la IA, la documentación tiene nuevos consumidores. Un sistema bien documentado en KDD puede ser indexado y consultado por asistentes que responden preguntas sobre el dominio:
+In the age of AI, documentation has new consumers. A well-documented KDD system can be indexed and queried by assistants that answer questions about the domain:
 
 ```
-Desarrollador: "¿Cómo se calcula el descuento VIP?"
+Developer: "How is the VIP discount calculated?"
 
-Asistente: [Consulta base de conocimiento KDD]
-           [Recupera RD-001-DescuentoClienteVIP.md]
-           [Recupera ejemplos de verificación]
+Assistant: [Queries KDD knowledge base]
+           [Retrieves BR-001-VIPCustomerDiscount.md]
+           [Retrieves verification examples]
            
-           "Según la regla de dominio RD-001, los clientes VIP 
-            reciben un 15% de descuento. Aquí tienes un ejemplo..."
+           "According to domain rule BR-001, VIP customers
+            receive a 15% discount. Here is an example..."
 ```
 
 ```
-QA: "¿Qué reglas de negocio afectan a la facturación?"
+QA: "What business rules affect billing?"
 
-Asistente: [Consulta grafo de conocimiento]
-           [Encuentra reglas enlazadas a [[Factura]]]
+Assistant: [Queries knowledge graph]
+           [Finds rules linked to [[Invoice]]]
            
-           "Hay 7 reglas que afectan a facturación:
-            - RD-012: Límite de crédito
-            - RD-015: Numeración de facturas
+           "There are 7 rules that affect billing:
+            - BR-012: Credit Limit
+            - BR-015: Invoice Numbering
             ..."
 ```
 
-**Implicaciones prácticas:**
+**Practical implications:**
 
-1. **Estructura semántica**: Los documentos tienen front-matter YAML con metadatos queryables
-2. **Enlaces tipados**: No solo `[[Entidad]]`, sino relaciones con significado
-3. **Granularidad atómica**: Un concepto = un archivo = una unidad consultable
-4. **Formato procesable**: Markdown + YAML, no PDFs ni Word
+1. **Semantic structure**: Documents have YAML front-matter with queryable metadata
+2. **Typed links**: Not just `[[Entity]]`, but relationships with meaning
+3. **Atomic granularity**: One concept = one file = one queryable unit
+4. **Machine-readable format**: Markdown + YAML, not PDFs or Word
 
 ```yaml
 ---
 id: RD-012
-title: Límite de Crédito
-type: regla-dominio
+title: Credit Limit
+type: business-rule
 status: approved
 affects:
-  - entity: Cliente
-  - entity: Factura
-  - command: CMD-004-EmitirFactura
+  - entity: Customer
+  - entity: Invoice
+  - command: CMD-004-IssueInvoice
 verified_by:
-  - facturacion.feature#limite-credito
+  - billing.feature#credit-limit
 ---
 ```
 
-**¿Por qué es importante?**
+**Why is this important?**
 
-Porque el conocimiento atrapado en la cabeza de las personas no escala. Cada vez que alguien pregunta "¿cómo funciona X?", alguien tiene que dejar lo que está haciendo para explicarlo. Con KDD:
+Because knowledge trapped in people's heads doesn't scale. Every time someone asks "how does X work?", someone has to stop what they're doing to explain it. With KDD:
 
-- El onboarding es autoservicio: "Lee el dominio de Facturación"
-- Las respuestas son consistentes: todos consultan la misma fuente
-- Los asistentes multiplican el acceso: preguntas 24/7 sin interrumpir humanos
+- Onboarding is self-service: "Read the Billing domain"
+- Answers are consistent: everyone queries the same source
+- Assistants multiply access: 24/7 questions without interrupting humans
 
 ---
 
-#### Principio 3: Documentación como Código
+#### Principle 3: Documentation as Code
 
-> *"Si la documentación es la fuente de verdad, debe tratarse con el mismo rigor que el código."*
+> *"If documentation is the source of truth, it must be treated with the same rigor as code."*
 
-Este principio cierra el círculo: si la documentación es tan importante, debe tener el mismo ciclo de vida que el código. No es un documento de Word en SharePoint. Es un artefacto versionado, testeado, y desplegado.
+This principle closes the circle: if documentation is that important, it must have the same lifecycle as code. It is not a Word document on SharePoint. It is a versioned, tested, and deployed artifact.
 
-**El pipeline de documentación:**
+**The documentation pipeline:**
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                                                                 │
-│   PIPELINE KDD (Documentación como Código)                      │
+│   KDD PIPELINE (Documentation as Code)                      │
 │                                                                 │
 │   ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐        │
 │   │         │   │         │   │         │   │         │        │
@@ -235,126 +235,126 @@ Este principio cierra el círculo: si la documentación es tan importante, debe 
 │   └─────────┘   └─────────┘   └─────────┘   └─────────┘        │
 │       │             │             │             │               │
 │       ▼             ▼             ▼             ▼               │
-│   - Git         - Front-matter  - Enlaces     - Publicar       │
-│   - Branch        válido         válidos       índice          │
-│   - PR          - Formato       - Ejemplos    - Actualizar     │
-│   - Review        correcto       ejecutables   embeddings      │
-│                 - Plantilla     - Cobertura   - Notificar      │
-│                   completa       de reglas     cambios         │
+│   - Git         - Valid         - Valid        - Publish        │
+│   - Branch        front-matter   links         index           │
+│   - PR          - Correct       - Executable  - Update         │
+│   - Review        format         examples      embeddings      │
+│                 - Complete      - Rule        - Notify          │
+│                   template       coverage      changes         │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**Componentes del pipeline:**
+**Pipeline components:**
 
-1. **Versionado (Git)**
-   - Cada cambio tiene historia
-   - Podemos ver quién cambió qué y cuándo
-   - Podemos revertir errores
-   - Branches para cambios grandes
+1. **Versioning (Git)**
+   - Every change has history
+   - We can see who changed what and when
+   - We can revert errors
+   - Branches for large changes
 
-2. **Linting (Validación estática)**
+2. **Linting (Static validation)**
    ```yaml
    # .github/workflows/kdd-lint.yml
-   - name: Validar front-matter
+   - name: Validate front-matter
      run: ./scripts/validate-frontmatter.sh
    
-   - name: Verificar plantillas completas
+   - name: Verify complete templates
      run: ./scripts/check-templates.sh
    
-   - name: Buscar enlaces rotos
+   - name: Find broken links
      run: ./scripts/check-broken-links.sh
    ```
 
-3. **Testing (Verificación)**
-   - Los `.feature` (BDD) se ejecutan contra el código
-   - Se verifica que cada regla tenga ejemplos
-   - Se detecta cuando documentación y código divergen
+3. **Testing (Verification)**
+   - The `.feature` files (BDD) are executed against the code
+   - Each rule is verified to have examples
+   - Divergence between documentation and code is detected
 
    ```bash
-   # Si este test falla, o el código está mal o la spec está desactualizada
+   # If this test fails, either the code is wrong or the spec is outdated
    npm run test:bdd
    ```
 
-4. **Deploy (Publicación)**
-   - Generar sitio de documentación (MkDocs, Docusaurus)
-   - Actualizar índices de búsqueda
-   - Regenerar embeddings para asistentes IA
-   - Notificar a equipos afectados
+4. **Deploy (Publication)**
+   - Generate documentation site (MkDocs, Docusaurus)
+   - Update search indexes
+   - Regenerate embeddings for AI assistants
+   - Notify affected teams
 
-**Automatización del ciclo de vida:**
+**Lifecycle automation:**
 
-El verdadero poder de "Documentación como Código" es que podemos **automatizar** la generación de artefactos derivados:
+The true power of "Documentation as Code" is that we can **automate** the generation of derived artifacts:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                                                                 │
-│   DOCUMENTACIÓN KDD                                             │
+│   KDD DOCUMENTATION                                             │
 │        │                                                        │
-│        ├──► Generar schemas de base de datos                    │
-│        │    (desde Entidades + Value Objects)                   │
+│        ├──► Generate database schemas                    │
+│        │    (from Entities + Value Objects)                   │
 │        │                                                        │
-│        ├──► Generar contratos OpenAPI                           │
-│        │    (desde Comandos + Consultas)                        │
+│        ├──► Generate OpenAPI contracts                           │
+│        │    (from Commands + Queries)                        │
 │        │                                                        │
-│        ├──► Generar esqueletos de código                        │
-│        │    (clases, interfaces, tests)                         │
+│        ├──► Generate code skeletons                        │
+│        │    (classes, interfaces, tests)                         │
 │        │                                                        │
-│        ├──► Generar tests BDD ejecutables                       │
-│        │    (desde ejemplos en /5-Verificacion)                 │
+│        ├──► Generate executable BDD tests                       │
+│        │    (from examples in /05-verification)                 │
 │        │                                                        │
-│        ├──► Generar diagramas                                   │
-│        │    (desde relaciones entre entidades)                  │
+│        ├──► Generate diagrams                                   │
+│        │    (from relationships between entities)                  │
 │        │                                                        │
-│        └──► Alimentar asistentes IA                             │
-│             (embeddings actualizados automáticamente)           │
+│        └──► Feed AI assistants                             │
+│             (automatically updated embeddings)           │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**Ejemplo concreto:**
+**Concrete example:**
 
 ```yaml
-# Entidad documentada en KDD
+# Entity documented in KDD
 ---
 id: ENT-003
-title: Factura
-type: entidad
+title: Invoice
+type: entity
 ---
 
-## Atributos
-| Atributo | Tipo | Requerido |
-|----------|------|-----------|
-| facturaId | UUID | Sí |
-| numero | String | Sí |
-| fecha | Date | Sí |
-| total | Money | Sí |
-| estado | Enum(borrador,emitida,anulada) | Sí |
+## Attributes
+| Attribute | Type | Required |
+|-----------|------|----------|
+| invoiceId | UUID | Yes |
+| number | String | Yes |
+| date | Date | Yes |
+| total | Money | Yes |
+| status | Enum(draft,issued,voided) | Yes |
 ```
 
 ```typescript
-// Generado automáticamente desde la especificación
-// ⚠️ NO EDITAR MANUALMENTE - Regenerar con `npm run kdd:generate`
+// Auto-generated from the specification
+// ⚠️ DO NOT EDIT MANUALLY - Regenerate with `npm run kdd:generate`
 
-interface Factura {
-  facturaId: string;  // UUID
-  numero: string;
-  fecha: Date;
+interface Invoice {
+  invoiceId: string;  // UUID
+  number: string;
+  date: Date;
   total: Money;
-  estado: 'borrador' | 'emitida' | 'anulada';
+  status: 'draft' | 'issued' | 'voided';
 }
 ```
 
-**Estados y gobernanza:**
+**States and governance:**
 
-Como el código, los documentos tienen estados que controlan su ciclo de vida:
+Like code, documents have states that control their lifecycle:
 
 ```yaml
 ---
-status: draft    # Trabajo en progreso, no usar como referencia
-status: review   # En revisión, pendiente de aprobación
-status: approved # Fuente de verdad oficial
-status: deprecated # Obsoleto, existe documentación nueva
+status: draft    # Work in progress, do not use as reference
+status: review   # Under review, pending approval
+status: approved # Official source of truth
+status: deprecated # Obsolete, newer documentation exists
 ---
 ```
 
@@ -362,467 +362,467 @@ status: deprecated # Obsoleto, existe documentación nueva
 draft ──────► review ──────► approved ──────► deprecated
   │              │                               │
   │              │                               │
-  └── Cualquiera └── Requiere                    └── Enlaza a
-      puede          aprobación                      reemplazo
-      crear          de owner
+  └── Anyone     └── Requires                    └── Links to
+      can create      owner                          replacement
+                    approval
 ```
 
-**¿Por qué es importante?**
+**Why is this important?**
 
-Porque la documentación sin rigor se degrada. Sin versionado, no sabes qué cambió. Sin linting, los errores se acumulan. Sin testing, la documentación y el código divergen silenciosamente. Sin deploy automatizado, nadie ve las actualizaciones.
+Because documentation without rigor degrades. Without versioning, you don't know what changed. Without linting, errors accumulate. Without testing, documentation and code silently diverge. Without automated deploy, nobody sees the updates.
 
-"Documentación como Código" no es una metáfora. Es una práctica concreta que hace que la documentación sea tan confiable como el código que describe.
+"Documentation as Code" is not a metaphor. It is a concrete practice that makes documentation as reliable as the code it describes.
 
 ---
 
-## Parte II: La Estructura Conceptual
+## Part II: The Conceptual Structure
 
-### 2.1 El Flujo Cognitivo Top-Down
+### 2.1 The Top-Down Cognitive Flow
 
-KDD organiza la documentación siguiendo el proceso mental natural de diseño de software. No es una taxonomía arbitraria: es el camino que recorre la mente al entender y construir un sistema.
+KDD organizes documentation following the natural mental process of software design. It is not an arbitrary taxonomy: it is the path the mind travels when understanding and building a system.
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                                                                 │
-│   PROBLEMA  →  DOMINIO  →  CAPACIDADES  →  INTERACCIÓN  →  VERIFICACIÓN
+│   PROBLEM  →  DOMAIN  →  CAPABILITIES  →  INTERACTION  →  VERIFICATION
 │                                                                 │
-│   "¿Por qué?"  "¿Qué      "¿Qué se      "¿Cómo lo     "¿Cómo lo   │
-│                existe?"    puede         usan?"        probamos?"  │
-│                            hacer?"                                 │
+│   "Why?"       "What      "What can     "How do       "How do     │
+│                exists?"    it do?"       they use it?" we test it?"│
+│                                                                    │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-Cada nivel **añade compromiso** con la implementación:
+Each level **adds commitment** to the implementation:
 
-| Nivel | Compromiso | Pregunta | Artefactos |
+| Level | Commitment | Question | Artifacts |
 |-------|-----------|----------|------------|
-| Problema | Nulo | ¿Por qué construimos esto? | PRD, contexto, objetivos |
-| Dominio | Conceptual | ¿Qué conceptos existen? | Entidades, eventos, reglas |
-| Capacidades | Funcional | ¿Qué puede hacer el sistema? | Comandos, procesos |
-| Interacción | Experiencial | ¿Cómo lo usa alguien? | Casos de uso, flujos, UI |
-| Verificación | Concreto | ¿Cómo sabemos que funciona? | Ejemplos, tests, criterios |
+| Problem | None | Why are we building this? | PRD, context, objectives |
+| Domain | Conceptual | What concepts exist? | Entities, events, rules |
+| Capabilities | Functional | What can the system do? | Commands, processes |
+| Interaction | Experiential | How does someone use it? | Use cases, flows, UI |
+| Verification | Concrete | How do we know it works? | Examples, tests, criteria |
 
-### 2.2 Los Cinco Niveles en Detalle
+### 2.2 The Five Levels in Detail
 
-#### Nivel 1: Problema
+#### Level 1: Problem
 
-Este nivel responde a la pregunta fundamental: **¿Por qué existe este sistema?**
+This level answers the fundamental question: **Why does this system exist?**
 
-Aquí no hablamos de software. Hablamos de problemas humanos, de contexto de negocio, de objetivos medibles. Un sistema que no tiene claro su "por qué" es un sistema condenado a la deriva.
+Here we don't talk about software. We talk about human problems, business context, measurable objectives. A system that doesn't have a clear "why" is a system doomed to drift.
 
-**Artefactos típicos:**
-- **PRD (Product Requirements Document)**: visión del producto, problema a resolver, usuarios objetivo, métricas de éxito
-- **Contexto de Negocio**: restricciones, stakeholders, sistemas relacionados
+**Typical artifacts:**
+- **PRD (Product Requirements Document)**: product vision, problem to solve, target users, success metrics
+- **Business Context**: constraints, stakeholders, related systems
 
-> **Nota sobre Lenguaje Ubicuo**: Las definiciones de términos del dominio viven en `/02-domain/entities/`. No se mantiene un glosario separado para evitar duplicación (principio SSoT).
+> **Note on Ubiquitous Language**: Domain term definitions live in `/02-domain/entities/`. A separate glossary is not maintained to avoid duplication (SSoT principle).
 
-**Ejemplo de PRD ligero:**
+**Lightweight PRD example:**
 
 ```markdown
-# Sistema de Facturación Electrónica
+# Electronic Invoicing System
 
-## El Problema
-Actualmente, el proceso de facturación es manual, propenso a errores, 
-y no cumple con la normativa de facturación electrónica que entra 
-en vigor en enero 2025.
+## The Problem
+Currently, the invoicing process is manual, error-prone,
+and does not comply with the electronic invoicing regulations
+coming into effect in January 2025.
 
-## Usuarios
-- Contables (emiten facturas)
-- Clientes (reciben facturas)
-- Hacienda (valida cumplimiento)
+## Users
+- Accountants (issue invoices)
+- Customers (receive invoices)
+- Tax Authority (validates compliance)
 
-## Éxito significa
-- 100% de facturas emitidas electrónicamente
-- Tiempo de emisión < 2 minutos
-- 0 errores de formato normativo
+## Success means
+- 100% of invoices issued electronically
+- Issuance time < 2 minutes
+- 0 regulatory format errors
 
-## Lo que NO es este sistema
-- No es un ERP completo
-- No gestiona cobros (eso es otro sistema)
+## What this system is NOT
+- It is not a full ERP
+- It does not manage collections (that is another system)
 ```
 
-#### Nivel 2: Dominio
+#### Level 2: Domain
 
-Este nivel responde: **¿Qué conceptos existen en nuestro universo de problema?**
+This level answers: **What concepts exist in our problem universe?**
 
-Aquí aplicamos Domain-Driven Design (DDD) para modelar el dominio de forma pura, sin contaminación de UI ni de tecnología. Es el nivel más estable: las entidades del dominio cambian menos que cualquier otra cosa.
+Here we apply Domain-Driven Design (DDD) to model the domain in pure form, without UI or technology contamination. It is the most stable level: domain entities change less than anything else.
 
-**Artefactos típicos:**
-- **Entidades**: objetos con identidad propia (Cliente, Factura, Producto)
-- **Value Objects**: objetos definidos por sus atributos (Dinero, DirecciónPostal)
-- **Agregados**: clusters de entidades con una raíz
-- **Eventos de Dominio**: hechos significativos que han ocurrido (FacturaEmitida, PedidoCancelado)
-- **Reglas de Dominio**: invariantes y restricciones que siempre deben cumplirse
+**Typical artifacts:**
+- **Entities**: objects with their own identity (Customer, Invoice, Product)
+- **Value Objects**: objects defined by their attributes (Money, PostalAddress)
+- **Aggregates**: clusters of entities with a root
+- **Domain Events**: significant facts that have occurred (InvoiceIssued, OrderCancelled)
+- **Domain Rules**: invariants and constraints that must always hold
 
-**Ejemplo de Entidad:**
+**Entity example:**
 
 ```markdown
-# Factura
+# Invoice
 
-## Identidad
-- `facturaId`: UUID, inmutable una vez creada
+## Identity
+- `invoiceId`: UUID, immutable once created
 
-## Atributos
-| Atributo | Tipo | Descripción |
-|----------|------|-------------|
-| número | String | Número secuencial según serie |
-| fecha | Date | Fecha de emisión |
-| cliente | [[Cliente]] | Receptor de la factura |
-| líneas | List<[[LíneaFactura]]> | Conceptos facturados |
-| estado | Enum | borrador, emitida, anulada |
+## Attributes
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| number | String | Sequential number by series |
+| date | Date | Issuance date |
+| customer | [[Customer]] | Invoice recipient |
+| lines | List<[[InvoiceLine]]> | Invoiced items |
+| status | Enum | draft, issued, voided |
 
-## Invariantes
-- Una factura emitida no puede modificarse (solo anularse)
-- El importe total = suma de líneas + impuestos
-- El número es único dentro de su serie
+## Invariants
+- An issued invoice cannot be modified (only voided)
+- Total amount = sum of lines + taxes
+- The number is unique within its series
 
-## Ciclo de Vida
+## Lifecycle
 ```mermaid
 stateDiagram-v2
-    [*] --> Borrador
-    Borrador --> Emitida: emitir()
-    Emitida --> Anulada: anular()
-    Emitida --> [*]
-    Anulada --> [*]
+    [*] --> Draft
+    Draft --> Issued: issue()
+    Issued --> Voided: void()
+    Issued --> [*]
+    Voided --> [*]
 ```
 
-## Eventos que genera
-- [[FacturaEmitida]] al emitir()
-- [[FacturaAnulada]] al anular()
+## Events generated
+- [[InvoiceIssued]] on issue()
+- [[InvoiceVoided]] on void()
 ```
 
-**Ejemplo de Regla de Dominio:**
+**Domain Rule example:**
 
 ```markdown
-# RD-012: Límite de Crédito
+# BR-012: Credit Limit
 
-## Declaración
-Cuando un [[Cliente]] tiene deuda pendiente superior a su límite 
-de crédito, no se pueden emitir nuevas [[Factura]]s para ese cliente.
+## Declaration
+When a [[Customer]] has outstanding debt exceeding their credit
+limit, new [[Invoice]]s cannot be issued for that customer.
 
-## Justificación de negocio
-Protege a la empresa de acumular deuda incobrable. El límite de 
-crédito se negocia individualmente con cada cliente según su 
-historial y solvencia.
+## Business justification
+Protects the company from accumulating bad debt. The credit
+limit is individually negotiated with each customer based on their
+history and solvency.
 
-## Fórmula
+## Formula
 ```
-deuda_pendiente = suma(facturas_no_pagadas)
-puede_facturar = (deuda_pendiente + nuevo_importe) <= limite_credito
-```
-
-## Excepciones
-- Facturas de regularización (abonos) siempre se permiten
-- El director financiero puede autorizar excepciones
-
-## Entidades involucradas
-- [[Cliente]]
-- [[Factura]]
-
-## Ver también
-- [[RD-013-CalculoDeudaPendiente]]
+outstanding_debt = sum(unpaid_invoices)
+can_invoice = (outstanding_debt + new_amount) <= credit_limit
 ```
 
-**Ejemplo de Evento de Dominio:**
+## Exceptions
+- Adjustment invoices (credits) are always allowed
+- The CFO can authorize exceptions
+
+## Involved entities
+- [[Customer]]
+- [[Invoice]]
+
+## See also
+- [[BR-013-OutstandingDebtCalculation]]
+```
+
+**Domain Event example:**
 
 ```markdown
-# FacturaEmitida
+# InvoiceIssued
 
-## Descripción
-Se ha emitido una factura, quedando registrada oficialmente 
-y siendo enviada al cliente.
+## Description
+An invoice has been issued, becoming officially registered
+and sent to the customer.
 
-## Productor
-[[Factura]].emitir()
+## Producer
+[[Invoice]].issue()
 
 ## Payload
 ```yaml
-facturaEmitidaId: UUID
+invoiceIssuedId: UUID
 timestamp: DateTime
-datos:
-  facturaId: UUID
-  número: String
-  clienteId: UUID
-  importeTotal: Money
-  fechaEmisión: Date
+data:
+  invoiceId: UUID
+  number: String
+  customerId: UUID
+  totalAmount: Money
+  issuanceDate: Date
 ```
 
-## Consumidores
-| Consumidor | Reacción |
-|------------|----------|
-| [[ProcesoEnvíoEmail]] | Envía PDF al cliente |
-| [[ProcesoContabilidad]] | Genera asiento contable |
-| [[ProcesoHacienda]] | Reporta a sistema tributario |
+## Consumers
+| Consumer | Reaction |
+|----------|----------|
+| [[EmailDeliveryProcess]] | Sends PDF to customer |
+| [[AccountingProcess]] | Generates journal entry |
+| [[TaxAuthorityProcess]] | Reports to tax system |
 
-## Reglas que aplican
-- [[RD-012-LímiteCrédito]] (verificada antes de emitir)
+## Applicable rules
+- [[BR-012-CreditLimit]] (verified before issuing)
 ```
 
-#### Nivel 3: Capacidades
+#### Level 3: Capabilities
 
-Este nivel responde: **¿Qué puede hacer el sistema?**
+This level answers: **What can the system do?**
 
-Aquí definimos las operaciones posibles sobre el dominio, todavía de forma abstracta. No decimos *cómo* un usuario ejecuta estas operaciones (eso es Interacción), solo *qué* operaciones existen.
+Here we define the possible operations on the domain, still in abstract form. We don't say *how* a user executes these operations (that is Interaction), only *what* operations exist.
 
-**Artefactos típicos:**
-- **Comandos**: acciones que modifican el estado (EmitirFactura, AnularPedido)
-- **Consultas**: peticiones de información (ObtenerFacturasPendientes)
-- **Procesos de Negocio**: flujos que orquestan múltiples comandos y eventos
+**Typical artifacts:**
+- **Commands**: actions that modify state (IssueInvoice, CancelOrder)
+- **Queries**: information requests (GetPendingInvoices)
+- **Business Processes**: flows that orchestrate multiple commands and events
 
-**Ejemplo de Comando:**
+**Command example:**
 
 ```markdown
-# CMD-004: EmitirFactura
+# CMD-004: IssueInvoice
 
-## Propósito
-Transforma una factura en borrador a estado emitido, 
-haciéndola oficial e inmutable.
+## Purpose
+Transforms a draft invoice to issued status,
+making it official and immutable.
 
-## Entrada
-| Parámetro | Tipo | Requerido |
-|-----------|------|-----------|
-| facturaId | UUID | Sí |
-| fechaEmisión | Date | No (default: hoy) |
+## Input
+| Parameter | Type | Required |
+|-----------|------|----------|
+| invoiceId | UUID | Yes |
+| issuanceDate | Date | No (default: today) |
 
-## Precondiciones
-- La factura existe y está en estado `borrador`
-- [[RD-012-LímiteCrédito]] se cumple para el cliente
-- La factura tiene al menos una línea
+## Preconditions
+- The invoice exists and is in `draft` status
+- [[BR-012-CreditLimit]] is satisfied for the customer
+- The invoice has at least one line
 
-## Postcondiciones
-- Factura pasa a estado `emitida`
-- Se asigna número definitivo según [[RD-015-NumeraciónFacturas]]
-- Se genera evento [[FacturaEmitida]]
+## Postconditions
+- Invoice transitions to `issued` status
+- A definitive number is assigned per [[BR-015-InvoiceNumbering]]
+- Event [[InvoiceIssued]] is generated
 
-## Errores posibles
-| Código | Condición |
-|--------|-----------|
-| FACT-001 | Factura no encontrada |
-| FACT-002 | Factura no está en borrador |
-| FACT-003 | Límite de crédito excedido |
-| FACT-004 | Factura sin líneas |
+## Possible errors
+| Code | Condition |
+|------|-----------|
+| INV-001 | Invoice not found |
+| INV-002 | Invoice is not in draft status |
+| INV-003 | Credit limit exceeded |
+| INV-004 | Invoice has no lines |
 ```
 
-**Ejemplo de Proceso de Negocio:**
+**Business Process example:**
 
 ```markdown
-# PROC-002: Proceso de Facturación Mensual
+# PROC-002: Monthly Billing Process
 
-## Descripción
-Proceso que se ejecuta el primer día de cada mes para generar 
-automáticamente las facturas de servicios recurrentes.
+## Description
+Process that runs on the first day of each month to automatically
+generate invoices for recurring services.
 
-## Disparador
-Evento temporal: primer día del mes a las 02:00
+## Trigger
+Temporal event: first day of the month at 02:00
 
 ## Flujo
 ```mermaid
 graph TD
-    A[Inicio] --> B[Obtener contratos activos]
-    B --> C{¿Tiene servicios facturables?}
-    C -->|Sí| D[Crear borrador factura]
-    C -->|No| E[Siguiente contrato]
-    D --> F[Añadir líneas según servicios]
-    F --> G{¿Cumple RD-012?}
-    G -->|Sí| H[Emitir factura]
-    G -->|No| I[Marcar para revisión manual]
-    H --> J[Evento: FacturaEmitida]
-    I --> K[Evento: FacturaRequiereRevisión]
+    A[Start] --> B[Get active contracts]
+    B --> C{Has billable services?}
+    C -->|Yes| D[Create draft invoice]
+    C -->|No| E[Next contract]
+    D --> F[Add lines per services]
+    F --> G{Satisfies BR-012?}
+    G -->|Yes| H[Issue invoice]
+    G -->|No| I[Flag for manual review]
+    H --> J[Event: InvoiceIssued]
+    I --> K[Event: InvoiceRequiresReview]
     J --> E
     K --> E
-    E --> L{¿Más contratos?}
-    L -->|Sí| C
-    L -->|No| M[Fin]
+    E --> L{More contracts?}
+    L -->|Yes| C
+    L -->|No| M[End]
 ```
 
-## Reglas aplicables
-- [[RD-012-LímiteCrédito]]
-- [[RD-020-FacturaciónRecurrente]]
-- [[RD-015-NumeraciónFacturas]]
+## Applicable rules
+- [[BR-012-CreditLimit]]
+- [[BR-020-RecurringBilling]]
+- [[BR-015-InvoiceNumbering]]
 
-## Eventos generados
-- [[FacturaEmitida]] (por cada factura exitosa)
-- [[FacturaRequiereRevisión]] (cuando hay bloqueos)
-- [[ProcesoFacturaciónCompletado]] (al finalizar)
+## Events generated
+- [[InvoiceIssued]] (for each successful invoice)
+- [[InvoiceRequiresReview]] (when there are blockers)
+- [[BillingProcessCompleted]] (upon completion)
 ```
 
-#### Nivel 4: Interacción
+#### Level 4: Interaction
 
-Este nivel responde: **¿Cómo usa alguien el sistema?**
+This level answers: **How does someone use the system?**
 
-Ahora sí introducimos al usuario. Aquí describimos cómo un actor (humano o sistema externo) interactúa con las capacidades del nivel anterior para lograr sus objetivos.
+Now we introduce the user. Here we describe how an actor (human or external system) interacts with the capabilities from the previous level to achieve their goals.
 
-**Artefactos típicos:**
-- **Casos de Uso**: interacciones actor-sistema con flujos completos
-- **Flujos de Usuario**: secuencias de pasos desde la perspectiva del usuario
-- **Wireframes / Pantallas**: representaciones de la interfaz
-- **Mapas de Navegación**: cómo se conectan las pantallas
+**Typical artifacts:**
+- **Use Cases**: actor-system interactions with complete flows
+- **User Flows**: step sequences from the user's perspective
+- **Wireframes / Screens**: interface representations
+- **Navigation Maps**: how screens connect to each other
 
-**Ejemplo de Caso de Uso:**
+**Use Case example:**
 
 ```markdown
-# CU-007: Emitir Factura
+# UC-007: Issue Invoice
 
-## Contexto
-| Elemento | Descripción |
-|----------|-------------|
-| Actor | Contable |
-| Objetivo | Convertir un borrador de factura en factura oficial |
-| Precondición | Existe una factura en estado borrador |
-| Postcondición | La factura está emitida y el cliente notificado |
+## Context
+| Element | Description |
+|---------|-------------|
+| Actor | Accountant |
+| Goal | Convert a draft invoice into an official invoice |
+| Precondition | An invoice exists in draft status |
+| Postcondition | The invoice is issued and the customer is notified |
 
-## Flujo Principal
-1. El contable accede al listado de facturas en borrador
-2. El sistema muestra las facturas pendientes de emisión
-3. El contable selecciona una factura
-4. El sistema muestra el detalle de la factura con preview
-5. El contable verifica los datos y pulsa "Emitir"
-6. El sistema valida las reglas de negocio
-7. El sistema emite la factura y muestra confirmación
-8. El sistema envía email al cliente con el PDF
+## Main Flow
+1. The accountant accesses the draft invoices list
+2. The system displays invoices pending issuance
+3. The accountant selects an invoice
+4. The system shows the invoice detail with preview
+5. The accountant verifies the data and clicks "Issue"
+6. The system validates business rules
+7. The system issues the invoice and displays confirmation
+8. The system sends an email to the customer with the PDF
 
-## Flujos Alternativos
+## Alternative Flows
 
-### A1: Límite de crédito excedido
-En el paso 6, si [[RD-012-LímiteCrédito]] no se cumple:
-1. El sistema muestra mensaje de error con deuda actual y límite
-2. El sistema ofrece opciones:
-   - Solicitar autorización excepcional
-   - Cancelar emisión
-3. Si solicita autorización, se crea tarea para director financiero
+### A1: Credit limit exceeded
+At step 6, if [[BR-012-CreditLimit]] is not satisfied:
+1. The system displays an error message with current debt and limit
+2. The system offers options:
+   - Request exceptional authorization
+   - Cancel issuance
+3. If authorization is requested, a task is created for the CFO
 
-### A2: Error en datos de factura
-En el paso 5, si el contable detecta errores:
-1. El contable pulsa "Editar"
-2. Vuelve al caso de uso [[CU-005-EditarBorradorFactura]]
+### A2: Error in invoice data
+At step 5, if the accountant detects errors:
+1. The accountant clicks "Edit"
+2. Returns to use case [[UC-005-EditDraftInvoice]]
 
-## Reglas de Negocio Aplicables
-- [[RD-012-LímiteCrédito]]
-- [[RD-015-NumeraciónFacturas]]
-- [[RD-018-FormatoFacturaElectrónica]]
+## Applicable Business Rules
+- [[BR-012-CreditLimit]]
+- [[BR-015-InvoiceNumbering]]
+- [[BR-018-ElectronicInvoiceFormat]]
 
-## Comandos invocados
-- [[CMD-004-EmitirFactura]]
+## Commands invoked
+- [[CMD-004-IssueInvoice]]
 
-## Pantallas relacionadas
-- [[UI-ListadoBorradores]]
-- [[UI-DetalleFactura]]
+## Related screens
+- [[UI-DraftsList]]
+- [[UI-InvoiceDetail]]
 
-## Eventos generados
-- [[FacturaEmitida]]
+## Events generated
+- [[InvoiceIssued]]
 ```
 
-**Ejemplo de Flujo de UI:**
+**UI Flow example:**
 
 ```markdown
-# Flujo: Checkout de Compra
+# Flow: Purchase Checkout
 
-## Pantallas involucradas
-1. [[UI-Carrito]]
-2. [[UI-DatosPago]]
-3. [[UI-Confirmación]]
-4. [[UI-ResultadoPago]]
+## Screens involved
+1. [[UI-Cart]]
+2. [[UI-PaymentDetails]]
+3. [[UI-Confirmation]]
+4. [[UI-PaymentResult]]
 
-## Mapa de navegación
+## Navigation map
 ```mermaid
 graph LR
-    A[Carrito] -->|Continuar| B[Datos Pago]
-    B -->|Pagar| C[Procesando...]
-    C -->|Éxito| D[Confirmación]
-    C -->|Error| E[Error Pago]
-    E -->|Reintentar| B
-    B -->|Volver| A
+    A[Cart] -->|Continue| B[Payment Details]
+    B -->|Pay| C[Processing...]
+    C -->|Success| D[Confirmation]
+    C -->|Error| E[Payment Error]
+    E -->|Retry| B
+    B -->|Back| A
 ```
 
-## Estados del flujo
-| Estado | Descripción | Acciones posibles |
-|--------|-------------|-------------------|
-| carrito | Usuario revisando productos | Modificar, Vaciar, Continuar |
-| datos_pago | Introduciendo tarjeta | Pagar, Volver |
-| procesando | Esperando respuesta pasarela | - |
-| completado | Pago exitoso | Ver pedido |
-| error | Pago fallido | Reintentar, Cancelar |
+## Flow states
+| State | Description | Possible actions |
+|-------|-------------|------------------|
+| cart | Customer reviewing products | Modify, Empty, Continue |
+| payment_details | Entering card | Pay, Back |
+| processing | Awaiting gateway response | - |
+| completed | Payment successful | View order |
+| error | Payment failed | Retry, Cancel |
 ```
 
-#### Nivel 5: Verificación
+#### Level 5: Verification
 
-Este nivel responde: **¿Cómo sabemos que funciona?**
+This level answers: **How do we know it works?**
 
-Aquí cerramos el círculo: convertimos todo el conocimiento anterior en **evidencia ejecutable**. Los ejemplos concretos (BDD), los criterios de aceptación, los casos de prueba—todo lo que demuestra que el sistema cumple con su especificación.
+Here we close the circle: we convert all previous knowledge into **executable evidence**. Concrete examples (BDD), acceptance criteria, test cases—everything that demonstrates the system meets its specification.
 
-**Artefactos típicos:**
-- **Especificaciones por Ejemplos (BDD)**: escenarios Given/When/Then
-- **Criterios de Aceptación**: condiciones de "done" para historias
-- **Casos de Prueba**: escenarios de testing documentados
-- **Contratos**: especificaciones de APIs, schemas
+**Typical artifacts:**
+- **Specification by Example (BDD)**: Given/When/Then scenarios
+- **Acceptance Criteria**: "done" conditions for stories
+- **Test Cases**: documented testing scenarios
+- **Contracts**: API specifications, schemas
 
-**Ejemplo de Especificación BDD:**
+**BDD Specification example:**
 
 ```gherkin
-# facturacion.feature
+# billing.feature
 
-Feature: Emisión de facturas
-  Como contable
-  Quiero emitir facturas a clientes
-  Para formalizar las ventas realizadas
+Feature: Invoice Issuance
+  As an accountant
+  I want to issue invoices to customers
+  In order to formalize completed sales
 
   Background:
-    Given existe un cliente "Acme Corp" con límite de crédito 10000€
-    And el cliente tiene una deuda pendiente de 3000€
+    Given a customer "Acme Corp" exists with a credit limit of 10000€
+    And the customer has outstanding debt of 3000€
 
-  @regla:RD-012
-  Scenario: Emisión exitosa dentro del límite
-    Given existe una factura en borrador por 5000€
-    When el contable emite la factura
-    Then la factura pasa a estado "emitida"
-    And se genera el número de factura según la serie
-    And se envía email al cliente con el PDF
+  @rule:BR-012
+  Scenario: Successful issuance within limit
+    Given a draft invoice exists for 5000€
+    When the accountant issues the invoice
+    Then the invoice transitions to "issued" status
+    And the invoice number is generated per the series
+    And an email is sent to the customer with the PDF
 
-  @regla:RD-012
-  Scenario: Bloqueo por límite de crédito excedido
-    Given existe una factura en borrador por 8000€
-    When el contable intenta emitir la factura
-    Then el sistema muestra error "Límite de crédito excedido"
-    And la factura permanece en estado "borrador"
-    And se muestra la deuda actual (3000€) y el límite (10000€)
+  @rule:BR-012
+  Scenario: Blocked due to credit limit exceeded
+    Given a draft invoice exists for 8000€
+    When the accountant attempts to issue the invoice
+    Then the system displays error "Credit limit exceeded"
+    And the invoice remains in "draft" status
+    And the current debt (3000€) and limit (10000€) are displayed
 
-  @regla:RD-012
-  Scenario Outline: Diferentes escenarios de límite
-    Given existe una factura en borrador por <importe>€
-    When el contable intenta emitir la factura
-    Then el resultado es "<resultado>"
+  @rule:BR-012
+  Scenario Outline: Different limit scenarios
+    Given a draft invoice exists for <amount>€
+    When the accountant attempts to issue the invoice
+    Then the result is "<result>"
 
     Examples:
-      | importe | resultado |
-      | 6000    | bloqueado |  # 3000 + 6000 = 9000, excede límite de 10000 en... espera, no excede
-      | 7000    | bloqueado |  # 3000 + 7000 = 10000, en el límite exacto
-      | 7001    | bloqueado |  # 3000 + 7001 = 10001, excede
-      | 5000    | emitida   |  # 3000 + 5000 = 8000, dentro del límite
+      | amount | result |
+      | 6000    | blocked   |  # 3000 + 6000 = 9000, exceeds limit of 10000 by... wait, it doesn't
+      | 7000    | blocked   |  # 3000 + 7000 = 10000, at the exact limit
+      | 7001    | blocked   |  # 3000 + 7001 = 10001, exceeds
+      | 5000    | issued    |  # 3000 + 5000 = 8000, within the limit
 ```
 
-**Ejemplo de Contrato de API:**
+**API Contract example:**
 
 ```markdown
-# API: Facturación
+# API: Billing
 
-## POST /api/v1/facturas/{id}/emitir
+## POST /api/v1/invoices/{id}/issue
 
-### Descripción
-Emite una factura existente en estado borrador.
+### Description
+Issues an existing invoice in draft status.
 
-### Implementa
-- Comando: [[CMD-004-EmitirFactura]]
-- Reglas: [[RD-012-LímiteCrédito]], [[RD-015-NumeraciónFacturas]]
+### Implements
+- Command: [[CMD-004-IssueInvoice]]
+- Rules: [[BR-012-CreditLimit]], [[BR-015-InvoiceNumbering]]
 
 ### Request
 ```http
-POST /api/v1/facturas/123e4567-e89b-12d3-a456-426614174000/emitir
+POST /api/v1/invoices/123e4567-e89b-12d3-a456-426614174000/issue
 Authorization: Bearer {token}
 Content-Type: application/json
 
 {
-  "fechaEmision": "2024-01-15"  // opcional
+  "issuanceDate": "2024-01-15"  // optional
 }
 ```
 
@@ -831,27 +831,27 @@ Content-Type: application/json
 #### 200 OK
 ```json
 {
-  "facturaId": "123e4567-e89b-12d3-a456-426614174000",
-  "numero": "2024/A/00042",
-  "estado": "emitida",
-  "fechaEmision": "2024-01-15",
-  "importeTotal": {
-    "cantidad": 5000.00,
-    "moneda": "EUR"
+  "invoiceId": "123e4567-e89b-12d3-a456-426614174000",
+  "number": "2024/A/00042",
+  "status": "issued",
+  "issuanceDate": "2024-01-15",
+  "totalAmount": {
+    "amount": 5000.00,
+    "currency": "EUR"
   }
 }
 ```
 
-#### 400 Bad Request - Límite excedido
+#### 400 Bad Request - Limit exceeded
 ```json
 {
-  "error": "FACT-003",
-  "message": "Límite de crédito excedido",
+  "error": "INV-003",
+  "message": "Credit limit exceeded",
   "details": {
-    "limiteCredito": 10000.00,
-    "deudaActual": 3000.00,
-    "importeFactura": 8000.00,
-    "exceso": 1000.00
+    "creditLimit": 10000.00,
+    "currentDebt": 3000.00,
+    "invoiceAmount": 8000.00,
+    "excess": 1000.00
   }
 }
 ```
@@ -859,17 +859,17 @@ Content-Type: application/json
 #### 404 Not Found
 ```json
 {
-  "error": "FACT-001",
-  "message": "Factura no encontrada"
+  "error": "INV-001",
+  "message": "Invoice not found"
 }
 ```
 ```
 
 ---
 
-## Parte III: Estructura de Carpetas en Obsidian
+## Part III: Folder Structure in Obsidian
 
-### 3.1 La Estructura Recomendada
+### 3.1 The Recommended Structure
 
 ```
 /KDD-{ProjectName}
@@ -947,9 +947,9 @@ Content-Type: application/json
 └── README.md
 ```
 
-### 3.2 Convenciones de Nombrado
+### 3.2 Naming Conventions
 
-| Tipo | Prefijo | Ejemplo |
+| Type | Prefix | Example |
 |------|---------|---------|
 | Business Rule | BR-NNN | BR-012-CreditLimit.md |
 | Command | CMD-NNN | CMD-004-IssueInvoice.md |
@@ -962,11 +962,11 @@ Content-Type: application/json
 | Aggregate | {AggregateName} | Order.md *(type: aggregate)* |
 | ADR | ADR-NNN | ADR-001-BackendTechnology.md |
 
-> **Nota**: Entity, Value Object y Aggregate comparten la carpeta `/entities` y se distinguen mediante el campo `type` en el front-matter.
+> **Note**: Entity, Value Object, and Aggregate share the `/entities` folder and are distinguished by the `type` field in the front-matter.
 
-### 3.3 Front-Matter Estándar
+### 3.3 Standard Front-Matter
 
-Cada archivo debe incluir metadatos en YAML:
+Each file must include YAML metadata:
 
 ```yaml
 ---
@@ -983,62 +983,62 @@ tags:
   - credit
   - customer
 related:
-  - "[[Cliente]]"
-  - "[[Factura]]"
-  - "[[CU-007-EmitirFactura]]"
+  - "[[Customer]]"
+  - "[[Invoice]]"
+  - "[[UC-007-IssueInvoice]]"
 ---
 ```
 
 ---
 
-## Parte IV: El Grafo de Conocimiento
+## Part IV: The Knowledge Graph
 
-### 4.1 La Red de Enlaces
+### 4.1 The Link Network
 
-El poder de KDD en Obsidian está en los **enlaces bidireccionales**. No son decoración: son la estructura del conocimiento.
+The power of KDD in Obsidian lies in **bidirectional links**. They are not decoration: they are the structure of knowledge.
 
 ```
                     ┌─────────────────┐
                     │   PRD           │
-                    │   (Problema)    │
+                    │   (Problem)     │
                     └────────┬────────┘
-                             │ define objetivos para
+                             │ defines goals for
                              ▼
                     ┌─────────────────┐    ┌──────────────┐
-                    │   Entidades     │───►│   Eventos    │
-                    │   (Dominio)     │    │              │
+                    │   Entities      │───►│   Events     │
+                    │   (Domain)      │    │              │
                     └────────┬────────┘    └──────┬───────┘
-                             │ restringidas por   │
+                             │ constrained by   │
                              ▼                    │
                     ┌─────────────────┐           │
-                    │   Reglas de     │◄──────────┘
-                    │   Dominio       │    disparan
+                    │   Domain        │◄──────────┘
+                    │   Rules         │    trigger
                     └────────┬────────┘
-                             │ implementadas en
+                             │ implemented in
                              ▼
                     ┌─────────────────┐
-                    │   Comandos /    │
-                    │   Capacidades   │
+                    │   Commands /    │
+                    │   Capabilities  │
                     └────────┬────────┘
-                             │ usados en
+                             │ used in
                              ▼
                     ┌─────────────────┐
-                    │   Casos de Uso  │
-                    │   (Interacción) │
+                    │   Use Cases     │
+                    │   (Interaction)  │
                     └────────┬────────┘
-                             │ verificados por
+                             │ verified by
                              ▼
                     ┌─────────────────┐
-                    │   Ejemplos BDD  │
-                    │   (Verificación)│
+                    │   BDD Examples  │
+                    │   (Verification) │
                     └─────────────────┘
 ```
 
-### 4.2 Consultas Útiles en Obsidian (Dataview)
+### 4.2 Useful Queries in Obsidian (Dataview)
 
-Si usas el plugin Dataview, puedes crear vistas dinámicas:
+If you use the Dataview plugin, you can create dynamic views:
 
-**Índice de Reglas de Dominio:**
+**Domain Rules Index:**
 
 ```dataview
 TABLE status, owner, last_modified
@@ -1047,7 +1047,7 @@ WHERE type = "regla-dominio"
 SORT id ASC
 ```
 
-**Reglas sin ejemplos de verificación:**
+**Rules without verification examples:**
 
 ```dataview
 LIST
@@ -1055,7 +1055,7 @@ FROM "2-Dominio/Reglas"
 WHERE !contains(file.outlinks, "5-Verificacion")
 ```
 
-**Casos de uso por estado:**
+**Use cases by status:**
 
 ```dataview
 TABLE status, owner
@@ -1065,76 +1065,76 @@ GROUP BY status
 
 ---
 
-## Parte V: Integración con el Desarrollo
+## Part V: Integration with Development
 
-### 5.1 KDD en el Flujo de Trabajo
+### 5.1 KDD in the Workflow
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                        CICLO KDD                                │
+│                        KDD CYCLE                                │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
-│  1. DESCUBRIMIENTO                                              │
+│  1. DISCOVERY                                              │
 │     ├── Event Storming / Domain Storytelling                    │
-│     ├── Identificar entidades, eventos, reglas                  │
-│     └── Documentar en /2-Dominio                                │
+│     ├── Identify entities, events, rules                  │
+│     └── Document in /02-domain                                │
 │                                                                 │
-│  2. ESPECIFICACIÓN                                              │
-│     ├── Definir comandos y procesos (/3-Capacidades)            │
-│     ├── Escribir casos de uso (/4-Interaccion)                  │
-│     └── Crear ejemplos BDD (/5-Verificacion)                    │
+│  2. SPECIFICATION                                              │
+│     ├── Define commands and processes (/03-capabilities)            │
+│     ├── Write use cases (/04-interaction)                  │
+│     └── Create BDD examples (/05-verification)                    │
 │                                                                 │
-│  3. IMPLEMENTACIÓN                                              │
-│     ├── Los .feature se copian al repo de código                │
-│     ├── El código implementa los comandos                       │
-│     └── Los tests verifican los ejemplos                        │
+│  3. IMPLEMENTATION                                              │
+│     ├── The .feature files are copied to the code repo                │
+│     ├── Code implements the commands                       │
+│     └── Tests verify the examples                        │
 │                                                                 │
-│  4. VALIDACIÓN                                                  │
-│     ├── CI ejecuta los tests BDD                                │
-│     ├── Si falla: ¿bug en código o spec desactualizada?         │
-│     └── Actualizar lo que corresponda                           │
+│  4. VALIDATION                                                  │
+│     ├── CI runs the BDD tests                                │
+│     ├── If it fails: bug in code or outdated spec?         │
+│     └── Update as appropriate                           │
 │                                                                 │
-│  5. EVOLUCIÓN                                                   │
-│     ├── Nuevos requisitos → volver a paso 1                     │
-│     ├── Documentación viaja con el cambio                       │
-│     └── El grafo de conocimiento crece                          │
+│  5. EVOLUTION                                                   │
+│     ├── New requirements → go back to step 1                     │
+│     ├── Documentation travels with the change                       │
+│     └── The knowledge graph grows                          │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### 5.2 Sincronización Docs ↔ Código
+### 5.2 Docs ↔ Code Synchronization
 
-**Opción A: Docs en repo separado**
-- Vault de Obsidian en su propio repositorio
-- Los `.feature` se copian/sincronizan al repo de código
-- Ventaja: separación clara
-- Desventaja: riesgo de desincronización
+**Option A: Docs in a separate repo**
+- Obsidian vault in its own repository
+- The `.feature` files are copied/synced to the code repo
+- Advantage: clear separation
+- Disadvantage: desynchronization risk
 
-**Opción B: Docs en el mismo repo**
+**Option B: Docs in the same repo**
 ```
-/mi-proyecto
+/my-project
 ├── /docs
 │   └── /kdd
-│       ├── /01-Problema
-│       ├── /02-Dominio
+│       ├── /01-problem
+│       ├── /02-domain
 │       └── ...
 ├── /src
 ├── /tests
-│   └── /features  ← symlink o copia de /docs/kdd/5-Verificacion/Ejemplos
+│   └── /features  ← symlink or copy of /docs/kdd/05-verification/examples
 └── package.json
 ```
-- Ventaja: todo viaja junto, PRs incluyen docs
-- Desventaja: mezcla concerns
+- Advantage: everything travels together, PRs include docs
+- Disadvantage: mixes concerns
 
-**Opción C: Docs como fuente, código como derivado (el ideal KDD)**
-- Pipeline de CI lee la documentación
-- Genera esqueletos de código, contratos, tests
-- El desarrollador completa la implementación
-- Esta es la visión "especificación > código"
+**Option C: Docs as source, code as derived (the KDD ideal)**
+- CI pipeline reads the documentation
+- Generates code skeletons, contracts, tests
+- The developer completes the implementation
+- This is the "specification > code" vision
 
-### 5.3 Linting y Validación
+### 5.3 Linting and Validation
 
-Implementa checks automáticos en CI:
+Implement automated checks in CI:
 
 ```yaml
 # .github/workflows/kdd-lint.yml
@@ -1148,390 +1148,390 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
-      - name: Validar front-matter
+      - name: Validate front-matter
         run: |
-          # Verificar que todos los .md tienen front-matter válido
+          # Verify that all .md files have valid front-matter
           ./scripts/validate-frontmatter.sh docs/kdd
       
-      - name: Verificar enlaces rotos
+      - name: Check broken links
         run: |
-          # Buscar enlaces [[xxx]] que no existen
+          # Find [[xxx]] links that don't exist
           ./scripts/check-broken-links.sh docs/kdd
       
-      - name: Verificar cobertura de reglas
+      - name: Check rule coverage
         run: |
-          # Cada regla en /2-Dominio/Reglas debe tener 
-          # al menos un ejemplo en /5-Verificacion
+          # Each rule in /02-domain/rules must have
+          # at least one example in /05-verification
           ./scripts/check-rule-coverage.sh docs/kdd
       
-      - name: Generar informe
+      - name: Generate report
         run: |
           ./scripts/generate-coverage-report.sh docs/kdd
 ```
 
 ---
 
-## Parte VI: Templates
+## Part VI: Templates
 
-### 6.1 Template: Entidad
+### 6.1 Template: Entity
 
 ```markdown
 ---
-id: ENT-{número}
-title: {NombreEntidad}
-type: entidad
+id: ENT-{number}
+title: {EntityName}
+type: entity
 status: draft
 owner: "@{usuario}"
 created: {fecha}
-aggregate: {AggregateRoot si aplica}
+aggregate: {AggregateRoot if applicable}
 tags: []
 ---
 
-# {NombreEntidad}
+# {EntityName}
 
-## Descripción
-{Qué representa esta entidad en el dominio}
+## Description
+{What this entity represents in the domain}
 
-## Identidad
-- `{nombreId}`: {tipo}, {restricciones}
+## Identity
+- `{nameId}`: {type}, {constraints}
 
-## Atributos
-| Atributo | Tipo | Requerido | Descripción |
-|----------|------|-----------|-------------|
+## Attributes
+| Attribute | Type | Required | Description |
+|-----------|------|----------|-------------|
 | | | | |
 
-## Invariantes
-- {Condición que siempre debe cumplirse}
+## Invariants
+- {Condition that must always hold}
 
-## Ciclo de Vida
+## Lifecycle
 ```mermaid
 stateDiagram-v2
-    [*] --> Estado1
-    Estado1 --> Estado2: accion()
+    [*] --> State1
+    State1 --> State2: action()
 ```
 
-## Relaciones
-- [[OtraEntidad]]: {tipo de relación}
+## Relationships
+- [[OtherEntity]]: {relationship type}
 
-## Eventos que genera
-- [[EventoX]] cuando {condición}
+## Events generated
+- [[EventX]] when {condition}
 
-## Reglas que aplican
-- [[RD-XXX]]
+## Applicable rules
+- [[BR-XXX]]
 ```
 
-### 6.2 Template: Regla de Dominio
+### 6.2 Template: Domain Rule
 
 ```markdown
 ---
-id: RD-{número}
-title: {NombreRegla}
-type: regla-dominio
+id: BR-{number}
+title: {RuleName}
+type: business-rule
 status: draft
 owner: "@{usuario}"
 created: {fecha}
-priority: {alta|media|baja}
+priority: {high|medium|low}
 tags: []
 ---
 
-# RD-{número}: {NombreRegla}
+# BR-{number}: {RuleName}
 
-## Declaración
-Cuando {condición}, entonces {consecuencia}.
+## Declaration
+When {condition}, then {consequence}.
 
-## Justificación de negocio
-{Por qué existe esta regla, qué problema resuelve}
+## Business justification
+{Why this rule exists, what problem it solves}
 
-## Fórmula / Lógica
+## Formula / Logic
 ```
-{pseudocódigo o fórmula si aplica}
+{pseudocode or formula if applicable}
 ```
 
-## Entidades involucradas
-- [[Entidad1]]
-- [[Entidad2]]
+## Involved entities
+- [[Entity1]]
+- [[Entity2]]
 
-## Excepciones
-- {Casos donde la regla no aplica}
+## Exceptions
+- {Cases where the rule does not apply}
 
-## Ejemplos
-| Escenario | Entrada | Resultado |
-|-----------|---------|-----------|
+## Examples
+| Scenario | Input | Result |
+|----------|-------|--------|
 | | | |
 
-## Verificación
-- [[ejemplos/{archivo}.feature]] - Escenario: {nombre}
+## Verification
+- [[examples/{file}.feature]] - Scenario: {name}
 
-## Historial
-| Fecha | Cambio | Autor |
-|-------|--------|-------|
-| {fecha} | Creación | @{usuario} |
+## History
+| Date | Change | Author |
+|------|--------|--------|
+| {date} | Creation | @{user} |
 ```
 
-### 6.3 Template: Evento de Dominio
+### 6.3 Template: Domain Event
 
 ```markdown
 ---
-id: EVT-{número}
-title: {NombreEvento}
-type: evento-dominio
+id: EVT-{number}
+title: {EventName}
+type: domain-event
 status: draft
 owner: "@{usuario}"
 created: {fecha}
 tags: []
 ---
 
-# {NombreEvento}
+# {EventName}
 
-## Descripción
-{Qué ha ocurrido en el dominio - siempre en pasado}
+## Description
+{What has occurred in the domain - always in past tense}
 
-## Productor
-[[{Entidad o Proceso que emite el evento}]]
+## Producer
+[[{Entity or Process that emits the event}]]
 
 ## Trigger
-{Qué acción o condición genera este evento}
+{What action or condition generates this event}
 
 ## Payload
 ```yaml
-{nombreEvento}Id: UUID
+{eventName}Id: UUID
 timestamp: DateTime
-datos:
-  campo1: tipo
-  campo2: tipo
+data:
+  field1: type
+  field2: type
 ```
 
-## Consumidores
-| Consumidor | Reacción |
-|------------|----------|
-| [[Proceso1]] | {qué hace} |
+## Consumers
+| Consumer | Reaction |
+|----------|----------|
+| [[Process1]] | {what it does} |
 
-## Reglas que aplican
-- [[RD-XXX]]
+## Applicable rules
+- [[BR-XXX]]
 
-## Eventos relacionados
-- Precedido por: [[EventoAnterior]]
-- Puede generar: [[EventoSiguiente]]
+## Related events
+- Preceded by: [[PreviousEvent]]
+- May generate: [[NextEvent]]
 ```
 
-### 6.4 Template: Comando
+### 6.4 Template: Command
 
 ```markdown
 ---
-id: CMD-{número}
-title: {NombreComando}
-type: comando
+id: CMD-{number}
+title: {CommandName}
+type: command
 status: draft
 owner: "@{usuario}"
 created: {fecha}
 tags: []
 ---
 
-# CMD-{número}: {NombreComando}
+# CMD-{number}: {CommandName}
 
-## Propósito
-{Qué hace este comando, qué estado modifica}
+## Purpose
+{What this command does, what state it modifies}
 
-## Entrada
-| Parámetro | Tipo | Requerido | Validación |
-|-----------|------|-----------|------------|
+## Input
+| Parameter | Type | Required | Validation |
+|-----------|------|----------|------------|
 | | | | |
 
-## Precondiciones
-- {Estado requerido antes de ejecutar}
+## Preconditions
+- {Required state before execution}
 
-## Postcondiciones
-- {Estado garantizado después de ejecutar}
+## Postconditions
+- {Guaranteed state after execution}
 
-## Reglas que valida
-- [[RD-XXX]]
+## Rules validated
+- [[BR-XXX]]
 
-## Eventos que genera
-- [[EventoX]] si {condición}
+## Events generated
+- [[EventX]] if {condition}
 
-## Errores posibles
-| Código | Condición | Mensaje |
-|--------|-----------|---------|
+## Possible errors
+| Code | Condition | Message |
+|------|-----------|---------|
 | | | |
 
-## Casos de uso que lo invocan
-- [[CU-XXX]]
+## Use cases that invoke it
+- [[UC-XXX]]
 ```
 
-### 6.5 Template: Caso de Uso
+### 6.5 Template: Use Case
 
 ```markdown
 ---
-id: CU-{número}
-title: {NombreCasoUso}
-type: caso-uso
+id: UC-{number}
+title: {UseCaseName}
+type: use-case
 status: draft
 owner: "@{usuario}"
 created: {fecha}
-actor: {ActorPrincipal}
+actor: {PrimaryActor}
 tags: []
 ---
 
-# CU-{número}: {NombreCasoUso}
+# UC-{number}: {UseCaseName}
 
-## Contexto
-| Elemento | Descripción |
-|----------|-------------|
-| Actor | {quién inicia} |
-| Objetivo | {qué quiere lograr} |
-| Precondición | {estado inicial requerido} |
-| Postcondición | {estado final garantizado} |
-| Trigger | {qué dispara el caso de uso} |
+## Context
+| Element | Description |
+|---------|-------------|
+| Actor | {who initiates} |
+| Goal | {what they want to achieve} |
+| Precondition | {required initial state} |
+| Postcondition | {guaranteed final state} |
+| Trigger | {what triggers the use case} |
 
-## Flujo Principal
-1. {Actor} {acción}
-2. El sistema {respuesta}
+## Main Flow
+1. {Actor} {action}
+2. The system {response}
 3. ...
 
-## Flujos Alternativos
+## Alternative Flows
 
-### A1: {NombreAlternativo}
-En el paso {n}, si {condición}:
+### A1: {AlternativeName}
+At step {n}, if {condition}:
 1. ...
 
-## Flujos de Excepción
+## Exception Flows
 
-### E1: {NombreExcepción}
-En el paso {n}, si {error}:
+### E1: {ExceptionName}
+At step {n}, if {error}:
 1. ...
 
-## Reglas de Negocio
-- [[RD-XXX]]
+## Business Rules
+- [[BR-XXX]]
 
-## Comandos invocados
+## Commands invoked
 - [[CMD-XXX]]
 
-## Pantallas
+## Screens
 - [[UI-XXX]]
 
-## Verificación
-- [[{archivo}.feature]] - Feature: {nombre}
+## Verification
+- [[{file}.feature]] - Feature: {name}
 ```
 
 ---
 
-## Parte VII: Métricas y Gobernanza
+## Part VII: Metrics and Governance
 
-### 7.1 Métricas de Salud del Conocimiento
+### 7.1 Knowledge Health Metrics
 
-| Métrica | Descripción | Objetivo |
+| Metric | Description | Target |
 |---------|-------------|----------|
-| **Cobertura de reglas** | % de reglas con ejemplos BDD | > 90% |
-| **Frescura** | Días desde última actualización por área | < 30 días |
-| **Completitud** | % de templates con todos los campos | > 80% |
-| **Conectividad** | Promedio de enlaces por documento | > 3 |
-| **Orfandad** | Documentos sin enlaces entrantes | 0 |
-| **Estados** | Distribución draft/review/approved | < 20% en draft |
+| **Rule coverage** | % of rules with BDD examples | > 90% |
+| **Freshness** | Days since last update per area | < 30 days |
+| **Completeness** | % of templates with all fields filled | > 80% |
+| **Connectivity** | Average links per document | > 3 |
+| **Orphanage** | Documents with no incoming links | 0 |
+| **States** | Distribution of draft/review/approved | < 20% in draft |
 
-### 7.2 Proceso de Revisión
+### 7.2 Review Process
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    FLUJO DE REVISIÓN                            │
+│                    REVIEW FLOW                            │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
 │   draft ──────► review ──────► approved                         │
 │     │              │              │                             │
 │     │              │              └──► deprecated               │
 │     │              │                                            │
-│     │              └── Requiere:                                │
-│     │                  - Revisión por owner del área            │
-│     │                  - Validación de enlaces                  │
-│     │                  - Al menos 1 ejemplo si es regla         │
+│     │              └── Requires:                                │
+│     │                  - Review by area owner            │
+│     │                  - Link validation                  │
+│     │                  - At least 1 example if it is a rule         │
 │     │                                                           │
-│     └── Cualquiera puede crear                                  │
+│     └── Anyone can create                                  │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### 7.3 Roles Sugeridos
+### 7.3 Suggested Roles
 
-| Rol | Responsabilidad |
+| Role | Responsibility |
 |-----|-----------------|
-| **Domain Owner** | Mantiene /2-Dominio, valida corrección conceptual |
-| **Product Owner** | Mantiene /1-Problema, prioriza qué documentar |
-| **Tech Lead** | Mantiene /3-Capacidades y /5-Verificacion/Contratos |
-| **QA Lead** | Mantiene /5-Verificacion/Ejemplos, asegura cobertura |
-| **UX Lead** | Mantiene /4-Interaccion, valida flujos |
+| **Domain Owner** | Maintains /02-domain, validates conceptual correctness |
+| **Product Owner** | Maintains /01-problem, prioritizes what to document |
+| **Tech Lead** | Maintains /03-capabilities and /05-verification/contracts |
+| **QA Lead** | Maintains /05-verification/examples, ensures coverage |
+| **UX Lead** | Maintains /04-interaction, validates flows |
 
 ---
 
-## Parte VIII: Preguntas Frecuentes
+## Part VIII: Frequently Asked Questions
 
-### ¿KDD reemplaza a Scrum/Kanban?
+### Does KDD replace Scrum/Kanban?
 
-No. KDD es ortogonal a la metodología de gestión. Puedes usar KDD con Scrum, Kanban, o waterfall. KDD define *qué documentar y cómo*; tu metodología define *cuándo y quién*.
+No. KDD is orthogonal to management methodology. You can use KDD with Scrum, Kanban, or waterfall. KDD defines *what to document and how*; your methodology defines *when and who*.
 
-### ¿No es demasiada documentación?
+### Isn't this too much documentation?
 
-La documentación excesiva es la que nadie lee ni mantiene. KDD produce documentación *útil* porque:
-- Es granular (cambias solo lo que cambia)
-- Es verificable (los tests fallan si miente)
-- Es navegable (encuentras lo que buscas)
-- Es consumible por humanos Y máquinas
+Excessive documentation is documentation that nobody reads or maintains. KDD produces *useful* documentation because:
+- It is granular (you change only what changes)
+- It is verifiable (tests fail if it lies)
+- It is navigable (you find what you're looking for)
+- It is consumable by humans AND machines
 
-### ¿Qué pasa con las historias de usuario y épicas?
+### What about user stories and epics?
 
-Son artefactos de *planificación*, no de *conocimiento*. Una historia de usuario es útil para priorizar y estimar trabajo. Una vez implementada, el conocimiento debe migrar a los artefactos KDD (entidades, reglas, casos de uso). Las historias pueden archivarse o eliminarse.
+They are *planning* artifacts, not *knowledge* artifacts. A user story is useful for prioritizing and estimating work. Once implemented, the knowledge should migrate to KDD artifacts (entities, rules, use cases). Stories can be archived or deleted.
 
-### ¿Cómo empiezo si ya tengo un sistema existente?
+### How do I start if I already have an existing system?
 
-1. Empieza por el glosario (lenguaje ubicuo)
-2. Documenta las reglas de negocio más críticas
-3. Añade ejemplos BDD para esas reglas
-4. Expande incrementalmente
+1. Start with the glossary (ubiquitous language)
+2. Document the most critical business rules
+3. Add BDD examples for those rules
+4. Expand incrementally
 
-No intentes documentar todo de golpe. Documenta lo que tocas.
+Don't try to document everything at once. Document what you touch.
 
-### ¿Obsidian es obligatorio?
+### Is Obsidian mandatory?
 
-No. Puedes usar cualquier sistema que soporte:
-- Archivos Markdown con front-matter YAML
-- Enlaces entre archivos
-- Versionado en Git
+No. You can use any system that supports:
+- Markdown files with YAML front-matter
+- Links between files
+- Versioning in Git
 
-Alternativas: Notion (menos ideal por vendor lock-in), VS Code + extensiones, Foam, Logseq.
+Alternatives: Notion (less ideal due to vendor lock-in), VS Code + extensions, Foam, Logseq.
 
 ---
 
-## Parte IX: Glosario de KDD
+## Part IX: KDD Glossary
 
-| Término | Definición |
+| Term | Definition |
 |---------|------------|
-| **Agregado** | Cluster de entidades tratado como unidad para cambios de datos |
-| **Comando** | Operación que modifica el estado del sistema |
-| **Consulta** | Operación que lee estado sin modificarlo |
-| **Entidad** | Objeto del dominio con identidad única |
-| **Evento de Dominio** | Hecho significativo que ha ocurrido en el dominio |
-| **Lenguaje Ubicuo** | Vocabulario compartido entre negocio y desarrollo |
-| **Regla de Dominio** | Invariante o restricción que el sistema debe cumplir |
-| **SSoT** | Single Source of Truth - cada concepto tiene un único lugar canónico |
-| **Value Object** | Objeto sin identidad, definido por sus atributos |
-| **Verificación** | Comprobación de que el sistema cumple su especificación |
+| **Aggregate** | Cluster of entities treated as a unit for data changes |
+| **Command** | Operation that modifies the system state |
+| **Query** | Operation that reads state without modifying it |
+| **Entity** | Domain object with unique identity |
+| **Domain Event** | Significant fact that has occurred in the domain |
+| **Ubiquitous Language** | Shared vocabulary between business and development |
+| **Domain Rule** | Invariant or constraint that the system must satisfy |
+| **SSoT** | Single Source of Truth - each concept has a single canonical location |
+| **Value Object** | Object without identity, defined by its attributes |
+| **Verification** | Confirmation that the system meets its specification |
 
 ---
 
-## Conclusión: El Conocimiento como Activo
+## Conclusion: Knowledge as an Asset
 
-El código envejece. Los frameworks mueren. Las arquitecturas se reescriben. 
+Code ages. Frameworks die. Architectures get rewritten. 
 
-Pero el conocimiento del dominio—las reglas de negocio, las entidades, los procesos—ese conocimiento es el verdadero activo de tu organización. Es lo que distingue a tu sistema de un CRUD genérico.
+But domain knowledge—business rules, entities, processes—that knowledge is your organization's true asset. It is what distinguishes your system from a generic CRUD.
 
-KDD es una apuesta: **si invertimos en documentar bien ese conocimiento, el desarrollo se vuelve más predecible, el onboarding más rápido, la comunicación más clara, y la automatización posible**.
+KDD is a bet: **if we invest in documenting that knowledge well, development becomes more predictable, onboarding faster, communication clearer, and automation possible**.
 
-No es una metodología perfecta. Es un punto de partida. Adáptala, extiéndela, hazla tuya.
+It is not a perfect methodology. It is a starting point. Adapt it, extend it, make it yours.
 
-Pero empieza hoy. Documenta esa regla de negocio que solo vive en la cabeza de María. Escribe ese ejemplo BDD que demuestra cómo funciona el descuento VIP. Conecta los conceptos con enlaces.
+But start today. Document that business rule that only lives in Maria's head. Write that BDD example that demonstrates how the VIP discount works. Connect concepts with links.
 
-El grafo de conocimiento crece un nodo a la vez.
+The knowledge graph grows one node at a time.
 
 ---
 
 *KDD: Knowledge-Driven Development*  
-*Versión 1.0 - {fecha}*  
-*Licencia: CC BY-SA 4.0*
+*Version 1.0 - {date}*  
+*License: CC BY-SA 4.0*

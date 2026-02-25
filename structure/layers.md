@@ -100,10 +100,10 @@ KDD specifications are organized in 5 layers. Each layer has a clear responsibil
 ```
 ┌───────────────────────────────────────────────────────────────┐
 │  00-requirements   (PRD, objectives, ADRs)                    │
-│  INPUT: Alimenta al diseño. Puede mencionar conceptos de      │
-│  dominio para dar contexto. No es parte del flujo de capas.   │
+│  INPUT: Feeds design. May mention domain concepts for          │
+│  context. Not part of the layer dependency flow.               │
 └───────────────────────────────────────────────────────────────┘
-                              ↓ alimenta
+                              ↓ feeds
 ┌───────────────────────────────────────────────────────────────┐
 │  04-verification   (REQ, BDD scenarios)                       │
 │      ↓ references                                             │
@@ -142,7 +142,7 @@ For large applications with multiple bounded contexts:
 └── _index.json               # Global index
 ```
 
-**Cross-domain references**: Use `[[domain::Entity]]` syntax, e.g., `[[core::Usuario]]`.
+**Cross-domain references**: Use `[[domain::Entity]]` syntax, e.g., `[[core::Customer]]`.
 
 ---
 
@@ -150,12 +150,12 @@ For large applications with multiple bounded contexts:
 
 | Artifact | File Pattern | Example |
 |----------|-------------|---------|
-| Entity | `PascalCase.md` | `Reto.md`, `Usuario.md` |
-| Role | `PascalCase.md` | `Propietario.md` |
+| Entity | `PascalCase.md` | `Order.md`, `Customer.md` |
+| Role | `PascalCase.md` | `Admin.md` |
 | External System | `UPPERCASE.md` | `STRIPE.md` |
-| Event | `EVT-{Entity}-{Action}.md` | `EVT-Reto-Creado.md` |
-| Business Rule | `BR-{ENTITY}-NNN.md` | `BR-RETO-001.md` |
-| Command | `CMD-NNN-{Name}.md` | `CMD-001-CreateChallenge.md` |
-| Query | `QRY-NNN-{Name}.md` | `QRY-001-GetChallenge.md` |
-| Use Case | `UC-NNN-{Name}.md` | `UC-001-CrearReto.md` |
+| Event | `EVT-{Entity}-{Action}.md` | `EVT-Order-Placed.md` |
+| Business Rule | `BR-{ENTITY}-NNN.md` | `BR-ORDER-001.md` |
+| Command | `CMD-NNN-{Name}.md` | `CMD-001-PlaceOrder.md` |
+| Query | `QRY-NNN-{Name}.md` | `QRY-001-GetOrder.md` |
+| Use Case | `UC-NNN-{Name}.md` | `UC-001-PlaceOrder.md` |
 | ADR | `ADR-NNNN-{Title}.md` | `ADR-0001-Use-PostgreSQL.md` |

@@ -1,14 +1,14 @@
-# Capa 04: Verification
+# Layer 04: Verification
 
-## El Cierre del Ciclo: ¿Cómo Sabemos que Funciona?
+## Closing the Loop: How Do We Know It Works?
 
 ---
 
-## Introducción
+## Introduction
 
-La capa de Verification es el **cierre del ciclo de especificación** en KDD. Responde a la pregunta más pragmática: **¿Cómo verificamos que el sistema hace lo que debe hacer?**
+The Verification layer is the **closing of the specification cycle** in KDD. It answers the most pragmatic question: **How do we verify that the system does what it should?**
 
-Esta capa no es un anexo o un "nice to have". Es la culminación de todo el trabajo anterior, donde las especificaciones abstractas se transforman en **criterios verificables** que pueden ser automatizados, auditados y mantenidos.
+This layer is not an appendix or a "nice to have." It is the culmination of all the previous work, where abstract specifications are transformed into **verifiable criteria** that can be automated, audited, and maintained.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -21,250 +21,250 @@ Esta capa no es un anexo o un "nice to have". Es la culminación de todo el trab
 │                                   ▼                                          │
 │                           04-Verification                                    │
 │                                                                              │
-│                        "¿LO CONSTRUIMOS BIEN?"                              │
-│                        "¿CONSTRUIMOS LO CORRECTO?"                          │
+│                        "DID WE BUILD IT RIGHT?"                             │
+│                        "DID WE BUILD THE RIGHT THING?"                      │
 │                                                                              │
 │                           ────────────────────                               │
 │                                                                              │
-│                        Requisitos formales (EARS)                           │
-│                        Criterios de aceptación (Gherkin)                    │
-│                        Trazabilidad completa                                 │
-│                        Esquemas de implementación                           │
+│                        Formal requirements (EARS)                            │
+│                        Acceptance criteria (Gherkin)                         │
+│                        Complete traceability                                 │
+│                        Implementation schemas                                │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## La Filosofía: Especificaciones Ejecutables
+## The Philosophy: Executable Specifications
 
-### Por Qué Esta Capa Cierra el Ciclo
+### Why This Layer Closes the Loop
 
-En metodologías tradicionales, la verificación es un ejercicio retrospectivo: primero se construye, luego se testea. KDD invierte esto:
+In traditional methodologies, verification is a retrospective exercise: first you build, then you test. KDD inverts this:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                              │
-│   ENFOQUE TRADICIONAL              ENFOQUE KDD                              │
-│   ───────────────────              ───────────                              │
+│   TRADITIONAL APPROACH             KDD APPROACH                             │
+│   ────────────────────             ────────────                             │
 │                                                                              │
-│   1. Escribir código               1. Especificar comportamiento            │
-│   2. Probar manualmente            2. Derivar requisitos formales           │
-│   3. Escribir tests (a veces)      3. Definir criterios de aceptación       │
-│   4. Documentar (casi nunca)       4. Implementar código                    │
-│         ↓                          5. Los tests YA EXISTEN                  │
-│   Tests desactualizados                  ↓                                  │
-│   Documentación obsoleta           Especificación = Documentación = Tests   │
+│   1. Write code                    1. Specify behavior                      │
+│   2. Test manually                 2. Derive formal requirements            │
+│   3. Write tests (sometimes)       3. Define acceptance criteria            │
+│   4. Document (almost never)       4. Implement code                        │
+│         ↓                          5. Tests ALREADY EXIST                   │
+│   Outdated tests                         ↓                                  │
+│   Obsolete documentation           Specification = Documentation = Tests    │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### El Principio de Trazabilidad Completa
+### The Complete Traceability Principle
 
-En KDD, cada línea de código debe poder rastrearse hasta una especificación:
+In KDD, every line of code must be traceable to a specification:
 
 ```
-Código → Test → Requisito EARS → Caso de Uso → Regla de Negocio → Objetivos
+Code → Test → EARS Requirement → Use Case → Business Rule → Objectives
 ```
 
-Si no puedes establecer esta cadena, estás escribiendo código sin justificación.
+If you cannot establish this chain, you are writing code without justification.
 
 ---
 
-## Los Artefactos de la Capa de Verification
+## The Artifacts of the Verification Layer
 
-### 1. Requisitos EARS (Easy Approach to Requirements Syntax)
+### 1. EARS Requirements (Easy Approach to Requirements Syntax)
 
-EARS es una sintaxis estructurada para escribir requisitos no ambiguos. Cada requisito sigue uno de estos patrones:
+EARS is a structured syntax for writing unambiguous requirements. Each requirement follows one of these patterns:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                              │
-│   PATRONES EARS                                                              │
+│   EARS PATTERNS                                                              │
 │   ─────────────                                                              │
 │                                                                              │
-│   UBIQUITOUS (siempre):                                                      │
-│   "The system SHALL [comportamiento]"                                        │
-│   → Comportamiento que siempre se cumple                                     │
+│   UBIQUITOUS (always):                                                       │
+│   "The system SHALL [behavior]"                                              │
+│   → Behavior that always holds                                               │
 │                                                                              │
-│   EVENT-DRIVEN (cuando):                                                     │
-│   "WHEN [trigger], the system SHALL [respuesta]"                            │
-│   → Respuesta a un evento específico                                         │
+│   EVENT-DRIVEN (when):                                                       │
+│   "WHEN [trigger], the system SHALL [response]"                             │
+│   → Response to a specific event                                             │
 │                                                                              │
-│   STATE-DRIVEN (mientras):                                                   │
-│   "WHILE [estado], the system SHALL [comportamiento]"                       │
-│   → Comportamiento durante un estado                                         │
+│   STATE-DRIVEN (while):                                                      │
+│   "WHILE [state], the system SHALL [behavior]"                              │
+│   → Behavior during a state                                                  │
 │                                                                              │
-│   UNWANTED/IF (si no deseado):                                              │
-│   "IF [condición], the system SHALL [prevención]"                           │
-│   → Manejo de situaciones no deseadas                                        │
+│   UNWANTED/IF (if undesired):                                               │
+│   "IF [condition], the system SHALL [prevention]"                           │
+│   → Handling of undesired situations                                         │
 │                                                                              │
-│   OPTIONAL/WHERE (donde aplique):                                            │
-│   "WHERE [condición], the system SHALL [comportamiento]"                    │
-│   → Comportamiento condicional/opcional                                      │
+│   OPTIONAL/WHERE (where applicable):                                         │
+│   "WHERE [condition], the system SHALL [behavior]"                          │
+│   → Conditional/optional behavior                                            │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-#### Ejemplo: Requisito Event-Driven
+#### Example: Event-Driven Requirement
 
 ```markdown
-## REQ-001.1: Creación de Reto (Event-Driven)
+## REQ-001.1: Order Creation (Event-Driven)
 
-**Patrón**: Event-Driven
+**Pattern**: Event-Driven
 
-WHEN the user submits the challenge creation form with a valid title,
-the system SHALL create a new Challenge entity
-  AND SHALL assign the authenticated user as owner (creador_id)
-  AND SHALL set the status to "borrador"
-  AND SHALL redirect the user to the synthetic personas configuration screen.
+WHEN the user submits the order creation form with a valid title,
+the system SHALL create a new Order entity
+  AND SHALL assign the authenticated user as owner (creator_id)
+  AND SHALL set the status to "draft"
+  AND SHALL redirect the user to the products configuration screen.
 
-**Trazabilidad**: UC-001-CrearReto, pasos 7-11
+**Traceability**: UC-001-PlaceOrder, steps 7-11
 ```
 
-#### Ejemplo: Requisito Unwanted
+#### Example: Unwanted Requirement
 
 ```markdown
-## REQ-003.3: Sesión Única Activa (Unwanted/If)
+## REQ-003.3: Single Active Cart (Unwanted/If)
 
-**Patrón**: Unwanted Behavior (If)
+**Pattern**: Unwanted Behavior (If)
 
-IF the Reto already has a Session in state "en_progreso",
-the system SHALL reject new session creation
-  AND SHALL display message "Este reto ya tiene una sesión en progreso"
-  AND SHALL offer options to continue or cancel the existing session.
+IF the Order already has a Cart in state "in_progress",
+the system SHALL reject new cart creation
+  AND SHALL display message "This order already has a cart in progress"
+  AND SHALL offer options to continue or cancel the existing cart.
 
-**Trazabilidad**: UC-003-IniciarSesion, extensión; BR-SESION-002
+**Traceability**: UC-003-InitiateCart, extension; BR-CART-002
 ```
 
 ---
 
-### 2. Criterios de Aceptación (Gherkin)
+### 2. Acceptance Criteria (Gherkin)
 
-Cada requisito EARS se descompone en criterios de aceptación ejecutables usando sintaxis Gherkin:
+Each EARS requirement is decomposed into executable acceptance criteria using Gherkin syntax:
 
 ```gherkin
-Given a logged-in user on the challenge creation form
-When the user enters title "¿Deberíamos expandir al mercado europeo?"
-  And clicks "Crear Reto"
-Then a new Challenge should be created with status "borrador"
-  And the user should be redirected to /retos/{id}/personas
-  And a success message "Reto creado correctamente" should be displayed
+Given a logged-in user on the order creation form
+When the user enters title "Should we expand to the European market?"
+  And clicks "Place Order"
+Then a new Order should be created with status "draft"
+  And the user should be redirected to /orders/{id}/products
+  And a success message "Order created successfully" should be displayed
 ```
 
-#### La Anatomía de un Buen Criterio
+#### The Anatomy of a Good Criterion
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                              │
-│   ESTRUCTURA GHERKIN                                                         │
+│   GHERKIN STRUCTURE                                                          │
 │   ──────────────────                                                         │
 │                                                                              │
-│   Given [contexto/precondiciones]                                            │
-│     → Estado inicial del sistema                                             │
-│     → Usuario autenticado, datos existentes, etc.                           │
+│   Given [context/preconditions]                                              │
+│     → Initial state of the system                                            │
+│     → Authenticated user, existing data, etc.                                │
 │                                                                              │
-│   When [acción/trigger]                                                      │
-│     → La acción que dispara el comportamiento                               │
-│     → Un clic, un submit, un evento del sistema                             │
+│   When [action/trigger]                                                      │
+│     → The action that triggers the behavior                                  │
+│     → A click, a submit, a system event                                      │
 │                                                                              │
-│   Then [resultado esperado]                                                  │
-│     → Lo que debe ocurrir                                                    │
-│     → Observable, verificable, específico                                    │
+│   Then [expected result]                                                     │
+│     → What should happen                                                     │
+│     → Observable, verifiable, specific                                       │
 │                                                                              │
-│   And [condiciones adicionales]                                              │
-│     → Múltiples condiciones en cualquier sección                            │
+│   And [additional conditions]                                                │
+│     → Multiple conditions in any section                                     │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-#### Ejemplo Completo con Múltiples Escenarios
+#### Complete Example with Multiple Scenarios
 
 ```gherkin
-# REQ-003.3: Sesión Única Activa
+# REQ-003.3: Single Active Cart
 
-Given reto "Test" has a session in state "en_progreso"
-When the user attempts to create a new session
-Then error "Este reto ya tiene una sesión en progreso" should be displayed
-  And options "Continuar sesión" and "Cancelar sesión" should be offered
-  And no new session should be created
+Given order "Test" has a cart in state "in_progress"
+When the user attempts to create a new cart
+Then error "This order already has a cart in progress" should be displayed
+  And options "Continue cart" and "Cancel cart" should be offered
+  And no new cart should be created
 
-Given reto "Test" has a session in state "completada"
-When the user attempts to create a new session
-Then the session creation should proceed normally
+Given order "Test" has a cart in state "completed"
+When the user attempts to create a new cart
+Then the cart creation should proceed normally
 
-Given reto "Test" has a session in state "cancelada"
-When the user attempts to create a new session
-Then the session creation should proceed normally
+Given order "Test" has a cart in state "cancelled"
+When the user attempts to create a new cart
+Then the cart creation should proceed normally
 ```
 
 ---
 
-### 3. Matriz de Trazabilidad
+### 3. Traceability Matrix
 
-La matriz de trazabilidad conecta **todas** las capas:
+The traceability matrix connects **all** layers:
 
 ```
-UC → REQ → BR (y viceversa)
+UC → REQ → BR (and vice versa)
 ```
 
 ```markdown
-## Matriz Completa: UC → REQ → BR
+## Complete Matrix: UC → REQ → BR
 
-UC-001-CrearReto
-├── REQ-001.1 Creación de Reto
-├── REQ-001.2 Validación longitud título ──────── BR-RETO-001
-├── REQ-001.3 Título obligatorio ──────────────── BR-RETO-001
-├── REQ-001.4 Límite retos activos ────────────── BR-RETO-002
-├── REQ-001.5 Emisión de evento
-├── REQ-001.6 Asistencia IA
-└── REQ-001.7 Estado inicial borrador ─────────── BR-RETO-003
+UC-001-PlaceOrder
+├── REQ-001.1 Order Creation
+├── REQ-001.2 Title length validation ──────── BR-ORDER-001
+├── REQ-001.3 Title required ──────────────── BR-ORDER-001
+├── REQ-001.4 Active orders limit ────────── BR-ORDER-002
+├── REQ-001.5 Event emission
+├── REQ-001.6 AI assistance
+└── REQ-001.7 Initial draft status ─────────── BR-ORDER-003
 ```
 
-#### Usos de la Matriz de Trazabilidad
+#### Uses of the Traceability Matrix
 
-| Uso | Descripción |
+| Use | Description |
 |-----|-------------|
-| **Desarrollo** | Al implementar un UC, verificar que todos los REQ estén cubiertos |
-| **Testing** | Generar test cases a partir de REQ, validando BR |
-| **Cambios** | Al modificar una BR, identificar todos los REQ/UC afectados |
-| **Code Review** | Verificar que el código implementa las BR referenciadas |
-| **Auditoría** | Demostrar cumplimiento de requisitos regulatorios |
+| **Development** | When implementing a UC, verify all REQs are covered |
+| **Testing** | Generate test cases from REQs, validating BRs |
+| **Changes** | When modifying a BR, identify all affected REQs/UCs |
+| **Code Review** | Verify that the code implements the referenced BRs |
+| **Audit** | Demonstrate compliance with regulatory requirements |
 
 ---
 
-### 4. Esquemas de Implementación
+### 4. Implementation Schemas
 
-La capa de verificación incluye **hints de implementación** que traducen los requisitos a código:
+The verification layer includes **implementation hints** that translate requirements into code:
 
 ```typescript
-// packages/shared/validators/reto.ts
+// packages/shared/validators/order.ts
 import { z } from 'zod'
 
-export const createRetoSchema = z.object({
-  titulo: z
+export const createOrderSchema = z.object({
+  title: z
     .string()
-    .min(1, 'Ingresa un título para tu reto')          // REQ-001.3
-    .max(100, 'El título no puede exceder 100 caracteres') // REQ-001.2
+    .min(1, 'Enter a title for your order')              // REQ-001.3
+    .max(100, 'Title cannot exceed 100 characters')       // REQ-001.2
     .transform(s => s.trim()),
-  descripcion: z
+  description: z
     .string()
-    .max(2000, 'La descripción no puede exceder 2000 caracteres')
+    .max(2000, 'Description cannot exceed 2000 characters')
     .optional(),
-  contexto: z
+  context: z
     .string()
-    .max(5000, 'El contexto no puede exceder 5000 caracteres')
+    .max(5000, 'Context cannot exceed 5000 characters')
     .optional(),
 })
 
-export type CreateRetoInput = z.infer<typeof createRetoSchema>
+export type CreateOrderInput = z.infer<typeof createOrderSchema>
 ```
 
-Nota que los comentarios referencian los requisitos EARS específicos.
+Note that the comments reference the specific EARS requirements.
 
 ---
 
-## Estructura de un Documento de Requisitos
+## Structure of a Requirements Document
 
 ### Front-matter
 
@@ -273,115 +273,115 @@ Nota que los comentarios referencian los requisitos EARS específicos.
 id: REQ-001
 kind: requirements
 status: draft
-source: UC-001-CrearReto   # Caso de uso del que deriva
-domain: six-hats
+source: UC-001-PlaceOrder   # Use case it derives from
+domain: store
 ---
 ```
 
-### Estructura Interna
+### Internal Structure
 
 ```markdown
-# Requisitos EARS: [Nombre del Caso de Uso]
+# EARS Requirements: [Use Case Name]
 
-Requisitos derivados del caso de uso [[UC-NNN-Nombre]].
+Requirements derived from use case [[UC-NNN-Name]].
 
-## Resumen de Requisitos
+## Requirements Summary
 
-| ID | Patrón EARS | Resumen |
+| ID | EARS Pattern | Summary |
 |----|-------------|---------|
 | REQ-NNN.1 | Event-Driven | ... |
 | REQ-NNN.2 | Unwanted (If) | ... |
 
 ---
 
-## REQ-NNN.1: [Nombre del Requisito] (Patrón)
+## REQ-NNN.1: [Requirement Name] (Pattern)
 
-**Patrón**: [Event-Driven | State-Driven | Unwanted | Optional | Ubiquitous]
+**Pattern**: [Event-Driven | State-Driven | Unwanted | Optional | Ubiquitous]
 
-[Especificación EARS en inglés]
+[EARS specification in English]
 
-**Trazabilidad**: UC-NNN-Nombre, [paso/extensión]; [BR-XXX]
+**Traceability**: UC-NNN-Name, [step/extension]; [BR-XXX]
 
-**Criterio de Aceptación**:
+**Acceptance Criterion**:
 [Gherkin]
 
 ---
 
-## Matriz de Trazabilidad
+## Traceability Matrix
 
-| Requisito | Paso UC | Regla de Negocio | Test Case |
-|-----------|---------|------------------|-----------|
+| Requirement | UC Step | Business Rule | Test Case |
+|-------------|---------|---------------|-----------|
 
-## Esquema Zod (Implementación)
+## Zod Schema (Implementation)
 
-[Código TypeScript]
+[TypeScript code]
 ```
 
 ---
 
-## El Flujo Completo de Verificación
+## The Complete Verification Flow
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                              │
-│   1. CASO DE USO (02-Behavior)                                              │
+│   1. USE CASE (02-Behavior)                                                 │
 │      │                                                                       │
-│      │ "El Usuario crea un Reto con título y descripción"                   │
+│      │ "The Customer creates an Order with title and description"           │
 │      │                                                                       │
 │      ▼                                                                       │
-│   2. DERIVAR REQUISITOS EARS (04-Verification)                              │
+│   2. DERIVE EARS REQUIREMENTS (04-Verification)                             │
 │      │                                                                       │
-│      │ "WHEN user submits form, system SHALL create Reto"                   │
+│      │ "WHEN user submits form, system SHALL create Order"                  │
 │      │ "IF title > 100 chars, system SHALL reject"                          │
 │      │                                                                       │
 │      ▼                                                                       │
-│   3. VINCULAR REGLAS DE NEGOCIO (01-Domain)                                 │
+│   3. LINK BUSINESS RULES (01-Domain)                                        │
 │      │                                                                       │
-│      │ REQ-001.2 ← BR-RETO-001 (título 1-100 chars)                         │
-│      │ REQ-001.4 ← BR-RETO-002 (máx 50 retos activos)                       │
-│      │                                                                       │
-│      ▼                                                                       │
-│   4. ESCRIBIR CRITERIOS GHERKIN                                             │
-│      │                                                                       │
-│      │ Given user with 50 active challenges                                  │
-│      │ When user attempts to create new challenge                            │
-│      │ Then error "Has alcanzado el límite" should display                  │
+│      │ REQ-001.2 ← BR-ORDER-001 (title 1-100 chars)                         │
+│      │ REQ-001.4 ← BR-ORDER-002 (max 50 active orders)                      │
 │      │                                                                       │
 │      ▼                                                                       │
-│   5. IMPLEMENTAR Y TESTEAR                                                   │
+│   4. WRITE GHERKIN CRITERIA                                                 │
 │      │                                                                       │
-│      │ - Código implementa REQ-001.4                                         │
-│      │ - Test automatizado verifica criterio Gherkin                        │
-│      │ - Test referencia REQ y BR en comentarios                            │
+│      │ Given user with 50 active orders                                      │
+│      │ When user attempts to create new order                               │
+│      │ Then error "You have reached the limit" should display               │
+│      │                                                                       │
+│      ▼                                                                       │
+│   5. IMPLEMENT AND TEST                                                      │
+│      │                                                                       │
+│      │ - Code implements REQ-001.4                                           │
+│      │ - Automated test verifies Gherkin criterion                          │
+│      │ - Test references REQ and BR in comments                             │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Relación con Otras Capas
+## Relationship with Other Layers
 
-La capa de Verification **consume** todas las capas anteriores y **no es consumida** por ninguna:
+The Verification layer **consumes** all previous layers and **is not consumed** by any:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                              │
 │   00-Requirements ──────────────────────────────────────────────┐           │
 │       │                                                         │           │
-│       │  "¿Por qué este requisito?"                            │           │
-│       │  → Ver OBJ: "Métricas de éxito"                        │           │
+│       │  "Why this requirement?"                                │           │
+│       │  → See OBJ: "Success metrics"                           │           │
 │       │                                                         ▼           │
 │   01-Domain ────────────────────────────────────────┐    04-Verification    │
 │       │                                             │           │           │
-│       │  "¿Qué regla valida esto?"                 │           │           │
-│       │  → BR-RETO-002: "Máximo 50 retos activos" │           │           │
+│       │  "What rule validates this?"                │           │           │
+│       │  → BR-ORDER-002: "Maximum 50 active orders" │           │           │
 │       │                                             ▼           │           │
-│   02-Behavior ──────────────────────────┐     Trazabilidad     │           │
+│   02-Behavior ──────────────────────────┐     Traceability      │           │
 │       │                                 │           │           │           │
-│       │  "¿Qué comando implementa?"    │           │           │           │
-│       │  → CMD-001-CreateChallenge     │           │           │           │
-│       │  "¿Qué caso de uso lo define?" │           │           │           │
-│       │  → UC-001-CrearReto            │           │           │           │
+│       │  "What command implements it?"  │           │           │           │
+│       │  → CMD-001-PlaceOrder           │           │           │           │
+│       │  "What use case defines it?"    │           │           │           │
+│       │  → UC-001-PlaceOrder            │           │           │           │
 │       │                                 ▼           │           │           │
 │   03-Experience ─────────────────► UI-Views ───────┘           │           │
 │                                       │                         │           │
@@ -391,183 +391,183 @@ La capa de Verification **consume** todas las capas anteriores y **no es consumi
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Dependencias de Referencias
+### Reference Dependencies
 
-| Desde | Hacia | Propósito |
-|-------|-------|-----------|
-| REQ → UC | Origen del requisito (02-Behavior) |
-| REQ → BR | Regla que valida (01-Domain) |
-| REQ → CMD | Operación que implementa (02-Behavior) |
-| REQ → OBJ | Justificación de negocio (00-Requirements) |
+| From | To | Purpose |
+|------|----|---------|
+| REQ → UC | Origin of the requirement (02-Behavior) |
+| REQ → BR | Rule it validates (01-Domain) |
+| REQ → CMD | Operation that implements it (02-Behavior) |
+| REQ → OBJ | Business justification (00-Requirements) |
 
 ---
 
-## Estructura de Carpetas
+## Folder Structure
 
 ```
 /specs/04-verification/
 ├── criteria/
-│   ├── REQ-001-Crear-Reto.md
-│   ├── REQ-002-Configurar-Personas.md
-│   ├── REQ-003-Iniciar-Sesion.md
+│   ├── REQ-001-Place-Order.md
+│   ├── REQ-002-Configure-Products.md
+│   ├── REQ-003-Initiate-Cart.md
 │   └── ...
-├── contracts/                    # Contratos API (opcional)
+├── contracts/                    # API contracts (optional)
 │   └── api-contract.yaml
-└── _TRACEABILITY.md             # Matriz de trazabilidad global
+└── _TRACEABILITY.md             # Global traceability matrix
 ```
 
 ---
 
-## Métricas de Cobertura
+## Coverage Metrics
 
-### ¿Qué Medir?
+### What to Measure?
 
 ```markdown
-## Verificación de Cobertura
+## Coverage Verification
 
-### Reglas Cubiertas por Requisitos: 42/44 (95%)
+### Rules Covered by Requirements: 42/44 (95%)
 
-### Requisitos Sin Regla Asociada (UX/Funcionalidad pura)
-- REQ-001.5 (emisión evento)
-- REQ-004.7 (progreso tiempo real)
-- REQ-005.1, REQ-005.2 (visualización/navegación)
+### Requirements Without Associated Rule (Pure UX/Functionality)
+- REQ-001.5 (event emission)
+- REQ-004.7 (real-time progress)
+- REQ-005.1, REQ-005.2 (visualization/navigation)
 ...
 
-Estos requisitos son funcionalidades de UX que no violan reglas de negocio.
+These requirements are UX features that do not violate business rules.
 ```
 
-### Cobertura Ideal
+### Ideal Coverage
 
-| Métrica | Objetivo |
-|---------|----------|
-| BR cubiertas por REQ | 100% |
-| REQ con criterios Gherkin | 100% |
-| UC con REQ derivados | 100% |
-| Tests automatizados por REQ | ≥ 80% |
+| Metric | Target |
+|--------|--------|
+| BRs covered by REQs | 100% |
+| REQs with Gherkin criteria | 100% |
+| UCs with derived REQs | 100% |
+| Automated tests per REQ | >= 80% |
 
 ---
 
-## Anti-patrones a Evitar
+## Anti-patterns to Avoid
 
-### 1. Requisitos Vagos
+### 1. Vague Requirements
 
 ```markdown
-# ❌ INCORRECTO
+# ❌ INCORRECT
 The system should validate the input.
 
-# ✅ CORRECTO
+# ✅ CORRECT
 IF the title exceeds 100 characters,
 the system SHALL reject the form submission
-  AND SHALL display the error message "El título no puede exceder 100 caracteres"
-  AND SHALL NOT create any Challenge entity.
+  AND SHALL display the error message "Title cannot exceed 100 characters"
+  AND SHALL NOT create any Order entity.
 ```
 
-### 2. Criterios No Verificables
+### 2. Non-Verifiable Criteria
 
 ```gherkin
-# ❌ INCORRECTO
+# ❌ INCORRECT
 Then the system should work correctly
 
-# ✅ CORRECTO
-Then a new Challenge should be created with status "borrador"
-  And the user should be redirected to /retos/{id}/personas
-  And a success message "Reto creado correctamente" should be displayed
+# ✅ CORRECT
+Then a new Order should be created with status "draft"
+  And the user should be redirected to /orders/{id}/products
+  And a success message "Order created successfully" should be displayed
 ```
 
-### 3. Trazabilidad Rota
+### 3. Broken Traceability
 
 ```markdown
-# ❌ INCORRECTO
-REQ-001.4: Límite de retos
-(sin referencia a UC ni BR)
+# ❌ INCORRECT
+REQ-001.4: Order limit
+(no reference to UC or BR)
 
-# ✅ CORRECTO
-REQ-001.4: Límite de Retos No Terminados (State-Driven)
-**Trazabilidad**: UC-001-CrearReto, escenario TC-001.6; BR-RETO-002
+# ✅ CORRECT
+REQ-001.4: Unfinished Orders Limit (State-Driven)
+**Traceability**: UC-001-PlaceOrder, scenario TC-001.6; BR-ORDER-002
 ```
 
-### 4. Requisitos Sin Criterios
+### 4. Requirements Without Criteria
 
 ```markdown
-# ❌ INCORRECTO
-## REQ-001.1: Creación de Reto
-[Solo especificación EARS, sin Gherkin]
+# ❌ INCORRECT
+## REQ-001.1: Order Creation
+[Only EARS specification, no Gherkin]
 
-# ✅ CORRECTO
-## REQ-001.1: Creación de Reto
-[Especificación EARS]
-**Criterio de Aceptación**:
-[Gherkin ejecutable]
+# ✅ CORRECT
+## REQ-001.1: Order Creation
+[EARS specification]
+**Acceptance Criterion**:
+[Executable Gherkin]
 ```
 
 ---
 
-## Cuándo Actualizar Esta Capa
+## When to Update This Layer
 
-La capa de Verification se actualiza cuando:
+The Verification layer is updated when:
 
-1. **Nuevos Casos de Uso**: Derivar REQ para cada UC nuevo (de 02-Behavior)
-2. **Cambios en Reglas**: Actualizar REQ que referencian la BR modificada (de 01-Domain)
-3. **Bugs encontrados**: Agregar criterios Gherkin que capturen el bug
-4. **Refactoring**: Verificar que los criterios existentes siguen pasando
-5. **Auditorías**: Completar trazabilidad faltante
+1. **New Use Cases**: Derive REQs for each new UC (from 02-Behavior)
+2. **Rule Changes**: Update REQs that reference the modified BR (from 01-Domain)
+3. **Bugs Found**: Add Gherkin criteria that capture the bug
+4. **Refactoring**: Verify that existing criteria still pass
+5. **Audits**: Complete missing traceability
 
-> **Regla de oro**: Si escribes código que no tiene un REQ asociado, o el código está de más, o falta la especificación.
-
----
-
-## Beneficios de la Capa de Verification
-
-### Para Desarrollo
-
-- **Claridad**: Saber exactamente qué implementar
-- **Tests pre-escritos**: Los criterios Gherkin son la base de tests automatizados
-- **Confianza**: Refactoring seguro si los tests pasan
-
-### Para QA
-
-- **Cobertura sistemática**: No se escapan edge cases
-- **Criterios claros**: Sin ambigüedad sobre qué probar
-- **Regresión automatizable**: Criterios se convierten en tests
-
-### Para Producto
-
-- **Trazabilidad a negocio**: Cada feature vinculada a los Objetivos
-- **Impacto de cambios**: Saber qué se afecta al modificar una regla
-- **Documentación viva**: Siempre actualizada con el código
-
-### Para Auditoría
-
-- **Compliance**: Demostrar que se cumplen requisitos regulatorios
-- **Historial**: Saber por qué se tomó cada decisión
-- **Cobertura medible**: Métricas objetivas de calidad
+> **Golden rule**: If you write code that has no associated REQ, either the code is unnecessary, or the specification is missing.
 
 ---
 
-## Resumen
+## Benefits of the Verification Layer
 
-La capa de Verification en KDD:
+### For Development
 
-1. **Cierra el ciclo**: Conecta especificaciones con implementación verificable
-2. **Usa EARS**: Sintaxis estructurada para requisitos no ambiguos
-3. **Incluye Gherkin**: Criterios de aceptación ejecutables
-4. **Mantiene trazabilidad**: UC → REQ → BR completa
-5. **Habilita automatización**: Los criterios se convierten en tests
-6. **Documenta hints**: Esquemas de implementación para desarrolladores
+- **Clarity**: Know exactly what to implement
+- **Pre-written tests**: Gherkin criteria are the basis for automated tests
+- **Confidence**: Safe refactoring if tests pass
 
-> **"Un sistema sin verificación especificada es un sistema que solo funciona por accidente. KDD garantiza que funcione por diseño."**
+### For QA
+
+- **Systematic coverage**: No edge cases slip through
+- **Clear criteria**: No ambiguity about what to test
+- **Automatable regression**: Criteria become tests
+
+### For Product
+
+- **Business traceability**: Every feature linked to Objectives
+- **Change impact**: Know what is affected when modifying a rule
+- **Living documentation**: Always up to date with the code
+
+### For Audit
+
+- **Compliance**: Demonstrate that regulatory requirements are met
+- **History**: Know why each decision was made
+- **Measurable coverage**: Objective quality metrics
 
 ---
 
-## Artefactos Relacionados
+## Summary
 
-- [[requirements.template]] - Template para documentos REQ
-- [[03-experience]] - Vistas que consumen los casos de uso
-- [[02-behavior]] - Casos de uso que generan requisitos
-- [[01-domain]] - Reglas de negocio que validan requisitos
-- [[00-requirements]] - Objetivos de negocio
-- [[Introducción a KDD]] - Visión general de KDD
+The Verification layer in KDD:
+
+1. **Closes the loop**: Connects specifications with verifiable implementation
+2. **Uses EARS**: Structured syntax for unambiguous requirements
+3. **Includes Gherkin**: Executable acceptance criteria
+4. **Maintains traceability**: Complete UC → REQ → BR chain
+5. **Enables automation**: Criteria become tests
+6. **Documents hints**: Implementation schemas for developers
+
+> **"A system without specified verification is a system that only works by accident. KDD ensures it works by design."**
 
 ---
 
-*Última actualización: 2025-01*
+## Related Artifacts
+
+- [[requirements.template]] - Template for REQ documents
+- [[03-experience]] - Views that consume the use cases
+- [[02-behavior]] - Use cases that generate requirements
+- [[01-domain]] - Business rules that validate requirements
+- [[00-requirements]] - Business objectives
+- [[Introduction to KDD]] - KDD overview
+
+---
+
+*Last updated: 2025-01*

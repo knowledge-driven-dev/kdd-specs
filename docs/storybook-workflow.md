@@ -1,165 +1,165 @@
-# Storybook en KDD: De Wireframes a Componentes
+# Storybook in KDD: From Wireframes to Components
 
-## Introducción
+## Introduction
 
-Este documento explica cómo Storybook se integra en la metodología KDD (Knowledge-Driven Development) como puente entre las especificaciones y el código de producción.
+This document explains how Storybook integrates into the KDD (Knowledge-Driven Development) methodology as a bridge between specifications and production code.
 
-## ¿Qué es Storybook?
+## What is Storybook?
 
-Storybook es una herramienta para desarrollar y documentar componentes UI de forma aislada. Permite visualizar componentes en diferentes estados sin necesidad de ejecutar toda la aplicación.
+Storybook is a tool for developing and documenting UI components in isolation. It allows you to visualize components in different states without needing to run the entire application.
 
-## El rol de Storybook en KDD
+## The Role of Storybook in KDD
 
-En KDD, Storybook cumple dos funciones distintas según la fase del proyecto:
+In KDD, Storybook serves two distinct functions depending on the project phase:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    FLUJO KDD + STORYBOOK                        │
+│                    KDD + STORYBOOK FLOW                          │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
 │  SPECS (markdown)                                               │
 │       │                                                         │
 │       ▼                                                         │
-│  WIREFRAMES (en .stories.tsx)  ← Fase de diseño/validación      │
+│  WIREFRAMES (in .stories.tsx)    ← Design/validation phase      │
 │       │                                                         │
 │       ▼                                                         │
-│  COMPONENTES REALES (.tsx)     ← Fase de implementación         │
+│  REAL COMPONENTS (.tsx)          ← Implementation phase          │
 │       │                                                         │
 │       ▼                                                         │
-│  STORIES ACTUALIZADOS          ← Documentación viva             │
+│  UPDATED STORIES                 ← Living documentation          │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-## Fase 1: Wireframes como documentación ejecutable
+## Phase 1: Wireframes as Executable Documentation
 
-### ¿Qué es un wireframe en Storybook?
+### What is a wireframe in Storybook?
 
-Un wireframe es un componente simplificado que vive **dentro** del archivo `.stories.tsx`. Su propósito es:
+A wireframe is a simplified component that lives **inside** the `.stories.tsx` file. Its purpose is:
 
-- Visualizar el diseño antes de implementar
-- Validar la especificación con stakeholders
-- Documentar estados y variantes del componente
-- Servir como referencia para la implementación real
+- Visualize the design before implementing
+- Validate the specification with stakeholders
+- Document component states and variants
+- Serve as a reference for the real implementation
 
-### Estructura de un wireframe
+### Wireframe Structure
 
 ```tsx
-// persona-form.stories.tsx
+// product-form.stories.tsx
 
 /**
- * Wireframe generado desde: specs/04-interaction/views/UI-PersonaForm.md
- * Estado: draft (pendiente de implementación real)
+ * Wireframe generated from: specs/04-interaction/views/UI-ProductForm.md
+ * Status: draft (pending real implementation)
  */
 
-// El componente vive DENTRO del archivo .stories.tsx
-function PersonaFormWireframe({ onSave, onCancel, isLoading }) {
-  // Implementación básica para visualizar el diseño
+// The component lives INSIDE the .stories.tsx file
+function ProductFormWireframe({ onSave, onCancel, isLoading }) {
+  // Basic implementation to visualize the design
   return (
     <div className="...">
-      {/* UI simplificada */}
+      {/* Simplified UI */}
     </div>
   )
 }
 
-// Stories que documentan diferentes estados
+// Stories that document different states
 export const Default: Story = { args: { ... } }
 export const Loading: Story = { args: { isLoading: true } }
-export const ConError: Story = { args: { error: "..." } }
+export const WithError: Story = { args: { error: "..." } }
 ```
 
-### Características de los wireframes
+### Wireframe Characteristics
 
-| Aspecto | Wireframe |
-|---------|-----------|
-| **Ubicación** | Dentro de `.stories.tsx` |
-| **Propósito** | Validar diseño, documentar |
-| **Lógica de negocio** | Simulada o ausente |
-| **Llamadas a API** | No |
-| **Se usa en producción** | No |
-| **Reutilizable** | No |
+| Aspect | Wireframe |
+|--------|-----------|
+| **Location** | Inside `.stories.tsx` |
+| **Purpose** | Validate design, document |
+| **Business logic** | Simulated or absent |
+| **API calls** | No |
+| **Used in production** | No |
+| **Reusable** | No |
 
-## Fase 2: Componentes reales
+## Phase 2: Real Components
 
-### Transición de wireframe a componente real
+### Transition from Wireframe to Real Component
 
-Cuando se implementa el componente real, el flujo es:
+When the real component is implemented, the flow is:
 
-1. **Crear el componente** en un archivo `.tsx` separado
-2. **Actualizar el story** para importar el componente real
-3. **Eliminar el wireframe** del archivo `.stories.tsx`
+1. **Create the component** in a separate `.tsx` file
+2. **Update the story** to import the real component
+3. **Remove the wireframe** from the `.stories.tsx` file
 
-### Ejemplo de transición
+### Transition Example
 
-**Antes (wireframe):**
+**Before (wireframe):**
 ```tsx
-// persona-form.stories.tsx
+// product-form.stories.tsx
 
-// Wireframe vive aquí
-function PersonaFormWireframe({ ... }) {
+// Wireframe lives here
+function ProductFormWireframe({ ... }) {
   return <div>...</div>
 }
 
-const meta: Meta<typeof PersonaFormWireframe> = {
-  component: PersonaFormWireframe,
+const meta: Meta<typeof ProductFormWireframe> = {
+  component: ProductFormWireframe,
 }
 ```
 
-**Después (componente real):**
+**After (real component):**
 ```tsx
-// persona-form.tsx (NUEVO ARCHIVO)
-export function PersonaForm({ ... }) {
-  // Implementación completa con hooks, API, etc.
+// product-form.tsx (NEW FILE)
+export function ProductForm({ ... }) {
+  // Complete implementation with hooks, API, etc.
 }
 ```
 
 ```tsx
-// persona-form.stories.tsx (ACTUALIZADO)
-import { PersonaForm } from './persona-form'  // Importa el real
+// product-form.stories.tsx (UPDATED)
+import { ProductForm } from './product-form'  // Import the real one
 
-const meta: Meta<typeof PersonaForm> = {
-  component: PersonaForm,  // Usa el real
+const meta: Meta<typeof ProductForm> = {
+  component: ProductForm,  // Use the real one
 }
 
-// Los stories se mantienen, ahora documentan el componente real
+// Stories remain, now they document the real component
 export const Default: Story = { ... }
 ```
 
-### Características de los componentes reales
+### Real Component Characteristics
 
-| Aspecto | Componente Real |
-|---------|-----------------|
-| **Ubicación** | Archivo `.tsx` propio |
-| **Propósito** | Código de producción |
-| **Lógica de negocio** | Completa |
-| **Llamadas a API** | Sí (mockeadas en stories) |
-| **Se usa en producción** | Sí |
-| **Reutilizable** | Sí |
+| Aspect | Real Component |
+|--------|----------------|
+| **Location** | Own `.tsx` file |
+| **Purpose** | Production code |
+| **Business logic** | Complete |
+| **API calls** | Yes (mocked in stories) |
+| **Used in production** | Yes |
+| **Reusable** | Yes |
 
-## Convención de co-location
+## Co-location Convention
 
-### ¿Qué es co-location?
+### What is Co-location?
 
-Co-location significa que los archivos relacionados viven juntos:
+Co-location means that related files live together:
 
 ```
-components/features/reto/
-├── persona-form.tsx           ← Componente
-├── persona-form.stories.tsx   ← Documentación/Stories
-├── persona-form.test.tsx      ← Tests
-└── persona-form.types.ts      ← Tipos (opcional)
+components/features/order/
+├── product-form.tsx           ← Component
+├── product-form.stories.tsx   ← Documentation/Stories
+├── product-form.test.tsx      ← Tests
+└── product-form.types.ts      ← Types (optional)
 ```
 
-### ¿Por qué co-location?
+### Why Co-location?
 
-1. **Descubribilidad**: Al abrir el componente, ves inmediatamente su documentación y tests
-2. **Mantenimiento**: Cambios en el componente recuerdan actualizar stories y tests
-3. **Modularidad**: Mover o eliminar un componente mueve toda su documentación
-4. **Estándar de industria**: Es la convención recomendada por Storybook
+1. **Discoverability**: When opening the component, you immediately see its documentation and tests
+2. **Maintenance**: Changes to the component remind you to update stories and tests
+3. **Modularity**: Moving or deleting a component moves all its documentation
+4. **Industry standard**: It is the convention recommended by Storybook
 
-### Configuración en Storybook
+### Storybook Configuration
 
-El archivo `.storybook/main.ts` busca stories en todo el proyecto:
+The `.storybook/main.ts` file searches for stories across the entire project:
 
 ```typescript
 const config: StorybookConfig = {
@@ -169,66 +169,66 @@ const config: StorybookConfig = {
 }
 ```
 
-## Organización en el sidebar de Storybook
+## Organization in the Storybook Sidebar
 
-### Jerarquía por categorías
+### Hierarchy by Categories
 
-Los stories se organizan usando el campo `title` en el meta:
+Stories are organized using the `title` field in the meta:
 
 ```tsx
-// Componentes UI base
+// Base UI components
 const meta = { title: 'UI/Button', ... }
 
-// Features específicas
-const meta = { title: 'Features/Reto/PersonaForm', ... }
+// Specific features
+const meta = { title: 'Features/Order/ProductForm', ... }
 
-// Vistas/Páginas completas
+// Views/Full pages
 const meta = { title: 'Views/Dashboard', ... }
 ```
 
-### Resultado en sidebar
+### Sidebar Result
 
 ```
 ├── UI/
 │   ├── Button
 │   └── Input
 ├── Features/
-│   └── Reto/
-│       ├── PersonaForm
-│       └── PersonaCard
+│   └── Order/
+│       ├── ProductForm
+│       └── ProductCard
 └── Views/
     └── Dashboard
 ```
 
-## Navegación entre stories
+## Navigation Between Stories
 
-### Conectando componentes según las specs
+### Connecting Components According to Specs
 
-Las especificaciones KDD definen interacciones que pueden abrir otros componentes:
+KDD specifications define interactions that can open other components:
 
 ```markdown
-<!-- En UI-PersonaGenerateModal.md -->
+<!-- In UI-ProductGenerateModal.md -->
 
-### Click en "Generar"
-- **Trigger**: Click en botón [Generar]
-- **Abre**: [[UI-PersonaForm]] → ConContenidoGenerado
+### Click on "Generate"
+- **Trigger**: Click on [Generate] button
+- **Opens**: [[UI-ProductForm]] → WithGeneratedContent
 ```
 
-### Implementación con linkTo
+### Implementation with linkTo
 
 ```tsx
 import { linkTo } from '@storybook/addon-links'
 
 const navigationLinks = {
-  onGenerateSuccess: linkTo('Features/Reto/PersonaForm', 'ConContenidoGenerado'),
-  onCancel: linkTo('Views/ConfigurarReto', 'Default'),
+  onGenerateSuccess: linkTo('Features/Order/ProductForm', 'WithGeneratedContent'),
+  onCancel: linkTo('Views/ConfigureOrder', 'Default'),
 }
 
-export const ConNavegacion: Story = {
+export const WithNavigation: Story = {
   render: () => (
-    <PersonaGenerateModal
+    <ProductGenerateModal
       onGenerate={(prompt) => {
-        // Simular generación exitosa
+        // Simulate successful generation
         setTimeout(() => {
           navigationLinks.onGenerateSuccess()
         }, 1000)
@@ -239,107 +239,107 @@ export const ConNavegacion: Story = {
 }
 ```
 
-## Flujo de trabajo recomendado
+## Recommended Workflow
 
-### 1. Crear especificación
+### 1. Create Specification
 
 ```markdown
-<!-- specs/04-interaction/views/UI-MiComponente.md -->
+<!-- specs/04-interaction/views/UI-MyComponent.md -->
 
-# MiComponente
+# MyComponent
 
 ## Props
 ...
 
-## Estados
+## States
 ...
 
-## Interacciones
+## Interactions
 ...
 ```
 
-### 2. Generar wireframe en story
+### 2. Generate Wireframe in Story
 
 ```bash
-# Usar comando de Claude Code
-/generate-story para UI-MiComponente
+# Use Claude Code command
+/generate-story for UI-MyComponent
 ```
 
-### 3. Validar con stakeholders
+### 3. Validate with Stakeholders
 
-- Revisar wireframe en Storybook
-- Iterar sobre diseño si es necesario
-- Actualizar spec y regenerar si hay cambios
+- Review wireframe in Storybook
+- Iterate on design if necessary
+- Update spec and regenerate if there are changes
 
-### 4. Implementar componente real
+### 4. Implement Real Component
 
 ```tsx
-// mi-componente.tsx
-export function MiComponente({ ... }) {
-  // Implementación completa
+// my-component.tsx
+export function MyComponent({ ... }) {
+  // Complete implementation
 }
 ```
 
-### 5. Actualizar story
+### 5. Update Story
 
 ```tsx
-// mi-componente.stories.tsx
-import { MiComponente } from './mi-componente'
+// my-component.stories.tsx
+import { MyComponent } from './my-component'
 
-// Eliminar wireframe, importar componente real
+// Remove wireframe, import real component
 ```
 
-## Identificando wireframes vs componentes reales
+## Identifying Wireframes vs Real Components
 
-### Convención de marcado
+### Labeling Convention
 
-Los wireframes incluyen un comentario al inicio:
+Wireframes include a comment at the top:
 
 ```tsx
 /**
- * Wireframe generado desde: specs/04-interaction/views/UI-XXX.md
- * Estado: draft (pendiente de implementación real)
+ * Wireframe generated from: specs/04-interaction/views/UI-XXX.md
+ * Status: draft (pending real implementation)
  *
- * TODO: Reemplazar wireframe con implementación real
+ * TODO: Replace wireframe with real implementation
  */
 ```
 
-### Verificación rápida
+### Quick Verification
 
-- **¿El componente está definido dentro del `.stories.tsx`?** → Es wireframe
-- **¿El componente se importa de un `.tsx` separado?** → Es componente real
+- **Is the component defined inside the `.stories.tsx`?** → It is a wireframe
+- **Is the component imported from a separate `.tsx`?** → It is a real component
 
-## Resumen
+## Summary
 
-| Fase | Archivo | Contenido | Propósito |
-|------|---------|-----------|-----------|
-| Especificación | `.md` en /specs | Definición formal | Qué debe hacer |
-| Wireframe | `.stories.tsx` | Componente embebido | Cómo se ve |
-| Implementación | `.tsx` + `.stories.tsx` actualizado | Componente real | Código de producción |
+| Phase | File | Content | Purpose |
+|-------|------|---------|---------|
+| Specification | `.md` in /specs | Formal definition | What it should do |
+| Wireframe | `.stories.tsx` | Embedded component | How it looks |
+| Implementation | `.tsx` + updated `.stories.tsx` | Real component | Production code |
 
-El valor de este flujo es que permite validar el diseño visualmente antes de invertir en implementación, manteniendo siempre la trazabilidad hacia las especificaciones originales.
+The value of this workflow is that it allows you to validate the design visually before investing in implementation, always maintaining traceability back to the original specifications.
 
-## Sincronización automática Spec → Story
+## Automatic Spec → Story Synchronization
 
-### El problema de la desincronización
+### The Desynchronization Problem
 
-Cuando las specs evolucionan, los stories pueden quedar desactualizados:
+When specs evolve, stories can become outdated:
 
 ```
-Semana 1: Spec tiene 3 estados → Story tiene 3 stories ✓
-Semana 4: Spec tiene 5 estados → Story tiene 3 stories ✗
+Week 1: Spec has 3 states → Story has 3 stories ✓
+Week 4: Spec has 5 states → Story has 3 stories ✗
 ```
 
-### Solución: Pre-commit hook + Claude
+### Solution: Pre-commit Hook + Claude
 
-El proyecto incluye un sistema de sincronización automática:
+The project includes an automatic synchronization system:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│  FLUJO DE SINCRONIZACIÓN                                        │
+│  SYNCHRONIZATION FLOW                                            │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
-│  1. Desarrollador edita spec UI                                 │
+│  1. Developer edits UI spec                                     │
 │         │                                                       │
 │         ▼                                                       │
 │  2. git add specs/04-interaction/views/UI-*.md                  │
@@ -349,82 +349,82 @@ El proyecto incluye un sistema de sincronización automática:
 │         │                                                       │
 │         ▼                                                       │
 │  ┌─────────────────────────────────────────────────────────┐   │
-│  │  Pre-commit hook detecta specs UI modificadas           │   │
-│  │  └── Avisa si no hay stories en staging                 │   │
+│  │  Pre-commit hook detects modified UI specs              │   │
+│  │  └── Warns if no stories are in staging                 │   │
 │  └─────────────────────────────────────────────────────────┘   │
 │         │                                                       │
 │         ▼                                                       │
-│  4. Desarrollador ejecuta: claude "/sync-story auto"            │
+│  4. Developer runs: claude "/sync-story auto"                   │
 │         │                                                       │
 │         ▼                                                       │
-│  5. Claude sincroniza los stories automáticamente               │
+│  5. Claude synchronizes the stories automatically               │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### Comandos disponibles
+### Available Commands
 
-| Comando | Descripción |
+| Command | Description |
 |---------|-------------|
-| `/generate-story {spec}` | Crea un story nuevo desde una spec |
-| `/sync-story {spec}` | Actualiza un story existente |
-| `/sync-story auto` | Sincroniza todas las specs UI modificadas |
+| `/generate-story {spec}` | Creates a new story from a spec |
+| `/sync-story {spec}` | Updates an existing story |
+| `/sync-story auto` | Synchronizes all modified UI specs |
 
-### Estructura del story con zonas
+### Story Structure with Zones
 
-Los stories generados tienen dos zonas:
+Generated stories have two zones:
 
 ```tsx
 // ============================================
 // @generated from specs/04-interaction/views/UI-*.md
-// DO NOT EDIT - Se regenera automáticamente
+// DO NOT EDIT - Automatically regenerated
 // ============================================
 
-// ... código generado desde la spec ...
+// ... code generated from the spec ...
 
 // ============================================
-// @custom - Extensiones manuales (NO se sobrescriben)
+// @custom - Manual extensions (NOT overwritten)
 // ============================================
 
-// ... código personalizado que se preserva ...
+// ... custom code that is preserved ...
 ```
 
-### Uso del pre-commit hook
+### Using the Pre-commit Hook
 
 ```bash
-# El hook se ejecuta automáticamente al hacer commit
-git commit -m "feat: actualizar spec de PersonaForm"
+# The hook runs automatically when committing
+git commit -m "feat: update ProductForm spec"
 
-# Output del hook:
-# 🔍 Verificando specs UI modificadas...
-# 📋 Specs UI modificadas detectadas:
-#    • specs/04-interaction/views/UI-PersonaForm.md
+# Hook output:
+# 🔍 Checking modified UI specs...
+# 📋 Modified UI specs detected:
+#    • specs/04-interaction/views/UI-ProductForm.md
 #
-# ⚠️  AVISO: Has modificado specs UI pero no hay stories en staging.
-#    Opciones:
-#    1. Ejecutar: claude "/sync-story auto" para sincronizar
-#    2. Continuar sin sincronizar
+# ⚠️  WARNING: You have modified UI specs but no stories are in staging.
+#    Options:
+#    1. Run: claude "/sync-story auto" to synchronize
+#    2. Continue without synchronizing
 
-# Para sincronizar
+# To synchronize
 claude "/sync-story auto"
 
-# Para saltarse la verificación (no recomendado)
+# To skip verification (not recommended)
 git commit --no-verify -m "..."
 ```
 
-### Ventajas de este enfoque
+### Advantages of This Approach
 
-| Aspecto | Beneficio |
-|---------|-----------|
-| **Inteligencia** | Claude interpreta la spec, no usa templates rígidos |
-| **Flexibilidad** | Sección @custom se preserva siempre |
-| **Sincronización** | Imposible olvidar actualizar stories |
-| **Bajo esfuerzo** | Solo editar la spec, Claude hace el resto |
+| Aspect | Benefit |
+|--------|---------|
+| **Intelligence** | Claude interprets the spec, does not use rigid templates |
+| **Flexibility** | @custom section is always preserved |
+| **Synchronization** | Impossible to forget updating stories |
+| **Low effort** | Only edit the spec, Claude does the rest |
 
-### Configuración
+### Configuration
 
-Los archivos relevantes son:
+The relevant files are:
 
-- `.husky/pre-commit` - Hook que detecta cambios
-- `.claude/commands/sync-story.md` - Comando de sincronización
-- `scripts/detect-ui-spec-changes.ts` - Script de detección
+- `.husky/pre-commit` - Hook that detects changes
+- `.claude/commands/sync-story.md` - Synchronization command
+- `scripts/detect-ui-spec-changes.ts` - Detection script

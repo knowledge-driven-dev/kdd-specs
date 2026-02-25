@@ -13,15 +13,15 @@ aliases:                      # @type: array @optional @description: Alternative
 # Entity Name <!-- title-is-name -->
 
 <!--
-  VARIANTES POR KIND:
+  KIND VARIANTS:
 
-  kind: entity  → Entidad de dominio estándar (Reto, Sesión, Plan)
-  kind: role    → Rol/actor que interactúa con el sistema (Propietario, Usuario, Moderador)
-  kind: system  → Sistema externo en MAYÚSCULAS (ORACLE, SAP, STRIPE)
+  kind: entity  → Standard domain entity (Order, Product, Cart)
+  kind: role    → Role/actor that interacts with the system (Customer, Admin)
+  kind: system  → External system in UPPERCASE (STRIPE, WAREHOUSE)
 
-  Para sistemas externos:
-  - El nombre del archivo y título SIEMPRE en MAYÚSCULAS: ORACLE.md, SAP.md
-  - En texto se referencia igual: [[ORACLE]], [[SAP]]
+  For external systems:
+  - File name and title ALWAYS in UPPERCASE: STRIPE.md, WAREHOUSE.md
+  - In text, reference the same way: [[STRIPE]], [[WAREHOUSE]]
 -->
 
 ## Description <!-- required -->

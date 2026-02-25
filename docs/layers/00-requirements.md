@@ -1,181 +1,181 @@
-# Capa 00: Requirements (Requisitos)
+# Layer 00: Requirements
 
-## El Fundamento de Todo: ¿Por Qué Existe Este Sistema?
+## The Foundation of Everything: Why Does This System Exist?
 
 ---
 
-## Introducción
+## Introduction
 
-La capa de Requirements es el **punto de partida** de toda especificación KDD. Responde a la pregunta más fundamental: **¿Por qué existe este sistema?**
+The Requirements layer is the **starting point** of every KDD specification. It answers the most fundamental question: **Why does this system exist?**
 
-Aquí no hablamos de código, ni de tecnología, ni siquiera de software. Hablamos de **problemas humanos**, de **contexto de negocio**, de **objetivos medibles**. Un sistema que no tiene claro su "por qué" es un sistema condenado a la deriva.
+Here we do not talk about code, nor technology, nor even software. We talk about **human problems**, about **business context**, about **measurable objectives**. A system that is unclear about its "why" is a system doomed to drift.
 
-> **Nota importante**: Esta capa es el **INPUT** que alimenta al diseño. Puede mencionar conceptos de dominio para dar contexto, pero está fuera del flujo de dependencias entre capas.
+> **Important note**: This layer is the **INPUT** that feeds into design. It may mention domain concepts to provide context, but it sits outside the dependency flow between layers.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                              │
 │   00-Requirements  →  01-Domain  →  02-Behavior     →  03-Experience        │
 │                                                                              │
-│   "¿POR QUÉ           "¿Qué          "¿Qué puede        "¿Cómo lo          │
-│    EXISTE?"            existe?"        hacer?"             ven?"             │
+│   "WHY DOES          "What          "What can          "How do they          │
+│    IT EXIST?"         exists?"       it do?"            see it?"             │
 │                                                                              │
 │   ──────────────────────────────────────────────────────────────────────────│
 │                                                                              │
-│   MOTIVACIÓN          Conceptual     Funcional          Experiencial        │
-│   CONTEXTO            (entidades)    (operaciones)      (vistas)            │
-│   OBJETIVOS                                                                  │
+│   MOTIVATION          Conceptual     Functional         Experiential        │
+│   CONTEXT             (entities)     (operations)       (views)             │
+│   OBJECTIVES                                                                 │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## La Filosofía: El Problema Antes que la Solución
+## The Philosophy: The Problem Before the Solution
 
-### Por Qué Esta Capa es Primera
+### Why This Layer Comes First
 
-En el desarrollo tradicional, es común saltar directamente al código. "Necesitamos una app que haga X" → empezamos a programar. Esto genera sistemas que:
+In traditional development, it is common to jump straight into code. "We need an app that does X" → we start coding. This produces systems that:
 
-- Resuelven problemas que nadie tiene
-- No miden si están teniendo éxito
-- Acumulan features sin dirección clara
-- Son difíciles de justificar ante stakeholders
+- Solve problems nobody has
+- Do not measure whether they are succeeding
+- Accumulate features without clear direction
+- Are hard to justify to stakeholders
 
-KDD invierte esto:
+KDD inverts this:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                              │
-│   ENFOQUE TRADICIONAL              ENFOQUE KDD                              │
-│   ───────────────────              ───────────                              │
+│   TRADITIONAL APPROACH               KDD APPROACH                           │
+│   ────────────────────               ────────────                           │
 │                                                                              │
-│   "Hagamos una app"                "¿Qué problema resolvemos?"              │
+│   "Let's build an app"              "What problem are we solving?"          │
 │         ↓                                   ↓                               │
-│   Empezar a codear                 "¿Para quién?"                           │
+│   Start coding                      "For whom?"                             │
 │         ↓                                   ↓                               │
-│   "¿Qué debería hacer?"            "¿Cómo medimos éxito?"                   │
+│   "What should it do?"              "How do we measure success?"            │
 │         ↓                                   ↓                               │
-│   Features sin fin                 PRD claro y acotado                      │
+│   Endless features                  Clear and scoped PRD                    │
 │         ↓                                   ↓                               │
-│   "¿Esto era lo que querían?"      Dominio → Capacidades → Experience       │
+│   "Was this what they wanted?"      Domain → Capabilities → Experience      │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### El Problema como Ancla
+### The Problem as Anchor
 
-Cuando las cosas se complican (y siempre se complican), la capa de Requirements es tu **ancla**:
+When things get complicated (and they always do), the Requirements layer is your **anchor**:
 
-- "¿Deberíamos añadir esta feature?" → ¿Resuelve el problema definido?
-- "¿Esta arquitectura es correcta?" → ¿Cumple los objetivos de negocio?
-- "¿Priorizamos X o Y?" → ¿Cuál acerca más a las métricas de éxito?
+- "Should we add this feature?" → Does it solve the defined problem?
+- "Is this architecture correct?" → Does it meet the business objectives?
+- "Do we prioritize X or Y?" → Which one moves us closer to the success metrics?
 
 ---
 
-## Los Artefactos de la Capa de Requirements
+## The Artifacts of the Requirements Layer
 
 ### 1. PRD (Product Requirements Document)
 
-El PRD es el documento central que define la visión del producto.
+The PRD is the central document that defines the product vision.
 
-#### Estructura Recomendada
+#### Recommended Structure
 
 ```markdown
-# PRD: [Nombre del Producto]
+# PRD: [Product Name]
 
-## El Problema
-¿Qué dolor o necesidad existe? ¿Por qué es importante resolverlo ahora?
+## The Problem
+What pain or need exists? Why is it important to solve it now?
 
-## Usuarios Objetivo
-¿Quiénes son? ¿Qué características tienen? ¿Cuántos son?
+## Target Users
+Who are they? What characteristics do they have? How many are there?
 
-## Objetivos de Negocio
-¿Qué queremos lograr como organización?
+## Business Objectives
+What do we want to achieve as an organization?
 
-## Métricas de Éxito
-¿Cómo sabremos que el producto funciona?
+## Success Metrics
+How will we know the product is working?
 
-## Lo Que NO Es Este Producto
-Límites claros para evitar scope creep.
+## What This Product Is NOT
+Clear boundaries to avoid scope creep.
 
-## Restricciones
-Técnicas, legales, de tiempo, de presupuesto.
+## Constraints
+Technical, legal, time, budget.
 
 ## Stakeholders
-¿Quiénes tienen interés en este producto?
+Who has an interest in this product?
 ```
 
-#### Ejemplo: Six Hats App
+#### Example: Store App
 
 ```markdown
-# PRD: Six Hats App
+# PRD: Store App
 
-## El Problema
+## The Problem
 
-Los equipos de trabajo enfrentan decisiones complejas donde:
-- Las perspectivas individuales dominan la discusión
-- Las emociones se mezclan con los hechos
-- No hay estructura para explorar alternativas
-- Las conclusiones son sesgadas o incompletas
+Online shoppers face friction in the purchasing process where:
+- Cart abandonment rates are high due to complex checkout flows
+- Inventory availability is unclear until late in the process
+- Order tracking is fragmented across multiple systems
+- Returns and refunds are cumbersome and slow
 
-El Método de los Seis Sombreros de Edward de Bono ofrece una solución,
-pero su aplicación manual es:
-- Difícil de facilitar correctamente
-- Limitada por la disponibilidad de participantes
-- Inconsistente en la calidad de las aportaciones
+A modern e-commerce platform can address these issues,
+but existing solutions are:
+- Difficult to customize for specific business needs
+- Limited by monolithic architecture
+- Inconsistent in the quality of the customer experience
 
-## Usuarios Objetivo
+## Target Users
 
-**Primario**: Profesionales que toman decisiones estratégicas
-- Product Managers definiendo roadmaps
-- Emprendedores evaluando oportunidades
-- Consultores analizando problemas de clientes
-- Equipos de innovación explorando ideas
+**Primary**: Customers who purchase products online
+- Individual consumers shopping for everyday goods
+- Small business buyers placing bulk orders
+- Gift shoppers seeking curated recommendations
+- Repeat customers managing subscriptions
 
-**Características**:
-- Familiaridad básica con metodologías de pensamiento
-- Disposición a pagar por herramientas de productividad
-- Trabajan individualmente o en equipos pequeños
+**Characteristics**:
+- Basic familiarity with online shopping
+- Willingness to pay for convenience and quality
+- Shop individually or for households/small teams
 
-## Objetivos de Negocio
+## Business Objectives
 
-1. Validar que el concepto de "Personas Sintéticas" aporta valor
-2. Conseguir 1,000 usuarios activos en 6 meses
-3. Alcanzar MRR de $5,000 en 12 meses
-4. Tasa de retención > 40% al mes 3
+1. Validate that the concept of "Product recommendations" adds value
+2. Achieve 1,000 active users in 6 months
+3. Reach MRR of $5,000 in 12 months
+4. Retention rate > 40% at month 3
 
-## Métricas de Éxito
+## Success Metrics
 
-| Métrica | Objetivo | Frecuencia |
-|---------|----------|------------|
-| Sesiones completadas | 5,000/mes | Mensual |
-| NPS | > 40 | Trimestral |
-| Tiempo promedio en análisis | < 15 min | Semanal |
-| % usuarios que repiten | > 60% | Mensual |
+| Metric | Target | Frequency |
+|--------|--------|-----------|
+| Completed orders | 5,000/month | Monthly |
+| NPS | > 40 | Quarterly |
+| Average time to checkout | < 15 min | Weekly |
+| % repeat customers | > 60% | Monthly |
 
-## Lo Que NO Es Este Producto
+## What This Product Is NOT
 
-- No es un reemplazo de reuniones presenciales
-- No es una herramienta de colaboración en tiempo real (v1)
-- No es un sistema de gestión de proyectos
-- No almacena documentos o archivos externos
+- Not a replacement for in-person retail
+- Not a real-time collaboration tool (v1)
+- Not a project management system
+- Does not store external documents or files
 
-## Restricciones
+## Constraints
 
-- **Técnicas**: Stack moderno (Bun, Elysia, Next.js)
-- **Legales**: GDPR compliance desde día 1
-- **Tiempo**: MVP en 3 meses
-- **Presupuesto**: Bootstrapped, costos mínimos de infra
+- **Technical**: Modern stack (Bun, Elysia, Next.js)
+- **Legal**: GDPR compliance from day 1
+- **Time**: MVP in 3 months
+- **Budget**: Bootstrapped, minimal infra costs
 ```
 
 ---
 
-### 2. Objectives (OBJ) - Objetivos de Usuario
+### 2. Objectives (OBJ) - User Objectives
 
-Los Objectives capturan los objetivos de alto nivel de los actores del sistema en formato User Story.
+Objectives capture the high-level goals of system actors in User Story format.
 
-#### Estructura de un Objective
+#### Structure of an Objective
 
 ```yaml
 ---
@@ -187,273 +187,273 @@ status: draft
 ---
 ```
 
-#### Secciones Requeridas
+#### Required Sections
 
-| Sección | Requerida | Descripción |
-|---------|-----------|-------------|
-| `## Actor` | Sí | Quién tiene este objetivo |
-| `## Objetivo` | Sí | "Como X, quiero Y, para Z" |
-| `## Criterios de éxito` | Sí | Cómo sabe el usuario que lo logró |
-| `## Casos de uso relacionados` | No | Links a UC-* |
+| Section | Required | Description |
+|---------|----------|-------------|
+| `## Actor` | Yes | Who has this objective |
+| `## Objective` | Yes | "As X, I want Y, so that Z" |
+| `## Success criteria` | Yes | How the user knows they achieved it |
+| `## Related use cases` | No | Links to UC-* |
 
-#### Ejemplo
+#### Example
 
 ---
 
-### 3. Unidades de Valor (UV)
+### 3. Value Units (UV)
 
-Las Unidades de Valor describen una **entrega end-to-end** que puede ser usada por el usuario y medida por el negocio. Son el puente entre objetivos y ejecución, y evitan planificar por componentes aislados.
+Value Units describe an **end-to-end delivery** that can be used by the user and measured by the business. They are the bridge between objectives and execution, and prevent planning by isolated components.
 
-#### Características
+#### Characteristics
 
-- **Verticales**: cruzan dominio → comportamiento → experiencia → verificación.
-- **Verificables**: tienen criterios de salida claros.
-- **Planificables**: se pueden estimar y priorizar.
+- **Vertical**: they cross domain → behavior → experience → verification.
+- **Verifiable**: they have clear exit criteria.
+- **Plannable**: they can be estimated and prioritized.
 
-#### Estructura Recomendada
+#### Recommended Structure
 
 ```yaml
 ---
 id: UV-NNN
 kind: value-unit
-title: Nombre de la unidad
+title: Unit name
 status: draft
 owner: PM/Lead
 ---
 ```
 
-#### Ejemplo
+#### Example
 
 ```markdown
-# UV-001: Crear Reto
+# UV-001: Place Order
 
-## Objetivo
-Permitir que el Usuario cree un Reto en estado borrador.
+## Objective
+Allow the Customer to place an Order in draft state.
 
-## Alcance (end-to-end)
-- [[UC-001-CrearReto]]
-- [[CMD-001-CreateChallenge]]
-- [[REQ-001-CrearReto]]
-- [[UI-RetoEditor]]
+## Scope (end-to-end)
+- [[UC-001-PlaceOrder]]
+- [[CMD-001-PlaceOrder]]
+- [[REQ-001-PlaceOrder]]
+- [[UI-OrderEditor]]
 
-## Criterios de salida
-- REQ-001 validado con feature.
-- UI-RetoEditor en storybook.
-- Comando implementado y probado.
+## Exit criteria
+- REQ-001 validated with feature.
+- UI-OrderEditor in storybook.
+- Command implemented and tested.
 ```
 
 ---
 
 ### 4. Release Plans (REL)
 
-Los Release Plans agrupan Unidades de Valor en entregas (MVP, v1, v1.1) con objetivos, dependencias y criterios de salida. Son el instrumento de planificación principal.
+Release Plans group Value Units into deliveries (MVP, v1, v1.1) with objectives, dependencies, and exit criteria. They are the primary planning instrument.
 
-#### Estructura Recomendada
+#### Recommended Structure
 
 ```yaml
 ---
 id: REL-NNN
 kind: release
-title: Nombre del release
+title: Release name
 status: draft
 owner: PM/Lead
 target_date: 2025-03-31
 ---
 ```
 
-#### Ejemplo
+#### Example
 
 ```markdown
 # REL-001: MVP
 
-## Objetivo
-Validar creación de Retos y configuración de Personas.
+## Objective
+Validate Order creation and Product configuration.
 
-## Unidades de Valor
-- [[UV-001-CrearReto]]
-- [[UV-002-ConfigurarPersonas]]
+## Value Units
+- [[UV-001-PlaceOrder]]
+- [[UV-002-ConfigureProducts]]
 
-## Dependencias
+## Dependencies
 - [[ADR-0002-Elysia-Backend]]
 
-## Criterios de salida
-- 100% UV con trazabilidad completa.
-- Tests críticos en verde.
+## Exit criteria
+- 100% UV with full traceability.
+- Critical tests passing.
 ```
 
 ```markdown
 ---
 id: OBJ-001
 kind: objective
-title: Analizar decisiones estructuradamente
-actor: Usuario
+title: Browse and purchase products efficiently
+actor: Customer
 status: approved
 ---
 
-# OBJ-001: Analizar decisiones estructuradamente
+# OBJ-001: Browse and purchase products efficiently
 
 ## Actor
-[[Usuario]] - Profesional que toma decisiones estratégicas
+[[Customer]] - Individual who purchases products online
 
-## Objetivo
-Como Usuario, quiero analizar mis decisiones usando el método Six Hats,
-para obtener perspectivas diversas sin depender de otras personas.
+## Objective
+As a Customer, I want to browse products and place orders seamlessly,
+so that I can get what I need without friction or delays.
 
-## Criterios de éxito
-- Puedo crear un Reto con mi problema a analizar
-- Recibo contribuciones desde 6 perspectivas diferentes
-- Obtengo un análisis final que sintetiza los hallazgos
+## Success criteria
+- I can create an Order with the products I want to purchase
+- I receive confirmation and tracking from the fulfillment process
+- I get a clear summary that synthesizes my order details
 
-## Casos de uso relacionados
-- [[UC-001-CrearReto]]
-- [[UC-003-IniciarSesion]]
-- [[UC-005-VerAnalisis]]
+## Related use cases
+- [[UC-001-PlaceOrder]]
+- [[UC-003-StartCart]]
+- [[UC-005-ViewOrderSummary]]
 ```
 
 ---
 
-### 3. Contexto de Negocio
+### 3. Business Context
 
-Documento que captura el entorno en el que opera el sistema.
+A document that captures the environment in which the system operates.
 
-#### Qué Incluye
+#### What It Includes
 
 ```markdown
-# Contexto de Negocio
+# Business Context
 
-## Situación Actual
-¿Cómo se resuelve el problema hoy? ¿Qué herramientas existen?
+## Current Situation
+How is the problem solved today? What tools exist?
 
-## Competencia
-¿Quién más está en este espacio? ¿Cómo nos diferenciamos?
+## Competition
+Who else is in this space? How do we differentiate?
 
-## Tendencias del Mercado
-¿Qué cambios están ocurriendo que hacen esto relevante?
+## Market Trends
+What changes are happening that make this relevant?
 
-## Sistemas Relacionados
-¿Con qué otros sistemas debe integrarse o coexistir?
+## Related Systems
+What other systems must it integrate or coexist with?
 
-## Modelo de Negocio
-¿Cómo generamos ingresos? ¿Cuál es la estructura de costos?
+## Business Model
+How do we generate revenue? What is the cost structure?
 ```
 
 ---
 
 ### 4. ADRs (Architecture Decision Records)
 
-Los ADRs documentan decisiones importantes y su justificación. En esta capa se documentan decisiones de **negocio o estrategia**. Las decisiones puramente técnicas van en `05-architecture`.
+ADRs document important decisions and their justification. In this layer, **business or strategy** decisions are documented. Purely technical decisions go in `05-architecture`.
 
-#### Estructura de un ADR
+#### Structure of an ADR
 
 ```yaml
 ---
 id: ADR-NNNN
 kind: adr
-title: Título de la Decisión
+title: Decision Title
 status: accepted  # proposed | accepted | deprecated | superseded
 date: 2024-01-15
 deciders: ["@juan", "@maria"]
 ---
 ```
 
-#### Ejemplo
+#### Example
 
 ```markdown
 ---
 id: ADR-0001
 kind: adr
-title: Modelo de monetización por créditos
+title: Credit-based monetization model
 status: accepted
 date: 2024-01-15
 deciders: ["@product", "@founder"]
 ---
 
-# ADR-0001: Modelo de monetización por créditos
+# ADR-0001: Credit-based monetization model
 
-## Contexto
-Necesitamos un modelo de monetización para Six Hats App que sea
-justo para usuarios ocasionales y escalable para power users.
+## Context
+We need a monetization model for Store App that is
+fair for occasional users and scalable for power users.
 
-## Opciones Consideradas
+## Options Considered
 
-### Opción A: Suscripción mensual fija
-- **Pros**: Ingresos predecibles, simple de implementar
-- **Cons**: Barrera alta para usuarios ocasionales
+### Option A: Fixed monthly subscription
+- **Pros**: Predictable revenue, simple to implement
+- **Cons**: High barrier for occasional users
 
-### Opción B: Pago por sesión
-- **Pros**: Paga solo lo que usas
-- **Cons**: Fricción en cada uso, impredecible
+### Option B: Pay per order
+- **Pros**: Pay only for what you use
+- **Cons**: Friction on each use, unpredictable
 
-### Opción C: Sistema de créditos
-- **Pros**: Flexibilidad, permite paquetes, reduce fricción
-- **Cons**: Más complejo de implementar
+### Option C: Credit system
+- **Pros**: Flexibility, allows packages, reduces friction
+- **Cons**: More complex to implement
 
-## Decisión
-Elegimos **Sistema de créditos** porque:
-1. Permite a usuarios probar con pocos créditos iniciales
-2. Los power users pueden comprar paquetes con descuento
-3. Facilita promociones y onboarding
+## Decision
+We chose **Credit system** because:
+1. It allows users to try with a few initial credits
+2. Power users can buy packages at a discount
+3. It facilitates promotions and onboarding
 
-## Consecuencias
+## Consequences
 
-### Positivas
-- Mejor conversión de usuarios free a paid
-- Flexibilidad en pricing futuro
+### Positive
+- Better conversion from free to paid users
+- Flexibility in future pricing
 
-### Negativas
-- Complejidad adicional en el sistema
-- Necesidad de comunicar claramente el valor de un crédito
+### Negative
+- Additional system complexity
+- Need to clearly communicate the value of a credit
 
-## Referencias
-- Benchmark de apps similares (Notion, Linear)
+## References
+- Benchmark of similar apps (Notion, Linear)
 ```
 
-#### Cuándo Crear un ADR
+#### When to Create an ADR
 
-- Elección de modelo de negocio
-- Decisión de mercado o posicionamiento
-- Cambio de estrategia de producto
-- Cualquier decisión que alguien preguntará "¿por qué hicimos esto?"
+- Choice of business model
+- Market or positioning decision
+- Product strategy change
+- Any decision that someone will ask "why did we do this?"
 
 ---
 
-## El Lenguaje Ubicuo Nace Aquí
+## The Ubiquitous Language Is Born Here
 
-Aunque los términos del dominio se definen formalmente en la capa 01-Domain, **comienzan a emerger en el PRD**.
+Although domain terms are formally defined in layer 01-Domain, **they begin to emerge in the PRD**.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                              │
-│   En el PRD mencionamos:                                                     │
-│   - "Sesiones de análisis"                                                   │
-│   - "Personas Sintéticas"                                                    │
-│   - "Sombreros" (perspectivas)                                               │
-│   - "Retos" (problemas a analizar)                                           │
+│   In the PRD we mention:                                                     │
+│   - "Shopping carts"                                                         │
+│   - "Products"                                                               │
+│   - "Categories" (product types)                                             │
+│   - "Orders" (purchases to fulfill)                                          │
 │                                                                              │
-│   Estos términos se formalizan en 01-Domain como Entidades:                  │
-│   - [[Sesión]]                                                               │
-│   - [[Persona Sintética]]                                                    │
-│   - [[Sombrero]]                                                             │
-│   - [[Reto]]                                                                 │
+│   These terms are formalized in 01-Domain as Entities:                       │
+│   - [[Cart]]                                                                 │
+│   - [[Product]]                                                              │
+│   - [[Category]]                                                             │
+│   - [[Order]]                                                                │
 │                                                                              │
-│   El PRD es donde el vocabulario compartido NACE.                            │
-│   El Domain es donde se DEFINE formalmente.                                  │
+│   The PRD is where the shared vocabulary is BORN.                            │
+│   The Domain is where it is formally DEFINED.                                │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Relación con Otras Capas
+## Relationship with Other Layers
 
-La capa de Requirements es el **INPUT** que alimenta al diseño. Está **fuera del flujo de dependencias**:
+The Requirements layer is the **INPUT** that feeds into design. It sits **outside the dependency flow**:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                                                                              │
-│   00-Requirements (INPUT - fuera del flujo de capas)                         │
+│   00-Requirements (INPUT - outside the layer flow)                           │
 │       │                                                                      │
-│       │  alimenta el diseño                                                  │
+│       │  feeds into design                                                   │
 │       ▼                                                                      │
 │   ┌─────────────────────────────────────────────────────────────────────┐   │
 │   │  04-Verification   (tests, criteria)                                │   │
@@ -473,141 +473,141 @@ La capa de Requirements es el **INPUT** que alimenta al diseño. Está **fuera d
 
 ---
 
-## Estructura de Carpetas
+## Folder Structure
 
 ```
 /specs/00-requirements/
-├── PRD.md                    # Documento principal del producto
-├── context.md                # Contexto de negocio (opcional)
+├── PRD.md                    # Main product document
+├── context.md                # Business context (optional)
 ├── /objectives/
-│   ├── OBJ-001-AnalisisEstructurado.md
-│   └── OBJ-002-PersonasSinteticas.md
+│   ├── OBJ-001-StructuredAnalysis.md
+│   └── OBJ-002-ProductRecommendations.md
 └── /decisions/
-    ├── ADR-0001-ModeloCreditos.md
-    └── ADR-0002-EstrategiaGTM.md
+    ├── ADR-0001-CreditModel.md
+    └── ADR-0002-GTMStrategy.md
 ```
 
 ---
 
-## Checklist: Definiendo el Problema
+## Checklist: Defining the Problem
 
-Antes de avanzar a otras capas, asegúrate de tener:
+Before moving on to other layers, make sure you have:
 
-- [ ] **Problema claro**: ¿Qué dolor resolvemos? ¿Por qué ahora?
-- [ ] **Usuarios definidos**: ¿Quiénes son? ¿Qué características tienen?
-- [ ] **Objetivos de negocio**: ¿Qué queremos lograr como organización?
-- [ ] **Métricas de éxito**: ¿Cómo medimos si funciona?
-- [ ] **Límites claros**: ¿Qué NO es este producto?
-- [ ] **Restricciones**: ¿Qué limitaciones tenemos?
-- [ ] **Objectives (OBJ)**: ¿Qué quieren lograr los usuarios?
-- [ ] **ADRs iniciales**: ¿Qué decisiones de negocio tomamos?
+- [ ] **Clear problem**: What pain are we solving? Why now?
+- [ ] **Defined users**: Who are they? What characteristics do they have?
+- [ ] **Business objectives**: What do we want to achieve as an organization?
+- [ ] **Success metrics**: How do we measure if it works?
+- [ ] **Clear boundaries**: What is this product NOT?
+- [ ] **Constraints**: What limitations do we have?
+- [ ] **Objectives (OBJ)**: What do users want to achieve?
+- [ ] **Initial ADRs**: What business decisions have we made?
 
 ---
 
-## Anti-patrones a Evitar
+## Anti-patterns to Avoid
 
-### 1. PRD como Lista de Features
+### 1. PRD as a Feature List
 
 ```markdown
-# ❌ INCORRECTO
+# INCORRECT
 ## Features
-- Login con Google
-- Dashboard con gráficas
-- Exportar a PDF
-- Modo oscuro
+- Login with Google
+- Dashboard with charts
+- Export to PDF
+- Dark mode
 
-# ✅ CORRECTO
-## El Problema
-Los equipos toman decisiones sesgadas porque...
+# CORRECT
+## The Problem
+Teams make biased decisions because...
 
-## Métricas de Éxito
+## Success Metrics
 - NPS > 40
-- Tiempo de análisis < 15 min
+- Analysis time < 15 min
 ```
 
-### 2. Objetivos Vagos
+### 2. Vague Objectives
 
 ```markdown
-# ❌ INCORRECTO
-## Objetivos
-- Hacer una app útil
-- Que la gente la use
-- Ganar dinero
+# INCORRECT
+## Objectives
+- Make a useful app
+- Get people to use it
+- Make money
 
-# ✅ CORRECTO
-## Objetivos
-- 1,000 usuarios activos en 6 meses
-- MRR de $5,000 en 12 meses
-- Retención > 40% al mes 3
+# CORRECT
+## Objectives
+- 1,000 active users in 6 months
+- MRR of $5,000 in 12 months
+- Retention > 40% at month 3
 ```
 
-### 3. Ausencia de "Lo Que NO Es"
+### 3. Missing "What It Is NOT"
 
 ```markdown
-# ❌ INCORRECTO
-(Sin sección de límites)
+# INCORRECT
+(No boundaries section)
 
-# ✅ CORRECTO
-## Lo Que NO Es Este Producto
-- No es un reemplazo de reuniones presenciales
-- No es colaboración en tiempo real (v1)
-- No gestiona proyectos
+# CORRECT
+## What This Product Is NOT
+- Not a replacement for in-person retail
+- Not real-time collaboration (v1)
+- Does not manage projects
 ```
 
-### 4. Decisiones Sin Documentar
+### 4. Undocumented Decisions
 
 ```markdown
-# ❌ INCORRECTO
-"Usamos créditos porque sí"
+# INCORRECT
+"We use credits just because"
 
-# ✅ CORRECTO
-ADR-0001 con:
-- Contexto
-- Opciones consideradas
-- Pros/cons de cada una
-- Decisión y justificación
-- Consecuencias
+# CORRECT
+ADR-0001 with:
+- Context
+- Options considered
+- Pros/cons of each
+- Decision and justification
+- Consequences
 ```
 
 ---
 
-## Cuándo Actualizar Esta Capa
+## When to Update This Layer
 
-La capa de Requirements **cambia poco** una vez establecida. Actualízala cuando:
+The Requirements layer **changes infrequently** once established. Update it when:
 
-1. **Pivot de producto**: El problema o los usuarios cambian fundamentalmente
-2. **Nuevos objetivos**: Los OKRs de la organización evolucionan
-3. **Decisiones estratégicas**: Nuevos ADRs por cambios de negocio
-4. **Post-mortem**: Aprendizajes que cambian la visión
+1. **Product pivot**: The problem or users change fundamentally
+2. **New objectives**: The organization's OKRs evolve
+3. **Strategic decisions**: New ADRs due to business changes
+4. **Post-mortem**: Learnings that change the vision
 
-> **Regla de oro**: Si cambias el PRD frecuentemente, probablemente no tenías claro el problema desde el inicio.
-
----
-
-## Resumen
-
-La capa de Requirements en KDD:
-
-1. **Es el fundamento**: Todo lo demás deriva de aquí
-2. **Es estable**: Cambia poco una vez definida
-3. **Es el "por qué"**: Justifica cada decisión posterior
-4. **Es medible**: Define métricas de éxito concretas
-5. **Es limitante**: Establece lo que NO es el producto
-6. **Documenta decisiones**: ADRs capturan el razonamiento
-7. **Captura objetivos**: OBJ define qué quieren lograr los usuarios
-
-> **"Un sistema sin un problema claro es una solución buscando un problema. KDD empieza por el problema."**
+> **Golden rule**: If you change the PRD frequently, you probably did not have the problem clear from the start.
 
 ---
 
-## Artefactos Relacionados
+## Summary
 
-- [[prd.template]] - Template para PRD
-- [[adr.template]] - Template para ADRs
-- [[objective.template]] - Template para Objectives
-- [[01-domain]] - La siguiente capa: Dominio
-- [[Introducción a KDD]] - Visión general de KDD
+The Requirements layer in KDD:
+
+1. **Is the foundation**: Everything else derives from here
+2. **Is stable**: Changes infrequently once defined
+3. **Is the "why"**: Justifies every subsequent decision
+4. **Is measurable**: Defines concrete success metrics
+5. **Is limiting**: Establishes what the product is NOT
+6. **Documents decisions**: ADRs capture the reasoning
+7. **Captures objectives**: OBJ defines what users want to achieve
+
+> **"A system without a clear problem is a solution looking for a problem. KDD starts with the problem."**
 
 ---
 
-*Última actualización: 2025-01*
+## Related Artifacts
+
+- [[prd.template]] - Template for PRD
+- [[adr.template]] - Template for ADRs
+- [[objective.template]] - Template for Objectives
+- [[01-domain]] - The next layer: Domain
+- [[Introduction to KDD]] - KDD overview
+
+---
+
+*Last updated: 2025-01*

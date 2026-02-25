@@ -3,15 +3,15 @@
 # @description: Release Plan (groups Value Units)
 id: REL-NNN            # @required @pattern: ^REL-\d{3}$
 kind: release          # @required @literal: release
-title: Nombre del release   # @required
+title: Release name          # @required
 status: draft          # @enum: draft|review|approved|deprecated
-owner: Nombre o rol    # @required
+owner: Name or role    # @required
 target_date: 2025-03-31 # @optional
 tags:                 # @type: array
   - release
 ---
 
-# REL-NNN: Nombre del release
+# REL-NNN: Release name
 
 ## Objective <!-- required -->
 

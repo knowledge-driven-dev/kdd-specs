@@ -1,130 +1,130 @@
-# KDD Multi-Dominio
+# KDD Multi-Domain
 
-> Extensión de la metodología KDD para soportar múltiples bounded contexts en aplicaciones grandes.
+> Extension of the KDD methodology to support multiple bounded contexts in large applications.
 
-## Principio Central
+## Core Principle
 
-> **"Dominio primero, capa segundo"**
+> **"Domain first, layer second"**
 
-En lugar de organizar por capa y luego buscar el dominio, invertimos la jerarquía para que cada dominio sea autónomo pero interconectable.
-
----
-
-## Cuándo Usar Multi-Dominio
-
-| Usar Multi-Dominio | Usar KDD Monolítico |
-|--------------------|---------------------|
-| Múltiples bounded contexts | Un solo bounded context |
-| Equipos trabajando en paralelo | Equipo pequeño |
-| 50+ artefactos de especificación | Menos de 50 artefactos |
-| Dependencias explícitas entre áreas | Todo está relacionado |
+Instead of organizing by layer and then searching for the domain, we invert the hierarchy so that each domain is autonomous but interconnectable.
 
 ---
 
-## Estructura de Carpetas
+## When to Use Multi-Domain
+
+| Use Multi-Domain | Use Monolithic KDD |
+|------------------|---------------------|
+| Multiple bounded contexts | A single bounded context |
+| Teams working in parallel | Small team |
+| 50+ specification artifacts | Fewer than 50 artifacts |
+| Explicit dependencies between areas | Everything is related |
+
+---
+
+## Folder Structure
 
 ```
 specs/
-├── _shared/                          # Elementos transversales (raíz)
-│   ├── policies/                     # XP-* Políticas cross-domain
-│   ├── glossary.md                   # Términos globales
-│   ├── domain-map.md                 # Mapa de dominios y dependencias
-│   └── _index.json                   # Índice de elementos compartidos
+├── _shared/                          # Cross-cutting elements (root)
+│   ├── policies/                     # XP-* Cross-domain policies
+│   ├── glossary.md                   # Global terms
+│   ├── domain-map.md                 # Domain map and dependencies
+│   └── _index.json                   # Shared elements index
 │
-├── domains/                          # Contenedor de todos los dominios
+├── domains/                          # Container for all domains
 │   │
-│   ├── core/                         # Dominio Core (fundacional)
-│   │   ├── _manifest.yaml            # Metadatos del dominio
+│   ├── core/                         # Core domain (foundational)
+│   │   ├── _manifest.yaml            # Domain metadata
 │   │   ├── 00-requirements/
 │   │   ├── 01-domain/
 │   │   ├── 02-behavior/
 │   │   ├── 03-experience/
 │   │   ├── 04-verification/
 │   │   ├── 05-architecture/
-│   │   └── _index.json               # Índice local del dominio
+│   │   └── _index.json               # Local domain index
 │   │
-│   ├── auth/                         # Dominio Autenticación
+│   ├── auth/                         # Authentication domain
 │   │   ├── _manifest.yaml
-│   │   └── ... (capas KDD)
+│   │   └── ... (KDD layers)
 │   │
-│   ├── billing/                      # Dominio Facturación
+│   ├── billing/                      # Billing domain
 │   │   └── ...
 │   │
-│   └── sessions/                     # Dominio Sesiones
+│   └── sessions/                     # Sessions domain
 │       └── ...
 │
-└── _index.json                       # Índice global (agregado)
+└── _index.json                       # Global index (aggregate)
 ```
 
-### Ventajas de `domains/` como contenedor
+### Advantages of `domains/` as a Container
 
-1. **Explícito**: Queda claro que es una organización por dominios
-2. **Limpio**: `_shared/` y `domains/` al mismo nivel, sin mezclar convenciones
-3. **Escalable**: Fácil añadir nuevos dominios dentro del contenedor
-4. **Tooling friendly**: Globs como `domains/*/01-domain/**` funcionan intuitivamente
+1. **Explicit**: It is clear that this is a domain-based organization
+2. **Clean**: `_shared/` and `domains/` at the same level, without mixing conventions
+3. **Scalable**: Easy to add new domains inside the container
+4. **Tooling friendly**: Globs like `domains/*/01-domain/**` work intuitively
 
 ---
 
-## Manifest de Dominio
+## Domain Manifest
 
-Cada dominio debe tener un archivo `_manifest.yaml` que declara sus metadatos y dependencias.
+Each domain must have a `_manifest.yaml` file that declares its metadata and dependencies.
 
-### Ubicación
+### Location
 
 `specs/domains/{domain-name}/_manifest.yaml`
 
-### Ejemplo Básico
+### Basic Example
 
 ```yaml
 domain:
   id: sessions
-  name: "Sesiones Six Hats"
-  description: "Gestión de sesiones de pensamiento estructurado"
+  name: "Store Sessions"
+  description: "Management of structured thinking sessions"
   status: active
 ```
 
-### Ejemplo Completo
+### Complete Example
 
 ```yaml
 domain:
   id: sessions
-  name: "Sesiones Six Hats"
+  name: "Store Sessions"
   description: |
-    Gestiona el ciclo completo de sesiones de pensamiento
-    estructurado con personas sintéticas.
+    Manages the complete lifecycle of structured thinking
+    sessions with synthetic products.
   status: active
   team: "@team-core"
   version: "1.0.0"
   tags:
     - core-business
-    - six-hats
+    - store
     - ai-powered
 
 dependencies:
   - domain: core
     type: required
-    reason: "Usuarios y Retos son conceptos fundacionales"
+    reason: "Customers and Orders are foundational concepts"
     imports:
-      entities: [Usuario, Reto]
-      events: [EVT-Reto-Creado]
+      entities: [Customer, Order]
+      events: [EVT-Order-Placed]
 
   - domain: billing
     type: optional
-    reason: "Las sesiones pueden funcionar sin créditos en modo demo"
+    reason: "Sessions can work without credits in demo mode"
     imports:
-      events: [EVT-Credito-Consumido]
+      events: [EVT-Credit-Consumed]
 
 exports:
   entities:
-    - Sesion
-    - Ronda
+    - Cart
+    - CartItem
     - Idea
-    - PersonaSintetica
+    - Product
   events:
-    - EVT-Sesion-Iniciada
-    - EVT-Sesion-Completada
+    - EVT-Cart-Initiated
+    - EVT-Cart-Completed
   commands:
-    - CMD-IniciarSesion
+    - CMD-InitiateCart
 
 context-map:
   upstream: [core, billing, ai]
@@ -132,139 +132,139 @@ context-map:
 
 boundaries:
   anti-corruption:
-    - external: "billing::Credito"
-      internal: CreditoDisponible
-      notes: "Solo nos interesa el balance, no los detalles de transacción"
+    - external: "billing::Credit"
+      internal: AvailableCredit
+      notes: "We only care about the balance, not the transaction details"
 ```
 
-### Campos del Manifest
+### Manifest Fields
 
-#### Sección `domain` (requerida)
+#### `domain` Section (required)
 
-| Campo | Tipo | Requerido | Descripción |
-|-------|------|-----------|-------------|
-| `id` | string | Sí | Identificador único (kebab-case, debe coincidir con carpeta) |
-| `name` | string | Sí | Nombre legible para humanos |
-| `description` | string | Sí | Propósito y alcance del dominio |
-| `status` | enum | Sí | `active`, `deprecated`, `experimental`, `frozen` |
-| `team` | string | No | Equipo responsable (`@team-name`) |
-| `version` | string | No | Versión semántica |
-| `tags` | array | No | Tags de categorización |
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | string | Yes | Unique identifier (kebab-case, must match folder) |
+| `name` | string | Yes | Human-readable name |
+| `description` | string | Yes | Purpose and scope of the domain |
+| `status` | enum | Yes | `active`, `deprecated`, `experimental`, `frozen` |
+| `team` | string | No | Responsible team (`@team-name`) |
+| `version` | string | No | Semantic version |
+| `tags` | array | No | Categorization tags |
 
-#### Sección `dependencies` (opcional)
+#### `dependencies` Section (optional)
 
-Lista de dominios de los que este depende.
+List of domains this one depends on.
 
-| Campo | Tipo | Requerido | Descripción |
-|-------|------|-----------|-------------|
-| `domain` | string | Sí | ID del dominio del que se depende |
-| `type` | enum | Sí | `required`, `optional`, `event-only` |
-| `reason` | string | No | Justificación de la dependencia |
-| `imports.entities` | array | No | Entidades que se referencian |
-| `imports.events` | array | No | Eventos que se escuchan |
-| `imports.commands` | array | No | Comandos que se invocan |
-| `imports.queries` | array | No | Queries que se consultan |
-| `imports.value-objects` | array | No | Value Objects que se usan |
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `domain` | string | Yes | ID of the domain depended upon |
+| `type` | enum | Yes | `required`, `optional`, `event-only` |
+| `reason` | string | No | Justification for the dependency |
+| `imports.entities` | array | No | Entities that are referenced |
+| `imports.events` | array | No | Events that are listened to |
+| `imports.commands` | array | No | Commands that are invoked |
+| `imports.queries` | array | No | Queries that are consulted |
+| `imports.value-objects` | array | No | Value Objects that are used |
 
-#### Sección `exports` (opcional)
+#### `exports` Section (optional)
 
-Artefactos que este dominio expone a otros.
+Artifacts that this domain exposes to others.
 
-| Campo | Tipo | Descripción |
+| Field | Type | Description |
 |-------|------|-------------|
-| `entities` | array | Entidades públicas |
-| `events` | array | Eventos consumibles por otros |
-| `commands` | array | Comandos invocables por otros |
-| `queries` | array | Queries disponibles para otros |
-| `value-objects` | array | Value Objects reutilizables |
+| `entities` | array | Public entities |
+| `events` | array | Events consumable by others |
+| `commands` | array | Commands invocable by others |
+| `queries` | array | Queries available to others |
+| `value-objects` | array | Reusable Value Objects |
 
-#### Sección `context-map` (opcional)
+#### `context-map` Section (optional)
 
-Posición en el mapa de contextos DDD.
+Position in the DDD context map.
 
-| Campo | Tipo | Descripción |
+| Field | Type | Description |
 |-------|------|-------------|
-| `upstream` | array | Dominios de los que consume |
-| `downstream` | array | Dominios que consumen de este |
-| `relationships` | array | Tipo de relación con cada dominio |
+| `upstream` | array | Domains it consumes from |
+| `downstream` | array | Domains that consume from this |
+| `relationships` | array | Relationship type with each domain |
 
-Patrones de relación válidos:
-- `conformist` - Nos adaptamos a su modelo
-- `anti-corruption-layer` - Traducimos su modelo
-- `shared-kernel` - Modelo compartido
-- `customer-supplier` - Relación cliente-proveedor
-- `open-host-service` - Servicio genérico expuesto
-- `published-language` - Lenguaje publicado
+Valid relationship patterns:
+- `conformist` - We adapt to their model
+- `anti-corruption-layer` - We translate their model
+- `shared-kernel` - Shared model
+- `customer-supplier` - Customer-supplier relationship
+- `open-host-service` - Generic exposed service
+- `published-language` - Published language
 
-#### Sección `boundaries` (opcional)
+#### `boundaries` Section (optional)
 
-Define traducciones Anti-Corruption Layer.
+Defines Anti-Corruption Layer translations.
 
 ```yaml
 boundaries:
   anti-corruption:
-    - external: "billing::Credito"
-      internal: CreditoDisponible
-      adapter: CreditoAdapter
-      notes: "Solo nos interesa el balance"
+    - external: "billing::Credit"
+      internal: AvailableCredit
+      adapter: CreditAdapter
+      notes: "We only care about the balance"
 ```
 
 ---
 
-## Referencias Cross-Domain
+## Cross-Domain References
 
-### Sintaxis de Wiki-Links
+### Wiki-Link Syntax
 
-Las wiki-links ahora soportan notación de dominio con `::` como separador:
+Wiki-links now support domain notation with `::` as separator:
 
 ```markdown
-# Referencia en el mismo dominio
-[[Sesion]]                    # Busca en dominio actual, luego en core
+# Reference in the same domain
+[[Cart]]                          # Searches in current domain, then in core
 
-# Referencia explícita a otro dominio
-[[core::Usuario]]             # Usuario en dominio core
-[[billing::Credito]]          # Credito en dominio billing
-[[_shared::XP-AUDIT-001]]     # Política compartida
+# Explicit reference to another domain
+[[core::Customer]]                # Customer in core domain
+[[billing::Credit]]               # Credit in billing domain
+[[_shared::XP-AUDIT-001]]        # Shared policy
 ```
 
-### Reglas de Resolución
+### Resolution Rules
 
-1. `[[Entity]]` → Busca primero en el dominio actual, luego en `core`
-2. `[[domain::Entity]]` → Busca explícitamente en el dominio especificado
-3. `[[_shared::Policy]]` → Busca en la carpeta `_shared/`
+1. `[[Entity]]` → Searches first in the current domain, then in `core`
+2. `[[domain::Entity]]` → Searches explicitly in the specified domain
+3. `[[_shared::Policy]]` → Searches in the `_shared/` folder
 
-### Por qué `::`
+### Why `::`
 
-- Evita confusión con paths de archivo (que usan `/`)
-- Familiar de otros lenguajes (C++, Rust namespaces)
-- Fácil de parsear sin ambigüedad
+- Avoids confusion with file paths (which use `/`)
+- Familiar from other languages (C++, Rust namespaces)
+- Easy to parse without ambiguity
 
 ---
 
-## Carpeta `_shared/`
+## `_shared/` Folder
 
-Elementos que aplican a TODOS los dominios:
+Elements that apply to ALL domains:
 
 ```
 _shared/
 ├── policies/
-│   ├── XP-LOGGING-001.md         # Política de logging
-│   ├── XP-AUDIT-001.md           # Auditoría
-│   └── XP-SECURITY-001.md        # Seguridad
-├── glossary.md                    # Términos universales
-├── domain-map.md                  # Visualización de dependencias
-└── nfr/                          # Non-functional requirements globales
+│   ├── XP-LOGGING-001.md         # Logging policy
+│   ├── XP-AUDIT-001.md           # Audit
+│   └── XP-SECURITY-001.md        # Security
+├── glossary.md                    # Universal terms
+├── domain-map.md                  # Dependency visualization
+└── nfr/                          # Global non-functional requirements
     └── NFR-001-Performance.md
 ```
 
 ### Domain Map
 
-El archivo `_shared/domain-map.md` visualiza las dependencias entre dominios:
+The `_shared/domain-map.md` file visualizes the dependencies between domains:
 
 ```markdown
-# Mapa de Dominios
+# Domain Map
 
-## Diagrama de Dependencias
+## Dependency Diagram
 
 ```mermaid
 graph TD
@@ -287,10 +287,10 @@ graph TD
     style SESSIONS fill:#fff3e0
 ```
 
-## Matriz de Dependencias
+## Dependency Matrix
 
-| Dominio | Depende de | Exporta a |
-|---------|------------|-----------|
+| Domain | Depends On | Exports To |
+|--------|-----------|------------|
 | core | - | auth, billing, sessions |
 | auth | core | sessions |
 | billing | core | sessions |
@@ -299,45 +299,45 @@ graph TD
 
 ---
 
-## Reglas de Dependencia
+## Dependency Rules
 
-### Principios
+### Principles
 
-1. **Core es fundacional**: `domains/core` no puede depender de ningún otro dominio
-2. **Dependencias explícitas**: Toda dependencia debe estar en `_manifest.yaml`
-3. **Sin ciclos**: A → B → A está prohibido
-4. **Anti-corruption layer**: Traducciones explícitas para conceptos externos
+1. **Core is foundational**: `domains/core` cannot depend on any other domain
+2. **Explicit dependencies**: Every dependency must be in `_manifest.yaml`
+3. **No cycles**: A → B → A is forbidden
+4. **Anti-corruption layer**: Explicit translations for external concepts
 
-### Niveles de Dominio
+### Domain Levels
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│  LEAF DOMAINS (no tienen dependientes)                  │
-│  sessions, reporting, analytics                         │
+│  LEAF DOMAINS (have no dependents)                       │
+│  sessions, reporting, analytics                          │
 ├─────────────────────────────────────────────────────────┤
-│  MIDDLE DOMAINS (dependencias bidireccionales)          │
-│  auth, billing, notifications                           │
+│  MIDDLE DOMAINS (bidirectional dependencies)             │
+│  auth, billing, notifications                            │
 ├─────────────────────────────────────────────────────────┤
-│  CORE DOMAIN (fundacional)                              │
-│  core                                                   │
+│  CORE DOMAIN (foundational)                              │
+│  core                                                    │
 └─────────────────────────────────────────────────────────┘
 ```
 
-### Tipos de Dependencia
+### Dependency Types
 
-| Tipo | Significado | Validación |
-|------|-------------|------------|
-| `required` | Dominio no funciona sin esta dependencia | Error si falta |
-| `optional` | Funcionalidad degradada sin dependencia | Warning si falta |
-| `event-only` | Solo escucha eventos, sin acoplamiento | Info |
+| Type | Meaning | Validation |
+|------|---------|------------|
+| `required` | Domain does not work without this dependency | Error if missing |
+| `optional` | Degraded functionality without dependency | Warning if missing |
+| `event-only` | Only listens to events, no coupling | Info |
 
 ---
 
-## Sistema de Índices
+## Index System
 
-### Índice Local (`domains/{domain}/_index.json`)
+### Local Index (`domains/{domain}/_index.json`)
 
-Cada dominio tiene un índice local generado automáticamente:
+Each domain has an automatically generated local index:
 
 ```json
 {
@@ -345,23 +345,23 @@ Cada dominio tiene un índice local generado automáticamente:
   "generated": "2025-01-20T10:00:00Z",
   "artifacts": {
     "entities": [
-      { "id": "Sesion", "path": "01-domain/entities/Sesion.md" },
-      { "id": "Ronda", "path": "01-domain/entities/Ronda.md" }
+      { "id": "Cart", "path": "01-domain/entities/Cart.md" },
+      { "id": "CartItem", "path": "01-domain/entities/CartItem.md" }
     ],
     "events": [...],
     "commands": [...]
   },
   "dependencies": {
-    "core": ["Usuario", "Reto"],
-    "billing": ["EVT-Credito-Consumido"]
+    "core": ["Customer", "Order"],
+    "billing": ["EVT-Credit-Consumed"]
   },
-  "exports": ["Sesion", "Ronda", "Idea"]
+  "exports": ["Cart", "CartItem", "Idea"]
 }
 ```
 
-### Índice Global (`specs/_index.json`)
+### Global Index (`specs/_index.json`)
 
-Agregación de todos los índices locales:
+Aggregation of all local indexes:
 
 ```json
 {
@@ -377,170 +377,170 @@ Agregación de todos los índices locales:
     "sessions → billing": 3
   },
   "search": {
-    "Usuario": { "domain": "core", "type": "entity" },
-    "Sesion": { "domain": "sessions", "type": "entity" }
+    "Customer": { "domain": "core", "type": "entity" },
+    "Cart": { "domain": "sessions", "type": "entity" }
   }
 }
 ```
 
 ---
 
-## Validación Multi-Dominio
+## Multi-Domain Validation
 
-### Comandos CLI
+### CLI Commands
 
 ```bash
-# Validar dominio específico
+# Validate specific domain
 bun run validate:specs --domain sessions
 
-# Validar todos los dominios
+# Validate all domains
 bun run validate:specs --all-domains
 
-# Validar dependencias entre dominios
+# Validate dependencies between domains
 bun run validate:specs --check-dependencies
 
-# Generar índice de dominio
+# Generate domain index
 bun run generate:index --domain sessions
 
-# Visualizar dependencias
+# Visualize dependencies
 bun run specs:domain-map
 ```
 
-### Validaciones Adicionales
+### Additional Validations
 
-1. **Dependencias declaradas**: Todo `[[domain::X]]` debe estar en `_manifest.yaml`
-2. **Ciclos detectados**: Error si A depende de B que depende de A
-3. **Exports consistentes**: Lo declarado en exports debe existir
-4. **Imports usados**: Warning si se declara import no usado
-5. **Core sin dependencias**: Error si `core` depende de otros dominios
+1. **Declared dependencies**: Every `[[domain::X]]` must be in `_manifest.yaml`
+2. **Cycles detected**: Error if A depends on B which depends on A
+3. **Consistent exports**: What is declared in exports must exist
+4. **Used imports**: Warning if a declared import is unused
+5. **Core without dependencies**: Error if `core` depends on other domains
 
 ---
 
-## Migración desde KDD Monolítico
+## Migration from Monolithic KDD
 
-### Estrategia Incremental
+### Incremental Strategy
 
 ```bash
-# Fase 1: Crear estructura base
+# Phase 1: Create base structure
 specs/
-├── _shared/              # Mover políticas XP-*
+├── _shared/              # Move XP-* policies
 ├── domains/
-│   ├── core/             # Mover entidades fundacionales
-│   └── legacy/           # Todo lo demás temporalmente
+│   ├── core/             # Move foundational entities
+│   └── legacy/           # Everything else temporarily
 
-# Fase 2: Extraer dominios uno por uno
-domains/auth/    ← Extraer de legacy
-domains/billing/ ← Extraer de legacy
+# Phase 2: Extract domains one by one
+domains/auth/    ← Extract from legacy
+domains/billing/ ← Extract from legacy
 
-# Fase 3: Eliminar domains/legacy cuando esté vacío
+# Phase 3: Remove domains/legacy when empty
 ```
 
-### Comando de Migración
+### Migration Command
 
 ```bash
-# Analizar monolito y sugerir dominios
+# Analyze monolith and suggest domains
 bun run specs:analyze-domains
 
-# Mover artefactos a nuevo dominio
-bun run specs:extract-domain --domain sessions --entities Sesion,Ronda,Idea
+# Move artifacts to new domain
+bun run specs:extract-domain --domain sessions --entities Cart,CartItem,Idea
 
-# Actualizar referencias automáticamente
-bun run specs:update-refs --from "[[Sesion]]" --to "[[sessions::Sesion]]"
+# Update references automatically
+bun run specs:update-refs --from "[[Cart]]" --to "[[sessions::Cart]]"
 ```
 
 ---
 
-## Detección Automática
+## Automatic Detection
 
-El validador detecta automáticamente el modo de operación:
+The validator automatically detects the operating mode:
 
-1. Si existe `specs/domains/`, activa modo multi-dominio
-2. Si no existe, usa modo monolítico tradicional
-3. La migración es gradual y sin breaking changes
+1. If `specs/domains/` exists, it activates multi-domain mode
+2. If it does not exist, it uses traditional monolithic mode
+3. Migration is gradual and without breaking changes
 
-### Coexistencia
+### Coexistence
 
-Durante la migración, puede existir una estructura híbrida:
+During migration, a hybrid structure can exist:
 
 ```
 specs/
-├── 01-domain/            # Artefactos legacy (monolítico)
+├── 01-domain/            # Legacy artifacts (monolithic)
 ├── 02-behavior/
-├── _shared/              # Nuevo: elementos compartidos
-└── domains/              # Nuevo: dominios extraídos
+├── _shared/              # New: shared elements
+└── domains/              # New: extracted domains
     └── auth/
 ```
 
 ---
 
-## Ejemplo Completo: Six Hats App
+## Complete Example: Store App
 
-### Dominios Identificados
+### Identified Domains
 
-| Dominio | Responsabilidad | Entidades Principales |
-|---------|-----------------|----------------------|
-| `core` | Fundacional | Reto, Usuario |
-| `auth` | Autenticación | Credencial, Sesión de Usuario |
-| `billing` | Créditos y pagos | Credito, Transaccion, Plan |
-| `sessions` | Sesiones Six Hats | Sesion, Ronda, Idea, PersonaSintetica |
-| `ai` | Integración IA | Prompt, Respuesta, Modelo |
-| `analytics` | Métricas y reportes | Metrica, Reporte, Dashboard |
+| Domain | Responsibility | Main Entities |
+|--------|---------------|---------------|
+| `core` | Foundational | Order, Customer |
+| `auth` | Authentication | Credential, User Session |
+| `billing` | Credits and payments | Credit, Transaction, Plan |
+| `sessions` | Store Sessions | Cart, CartItem, Idea, Product |
+| `ai` | AI Integration | Prompt, Response, Model |
+| `analytics` | Metrics and reports | Metric, Report, Dashboard |
 
-### Manifest de `sessions`
+### `sessions` Manifest
 
 ```yaml
 domain:
   id: sessions
-  name: "Sesiones de Pensamiento"
+  name: "Thinking Sessions"
   description: |
-    Dominio principal de Six Hats. Gestiona el ciclo completo
-    de sesiones de pensamiento estructurado con personas sintéticas.
+    Main Store domain. Manages the complete lifecycle
+    of structured thinking sessions with products.
   team: "@team-core"
   status: active
 
 dependencies:
   - domain: core
     type: required
-    reason: "Usuarios y Retos son conceptos fundacionales"
+    reason: "Customers and Orders are foundational concepts"
     imports:
-      entities: [Usuario, Reto]
-      events: [EVT-Reto-Creado, EVT-Reto-Configurado]
+      entities: [Customer, Order]
+      events: [EVT-Order-Placed, EVT-Order-Configured]
 
   - domain: billing
     type: required
-    reason: "Las sesiones consumen créditos"
+    reason: "Sessions consume credits"
     imports:
-      entities: [CreditoDisponible]
-      events: [EVT-Credito-Consumido]
+      entities: [AvailableCredit]
+      events: [EVT-Credit-Consumed]
 
   - domain: ai
     type: required
-    reason: "Personas sintéticas requieren generación IA"
+    reason: "Products require AI generation"
     imports:
-      commands: [CMD-GenerarRespuesta]
-      entities: [ModeloIA]
+      commands: [CMD-GenerateResponse]
+      entities: [AIModel]
 
 exports:
   entities:
-    - Sesion
-    - Ronda
+    - Cart
+    - CartItem
     - Idea
-    - PersonaSintetica
-    - AnalisisFinal
+    - Product
+    - FinalAnalysis
   events:
-    - EVT-Sesion-Iniciada
-    - EVT-Sesion-Completada
-    - EVT-Ronda-Completada
-    - EVT-Idea-Generada
-    - EVT-Analisis-Generado
+    - EVT-Cart-Initiated
+    - EVT-Cart-Completed
+    - EVT-CartItem-Completed
+    - EVT-Idea-Generated
+    - EVT-Analysis-Generated
   commands:
-    - CMD-IniciarSesion
-    - CMD-AvanzarRonda
-    - CMD-GenerarIdea
-    - CMD-GenerarAnalisis
+    - CMD-InitiateCart
+    - CMD-AdvanceCartItem
+    - CMD-GenerateIdea
+    - CMD-GenerateAnalysis
   queries:
-    - QRY-ObtenerSesion
-    - QRY-ListarIdeasPorSombrero
+    - QRY-GetCart
+    - QRY-ListItemsByCategory
 
 context-map:
   upstream: [core, billing, ai]
@@ -548,29 +548,29 @@ context-map:
 
 boundaries:
   anti-corruption:
-    - external: "billing::Credito"
-      internal: CreditoDisponible
-      notes: "Solo nos interesa el balance, no los detalles de transacción"
-    - external: "ai::ModeloIA"
-      internal: ConfiguracionIA
-      notes: "Abstraemos el modelo específico usado"
+    - external: "billing::Credit"
+      internal: AvailableCredit
+      notes: "We only care about the balance, not the transaction details"
+    - external: "ai::AIModel"
+      internal: AIConfiguration
+      notes: "We abstract the specific model used"
 ```
 
 ---
 
-## Beneficios
+## Benefits
 
-1. **Autonomía de equipos**: Cada equipo trabaja en su dominio sin conflictos
-2. **Navegación clara**: Saber dónde buscar algo es inmediato
-3. **Validación rápida**: Solo validar el dominio modificado
-4. **Dependencias explícitas**: El domain-map muestra la arquitectura
-5. **Escalabilidad**: Añadir dominios no afecta los existentes
-6. **Onboarding fácil**: Nuevo dev solo estudia su dominio + core
+1. **Team autonomy**: Each team works in its own domain without conflicts
+2. **Clear navigation**: Knowing where to find something is immediate
+3. **Fast validation**: Only validate the modified domain
+4. **Explicit dependencies**: The domain-map shows the architecture
+5. **Scalability**: Adding domains does not affect existing ones
+6. **Easy onboarding**: New dev only studies their domain + core
 
 ---
 
-## Referencias
+## References
 
 - [KDD Model Reference](/kdd/kdd.md)
-- [Convenciones de Escritura](/kdd/docs/convenciones-escritura.md)
-- [Validación de Especificaciones](/kdd/docs/validacion-especificaciones.md)
+- [Writing Conventions](/kdd/docs/writing-conventions.md)
+- [Specification Validation](/kdd/docs/specification-validation.md)

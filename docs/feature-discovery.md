@@ -1,282 +1,282 @@
-# Feature Discovery: De Idea a Artefactos KDD
+# Feature Discovery: From Idea to KDD Artifacts
 
-## Introducción
+## Introduction
 
-Este documento describe el proceso conversacional para capturar, refinar y formalizar nuevas características o mejoras en el sistema. El objetivo es reducir la fricción inicial mientras mantenemos el rigor de KDD.
+This document describes the conversational process to capture, refine, and formalize new features or improvements in the system. The goal is to reduce initial friction while maintaining KDD rigor.
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                                                                 │
-│   IDEA CRUDA  →  REFINAMIENTO  →  SÍNTESIS  →  ARTEFACTOS KDD  │
-│   (ligero)       (conversación)   (propuesta)   (formales)      │
+│   RAW IDEA  →  REFINEMENT  →  SYNTHESIS  →  KDD ARTIFACTS      │
+│   (lightweight)  (conversation)  (proposal)   (formal)          │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Fase 1: Captura Ligera
+## Phase 1: Lightweight Capture
 
-### Dónde viven las ideas
+### Where ideas live
 
 ```
 /specs/00-inbox/
-├── IDEA-2024-12-13-pausar-sesion.md
-├── IDEA-2024-12-15-niveles-detalle.md
+├── IDEA-2024-12-13-pause-cart.md
+├── IDEA-2024-12-15-detail-levels.md
 └── _archive/
-    └── (ideas ya procesadas)
+    └── (already processed ideas)
 ```
 
-### Cómo capturar una idea
+### How to capture an idea
 
-**Opción A: Comando `/feature`**
+**Option A: `/feature` command**
 ```bash
-# En Claude Code
+# In Claude Code
 /feature
 ```
-Claude te guiará para capturar la idea y comenzar el refinamiento.
+Claude will guide you to capture the idea and begin refinement.
 
-**Opción B: Archivo manual**
-1. Crea un archivo en `/specs/00-inbox/` usando el template `idea.template.md`
-2. Llena al menos las secciones "El Problema" y "La Idea"
-3. Inicia una conversación con Claude para refinar
+**Option B: Manual file**
+1. Create a file in `/specs/00-inbox/` using the `idea.template.md` template
+2. Fill in at least the "The Problem" and "The Idea" sections
+3. Start a conversation with Claude to refine
 
-### Qué incluir en la captura inicial
+### What to include in the initial capture
 
-| Sección | Requerido | Descripción |
-|---------|-----------|-------------|
-| El Problema | Sí | ¿Qué situación actual es problemática? |
-| La Idea | Sí | ¿Cuál es tu propuesta de solución? |
-| Ejemplos | Recomendado | Un caso concreto de uso |
-| Preguntas | Opcional | Dudas o aspectos a discutir |
+| Section | Required | Description |
+|---------|----------|-------------|
+| The Problem | Yes | What current situation is problematic? |
+| The Idea | Yes | What is your proposed solution? |
+| Examples | Recommended | A concrete use case |
+| Questions | Optional | Doubts or aspects to discuss |
 
-**No te preocupes por:**
-- Usar terminología exacta de KDD
-- Identificar entidades o reglas
-- Formato perfecto
+**Don't worry about:**
+- Using exact KDD terminology
+- Identifying entities or rules
+- Perfect formatting
 
-Eso lo refinamos en la conversación.
+We refine that in the conversation.
 
 ---
 
-## Fase 2: Refinamiento Conversacional
+## Phase 2: Conversational Refinement
 
-### El proceso de exploración
+### The exploration process
 
-Claude sigue un flujo estructurado de preguntas para entender completamente la idea:
+Claude follows a structured flow of questions to fully understand the idea:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    FLUJO DE EXPLORACIÓN                         │
+│                    EXPLORATION FLOW                              │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
-│  1. CLARIFICACIÓN DEL PROBLEMA                                  │
-│     ├── ¿Qué problema específico resuelve?                      │
-│     ├── ¿Quién tiene este problema?                             │
-│     ├── ¿Con qué frecuencia ocurre?                             │
-│     └── ¿Qué pasa hoy cuando ocurre?                            │
+│  1. PROBLEM CLARIFICATION                                       │
+│     ├── What specific problem does it solve?                    │
+│     ├── Who has this problem?                                   │
+│     ├── How often does it occur?                                │
+│     └── What happens today when it occurs?                      │
 │                                                                 │
-│  2. IDENTIFICACIÓN DE ENTIDADES                                 │
-│     ├── ¿Qué entidades existentes están involucradas?           │
-│     ├── ¿Necesitamos una entidad nueva?                         │
-│     └── ¿Hay cambios de estado en entidades?                    │
+│  2. ENTITY IDENTIFICATION                                       │
+│     ├── What existing entities are involved?                    │
+│     ├── Do we need a new entity?                                │
+│     └── Are there state changes in entities?                    │
 │                                                                 │
-│  3. REGLAS DE NEGOCIO                                           │
-│     ├── ¿Hay restricciones que cumplir?                         │
-│     ├── ¿Qué NO debería pasar?                                  │
-│     └── ¿Casos límite que preocupen?                            │
+│  3. BUSINESS RULES                                              │
+│     ├── Are there constraints to meet?                          │
+│     ├── What should NOT happen?                                 │
+│     └── Edge cases of concern?                                  │
 │                                                                 │
-│  4. INTERACCIÓN DEL USUARIO                                     │
-│     ├── ¿Cómo lo dispara el usuario?                            │
-│     ├── ¿Qué ve antes/durante/después?                          │
-│     └── ¿Qué feedback necesita?                                 │
+│  4. USER INTERACTION                                            │
+│     ├── How does the user trigger it?                           │
+│     ├── What do they see before/during/after?                   │
+│     └── What feedback do they need?                             │
 │                                                                 │
-│  5. VERIFICACIÓN                                                │
-│     ├── ¿Cómo sabemos que funciona?                             │
-│     ├── Ejemplo del escenario "feliz"                           │
-│     └── Ejemplo de un caso que debe fallar                      │
+│  5. VERIFICATION                                                │
+│     ├── How do we know it works?                                │
+│     ├── Example of the "happy" scenario                         │
+│     └── Example of a case that should fail                      │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### Ejemplo de conversación
+### Conversation example
 
 ```
-Usuario: Quiero que el usuario pueda pausar una Sesión a mitad
-         y retomarla después.
+User: I want the customer to be able to pause a Cart midway
+      and resume it later.
 
-Claude: Entendido. Vamos a explorar esta idea.
+Claude: Got it. Let's explore this idea.
 
-        **Sobre el problema:**
-        ¿Qué pasa actualmente cuando una reunión se interrumpe
-        a mitad de una Sesión? ¿Se pierde todo el progreso?
+        **About the problem:**
+        What happens currently when a customer is interrupted
+        midway through a Cart? Is all progress lost?
 
-Usuario: Sí, hay que empezar de cero. Es frustrante porque
-         a veces ya tenemos 3 rondas completadas.
+User: Yes, they have to start from scratch. It's frustrating because
+      sometimes we already have 3 items added.
 
-Claude: Claro, eso es un dolor real.
+Claude: Of course, that's a real pain point.
 
-        **Sobre las restricciones:**
-        ¿Debería haber un límite de tiempo para retomar?
-        Por ejemplo, ¿una sesión pausada por 1 semana
-        todavía tiene sentido?
+        **About the constraints:**
+        Should there be a time limit to resume?
+        For example, does a cart paused for 1 week
+        still make sense?
 
-Usuario: Buena pregunta. Diría que máximo 24-48 horas,
-         después pierde contexto.
+User: Good question. I'd say 24-48 hours max,
+      after that it loses context.
 
-Claude: Perfecto. Eso sería una regla de negocio: BR-SESION-PAUSA.
+Claude: Perfect. That would be a business rule: BR-CART-PAUSE.
 
-        **Sobre la interacción:**
-        ¿Dónde esperarías ver el botón de "Pausar"?
-        ¿Y cómo volverías a la sesión pausada?
+        **About the interaction:**
+        Where would you expect to see the "Pause" button?
+        And how would you return to the paused cart?
 
-[... continúa el refinamiento ...]
+[... refinement continues ...]
 ```
 
 ---
 
-## Fase 3: Síntesis
+## Phase 3: Synthesis
 
-### El entregable intermedio
+### The intermediate deliverable
 
-Antes de crear artefactos, Claude produce un **resumen estructurado** que mapea la idea a componentes KDD:
+Before creating artifacts, Claude produces a **structured summary** that maps the idea to KDD components:
 
 ```markdown
-## Resumen: Pausar y Retomar Sesión
+## Summary: Pause and Resume Cart
 
-### Impacto en el Dominio (02-domain/)
-| Tipo | Artefacto | Acción |
-|------|-----------|--------|
-| Entidad | [[Sesión]] | Modificar: nuevo estado `pausada` |
-| Evento | EVT-Sesion-Pausada | Crear |
-| Evento | EVT-Sesion-Retomada | Crear |
-| Regla | BR-SESION-PAUSA | Crear: timeout 24h |
+### Domain Impact (02-domain/)
+| Type | Artifact | Action |
+|------|----------|--------|
+| Entity | [[Cart]] | Modify: new state `paused` |
+| Event | EVT-Cart-Paused | Create |
+| Event | EVT-Cart-Resumed | Create |
+| Rule | BR-CART-PAUSE | Create: 24h timeout |
 
-### Capacidades (03-capabilities/)
-| Tipo | Artefacto | Acción |
-|------|-----------|--------|
-| Comando | CMD-PauseSession | Crear |
-| Comando | CMD-ResumeSession | Crear |
+### Capabilities (03-capabilities/)
+| Type | Artifact | Action |
+|------|----------|--------|
+| Command | CMD-PauseCart | Create |
+| Command | CMD-ResumeCart | Create |
 
-### Interacción (04-interaction/)
-| Tipo | Artefacto | Acción |
-|------|-----------|--------|
-| Caso de Uso | UC-XXX-Pausar-Sesion | Crear |
-| Caso de Uso | UC-XXX-Retomar-Sesion | Crear |
-| Vista | UI-SessionActive | Modificar: agregar botón |
+### Interaction (04-interaction/)
+| Type | Artifact | Action |
+|------|----------|--------|
+| Use Case | UC-XXX-Pause-Cart | Create |
+| Use Case | UC-XXX-Resume-Cart | Create |
+| View | UI-CartActive | Modify: add button |
 
-### Verificación (05-verification/)
-| Tipo | Artefacto | Acción |
-|------|-----------|--------|
-| Criterios | REQ-XXX-Pausar-Sesion | Crear |
-| Ejemplo | Pausar con rondas completas | Crear |
-| Ejemplo | Retomar antes del timeout | Crear |
-| Ejemplo | Timeout expirado | Crear |
+### Verification (05-verification/)
+| Type | Artifact | Action |
+|------|----------|--------|
+| Criteria | REQ-XXX-Pause-Cart | Create |
+| Example | Pause with completed items | Create |
+| Example | Resume before timeout | Create |
+| Example | Timeout expired | Create |
 
-### Escenarios de Ejemplo
+### Example Scenarios
 ```gherkin
-Scenario: Pausar sesión exitosamente
-  Given una Sesión activa con 2 Rondas completadas
-  When el Propietario pausa la Sesión
-  Then la Sesión pasa a estado "pausada"
-  And se registra la fecha/hora de pausa
-  And se genera evento SesionPausada
+Scenario: Successfully pause cart
+  Given an active Cart with 2 completed CartItems
+  When the Customer pauses the Cart
+  Then the Cart transitions to "paused" state
+  And the pause date/time is recorded
+  And a CartPaused event is generated
 
-Scenario: Timeout de sesión pausada
-  Given una Sesión pausada hace más de 24 horas
-  When el sistema verifica sesiones pausadas
-  Then la Sesión pasa a estado "cancelada"
-  And se notifica al Propietario
+Scenario: Paused cart timeout
+  Given a Cart paused for more than 24 hours
+  When the system checks paused carts
+  Then the Cart transitions to "cancelled" state
+  And the Customer is notified
 ```
 ```
 
-### Validación antes de proceder
+### Validation before proceeding
 
-Claude confirma con el usuario:
+Claude confirms with the user:
 
 ```
-✓ ¿Este resumen captura tu intención?
-✓ ¿Los escenarios de ejemplo son correctos?
-✓ ¿Falta considerar algún caso?
-✓ ¿Procedo a crear los artefactos KDD?
+✓ Does this summary capture your intent?
+✓ Are the example scenarios correct?
+✓ Is there any case we missed?
+✓ Shall I proceed to create the KDD artifacts?
 ```
 
 ---
 
-## Fase 4: Generación de Artefactos
+## Phase 4: Artifact Generation
 
-### Qué se genera
+### What gets generated
 
-Con aprobación del usuario, Claude:
+With user approval, Claude:
 
-1. **Modifica** artefactos existentes (ej: agregar estado a Sesión)
-2. **Crea** nuevos artefactos usando los templates de `/kdd/templates/`
-3. **Enlaza** todo correctamente en el grafo KDD
-4. **Actualiza** la idea original a estado `processed`
+1. **Modifies** existing artifacts (e.g.: add state to Cart)
+2. **Creates** new artifacts using templates from `/kdd/templates/`
+3. **Links** everything correctly in the KDD graph
+4. **Updates** the original idea to `processed` status
 
-### Orden de generación
+### Generation order
 
 ```
-1. Dominio (fundamentos)
-   └── Entidades → Eventos → Reglas
+1. Domain (foundations)
+   └── Entities → Events → Rules
 
-2. Capacidades (qué puede hacer)
-   └── Comandos → Queries → Procesos
+2. Capabilities (what it can do)
+   └── Commands → Queries → Processes
 
-3. Interacción (cómo se usa)
-   └── Casos de Uso → Vistas
+3. Interaction (how it's used)
+   └── Use Cases → Views
 
-4. Verificación (cómo se prueba)
-   └── Criterios → Ejemplos BDD
+4. Verification (how it's tested)
+   └── Criteria → BDD Examples
 ```
 
-### Validación automática
+### Automatic validation
 
-Después de generar, ejecutar:
+After generating, run:
 
 ```bash
 bun run validate:specs
 ```
 
-Para verificar:
-- Front-matter válido
-- Enlaces no rotos
-- Templates completos
+To verify:
+- Valid front-matter
+- No broken links
+- Complete templates
 
 ---
 
-## Buenas Prácticas
+## Best Practices
 
-### Para quien captura la idea
+### For whoever captures the idea
 
-1. **Sé específico con el problema** - "Los usuarios se quejan" es vago; "Perdemos el trabajo de 3 rondas cuando se corta la reunión" es concreto
-2. **Incluye un ejemplo real** - Ayuda muchísimo a entender el contexto
-3. **No te autocensures** - Las "malas ideas" a veces llevan a buenas soluciones
+1. **Be specific about the problem** - "Users complain" is vague; "We lose the work of 3 items when the session drops" is concrete
+2. **Include a real example** - It helps tremendously to understand the context
+3. **Don't self-censor** - "Bad ideas" sometimes lead to good solutions
 
-### Para el proceso de refinamiento
+### For the refinement process
 
-1. **Una idea = un problema** - Si hay múltiples problemas, sepáralos
-2. **Valida suposiciones** - "Asumo que X, ¿es correcto?"
-3. **Piensa en casos límite** - ¿Qué pasa si...?
+1. **One idea = one problem** - If there are multiple problems, separate them
+2. **Validate assumptions** - "I assume X, is that correct?"
+3. **Think about edge cases** - What happens if...?
 
-### Para la generación
+### For generation
 
-1. **Revisa antes de aprobar** - El resumen es tu última oportunidad de ajustar
-2. **No todo necesita todos los artefactos** - Una idea pequeña puede ser solo 1-2 documentos
-3. **Itera** - Si después de generar ves algo mal, ajústalo
+1. **Review before approving** - The summary is your last chance to adjust
+2. **Not everything needs all artifacts** - A small idea may be just 1-2 documents
+3. **Iterate** - If after generating you see something wrong, adjust it
 
 ---
 
-## Comandos Útiles
+## Useful Commands
 
 ```bash
-# Iniciar flujo de feature discovery
+# Start feature discovery flow
 /feature
 
-# Validar especificaciones después de generar
+# Validate specifications after generating
 bun run validate:specs
 
-# Ver ideas pendientes de procesar
+# View pending ideas to process
 ls specs/00-inbox/*.md | grep -v README
 ```
 
@@ -284,18 +284,18 @@ ls specs/00-inbox/*.md | grep -v README
 
 ## FAQ
 
-### ¿Puedo saltar el proceso y crear artefactos directamente?
+### Can I skip the process and create artifacts directly?
 
-Sí, si tienes claridad total sobre lo que necesitas. El proceso conversacional es para cuando la idea aún está difusa.
+Yes, if you have total clarity on what you need. The conversational process is for when the idea is still fuzzy.
 
-### ¿Qué pasa con las ideas que no se implementan?
+### What happens with ideas that don't get implemented?
 
-Pueden quedarse en `00-inbox/` con estado `raw` o moverse a `_archive/` con una nota de por qué se descartó.
+They can stay in `00-inbox/` with `raw` status or be moved to `_archive/` with a note about why they were discarded.
 
-### ¿Cuánto debería durar el refinamiento?
+### How long should refinement take?
 
-Depende de la complejidad. Una idea simple puede ser 5-10 minutos. Una feature compleja puede requerir múltiples sesiones.
+It depends on the complexity. A simple idea can take 5-10 minutes. A complex feature may require multiple sessions.
 
-### ¿Puedo refinar sin Claude?
+### Can I refine without Claude?
 
-Sí, el proceso está documentado aquí. Pero Claude ayuda a no olvidar aspectos importantes y a mantener consistencia con el dominio existente.
+Yes, the process is documented here. But Claude helps to not forget important aspects and to maintain consistency with the existing domain.

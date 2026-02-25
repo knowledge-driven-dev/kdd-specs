@@ -13,13 +13,13 @@
 
 ```
 /specs
-├── 00-requirements/       # INPUT - Business context (alimenta al diseño)
+├── 00-requirements/       # INPUT - Business context (feeds design)
 │   ├── PRD.md
-│   ├── objectives/        # OBJ-NNN-*.md (User Stories alto nivel)
-│   ├── value-units/       # UV-NNN-*.md (Unidades de Valor)
+│   ├── objectives/        # OBJ-NNN-*.md (High-level User Stories)
+│   ├── value-units/       # UV-NNN-*.md (Value Units)
 │   ├── releases/          # REL-NNN-*.md (Release plans)
 │   └── decisions/         # ADR-NNN-*.md
-├── 01-domain/             # BASE - Domain model (fundamento)
+├── 01-domain/             # BASE - Domain model (foundation)
 │   ├── entities/          # Entity.md (PascalCase)
 │   ├── events/            # EVT-Entity-Action.md
 │   └── rules/             # BR-*-NNN.md (Business Rules)
@@ -37,6 +37,7 @@
 ```
 
 > **Note**: Architecture decisions (ADRs) live in `00-requirements/decisions/`, not in a separate `05-architecture/` layer.
+
 
 ### Multi-Domain Structure (Optional)
 
@@ -57,7 +58,7 @@ For large applications with multiple bounded contexts, use the multi-domain stru
 └── _index.json               # Global index
 ```
 
-**Cross-domain references**: Use `[[domain::Entity]]` syntax (e.g., `[[core::Usuario]]`).
+**Cross-domain references**: Use `[[domain::Entity]]` syntax (e.g., `[[core::Customer]]`).
 
 **See**: `/kdd/docs/multi-domain.md` for complete documentation.
 
@@ -90,10 +91,10 @@ For large applications with multiple bounded contexts, use the multi-domain stru
 ```
 ┌───────────────────────────────────────────────────────────────┐
 │  00-requirements   (PRD, objectives, ADRs)                    │
-│  INPUT: Alimenta al diseño. Puede mencionar conceptos de      │
-│  dominio para dar contexto. No es parte del flujo de capas.   │
+│  INPUT: Feeds design. May mention domain concepts for          │
+│  context. Not part of the layer dependency flow.               │
 └───────────────────────────────────────────────────────────────┘
-                              ↓ alimenta
+                              ↓ feeds
 ┌───────────────────────────────────────────────────────────────┐
 │  04-verification   (tests, criteria)                          │
 │      ↓ references                                             │
@@ -110,46 +111,46 @@ For large applications with multiple bounded contexts, use the multi-domain stru
 
 **Rule**: Higher layers (04→03→02→01) CAN reference lower layers. Lower layers SHOULD NOT reference higher layers.
 
-> **00-requirements** está fuera del flujo de dependencias. Es el input que alimenta el diseño, por lo que naturalmente puede mencionar conceptos de dominio sin violar la regla de capas.
+> **00-requirements** is outside the dependency flow. It is the input that feeds design, so it can naturally mention domain concepts without violating the layer rule.
 
 ---
 
 ## Status Lifecycle
 
-Todos los artefactos usan el mismo ciclo:
+All artifacts use the same cycle:
 
 ```
 draft → review → approved → deprecated
 ```
 
-| Status | Significado |
-|--------|-------------|
-| `draft` | Work in progress, no es fuente de verdad |
-| `review` | Pendiente de aprobación |
-| `approved` | Fuente de verdad oficial |
-| `deprecated` | Obsoleto, debe linkar al reemplazo |
+| Status | Meaning |
+|--------|---------|
+| `draft` | Work in progress, not yet source of truth |
+| `review` | Pending approval |
+| `approved` | Official source of truth |
+| `deprecated` | Obsolete, should link to replacement |
 
-> **Nota**: No usar `proposed`. Usar `review` para artefactos pendientes de aprobación.
+> **Note**: Do not use `proposed`. Use `review` for artifacts pending approval.
 
 ---
 
 ## Language Policy
 
-| Aspecto                       | Idioma            | Ejemplo                                |
-| ----------------------------- | ----------------- | -------------------------------------- |
-| Secciones de contenido        | Español           | `## Declaración`, `## Flujo Principal` |
-| Nombres de secciones técnicas | Inglés (opcional) | `## Purpose`, `## Input`               |
-| Código y ejemplos             | Inglés            | `function createChallenge()`           |
-| IDs y prefijos                | Inglés            | `CMD-009`, `BR-SESION-001`             |
-| Contenido narrativo           | Español           | "El Usuario crea un Reto..."           |
+| Aspect                     | Language | Example                                 |
+| -------------------------- | -------- | --------------------------------------- |
+| Section headings           | English  | `## Description`, `## Main Flow`        |
+| Template instructions      | English  | `<!-- 1-3 lines: what this view does -->` |
+| Code and examples          | English  | `function placeOrder()`                 |
+| IDs and prefixes           | English  | `CMD-009`, `BR-ORDER-001`               |
+| Narrative content (specs)  | Any      | Users write spec content in their language |
 
-> **Consistencia**: Dentro de un mismo archivo, mantener el idioma elegido para las secciones.
+> **Note**: Section headings, template instructions, and structural content must be in English. The narrative content that users write inside their specs (descriptions, examples, etc.) can be in any language.
 
 ---
 
 ## Front-Matter by Type
 
-> **Nota**: El atributo `kind` indica el tipo de artefacto KDD. Los `tags` son opcionales y se usan para categorización adicional (no para indicar el tipo).
+> **Note**: The `kind` attribute indicates the KDD artifact type. `tags` are optional and used for additional categorization (not for indicating the type).
 
 ### Entity
 
@@ -177,10 +178,10 @@ status: draft
 
 ```yaml
 ---
-id: BR-{ENTITY}-NNN      # Required, e.g., BR-SESION-001
+id: BR-{ENTITY}-NNN      # Required, e.g., BR-CART-001
 kind: business-rule      # Required
 title: RuleName          # Required
-entity: EntityName       # Required: entidad principal afectada
+entity: EntityName       # Required: primary affected entity
 category: validation     # validation|state|limit|security
 severity: medium         # low|medium|high|critical
 status: draft
@@ -191,10 +192,10 @@ status: draft
 
 ```yaml
 ---
-id: BP-{TOPIC}-NNN       # Required, e.g., BP-CREDITO-001
+id: BP-{TOPIC}-NNN       # Required, e.g., BP-BILLING-001
 kind: business-policy    # Required
 title: PolicyName        # Required
-entity: EntityName       # Optional: entidad principal afectada
+entity: EntityName       # Optional: primary affected entity
 category: business       # business|compliance|limit
 severity: medium         # low|medium|high|critical
 status: draft
@@ -205,7 +206,7 @@ status: draft
 
 ```yaml
 ---
-id: XP-{TOPIC}-NNN       # Required, e.g., XP-CREDITOS-001
+id: XP-{TOPIC}-NNN       # Required, e.g., XP-BILLING-001
 kind: cross-policy       # Required
 title: PolicyName        # Required
 status: draft
@@ -220,7 +221,7 @@ id: CMD-NNN              # Required, pattern: ^CMD-\d{3}$
 kind: command            # Required
 title: CommandName       # Required
 status: draft
-billable: false          # Optional: if true, applies XP-CREDITOS-001
+billable: false          # Optional: if true, applies XP-BILLING-001
 credit-cost: 0           # Optional: credits consumed (requires billable: true)
 tags: [core, destructive] # Optional: categorization tags
 ---
@@ -320,118 +321,118 @@ status: draft
 
 ### Entity
 
-| Sección | Requerida | Descripción |
-|---------|-----------|-------------|
-| `## Descripción` | Sí | Qué es y para qué sirve |
-| `## Atributos` | Sí | Tabla con campos |
-| `## Ciclo de Vida` | No | Diagrama mermaid stateDiagram |
-| `## Relaciones` | No | Relaciones con otras entidades |
-| `## Invariantes` | No | Restricciones que siempre deben cumplirse |
+| Section | Required | Description |
+|---------|----------|-------------|
+| `## Description` | Yes | What it is and what it's for |
+| `## Attributes` | Yes | Table with fields |
+| `## Lifecycle` | No | Mermaid stateDiagram |
+| `## Relations` | No | Relationships with other entities |
+| `## Invariants` | No | Constraints that must always hold |
 
 ### Command
 
-| Sección | Requerida | Descripción |
-|---------|-----------|-------------|
-| `## Purpose` | Sí | Qué hace el comando |
-| `## Input` | Sí | Tabla: Parameter, Type, Required, Validation |
-| `## Preconditions` | Sí | Lista de condiciones previas |
-| `## Postconditions` | Sí | Estado después de ejecutar |
-| `## Possible Errors` | Sí | Tabla: Code, Condition, Message |
+| Section | Required | Description |
+|---------|----------|-------------|
+| `## Purpose` | Yes | What the command does |
+| `## Input` | Yes | Table: Parameter, Type, Required, Validation |
+| `## Preconditions` | Yes | List of prior conditions |
+| `## Postconditions` | Yes | State after execution |
+| `## Possible Errors` | Yes | Table: Code, Condition, Message |
 
-**Columnas requeridas para Input:**
+**Required columns for Input:**
 | Parameter | Type | Required | Validation |
 |-----------|------|----------|------------|
 
-**Columnas requeridas para Errors:**
+**Required columns for Errors:**
 | Code | Condition | Message |
 |------|-----------|---------|
 
 ### Query
 
-| Sección | Requerida | Descripción |
-|---------|-----------|-------------|
-| `## Purpose` | Sí | Qué datos devuelve |
-| `## Input` | Sí | Tabla con parámetros |
-| `## Output` | Sí | Estructura de respuesta |
-| `## Possible Errors` | Sí | Tabla de errores |
+| Section | Required | Description |
+|---------|----------|-------------|
+| `## Purpose` | Yes | What data it returns |
+| `## Input` | Yes | Table with parameters |
+| `## Output` | Yes | Response structure |
+| `## Possible Errors` | Yes | Error table |
 
 ### Use Case
 
-| Sección | Requerida | Descripción |
-|---------|-----------|-------------|
-| `## Descripción` | Sí | Resumen del caso de uso |
-| `## Actores` | Sí | Quiénes participan |
-| `## Precondiciones` | Sí | Estado inicial requerido |
-| `## Flujo Principal` | Sí | Pasos del camino feliz |
-| `## Flujos Alternativos` | No | Variaciones válidas |
-| `## Excepciones` | No | Qué pasa cuando algo falla |
-| `## Postcondiciones` | Sí | Estado final |
-| `## Reglas Aplicadas` | No | BR-*, BP-*, XP-* que se validan |
-| `## Comandos Ejecutados` | No | CMD-* que se invocan |
+| Section | Required | Description |
+|---------|----------|-------------|
+| `## Description` | Yes | Use case summary |
+| `## Actors` | Yes | Who participates |
+| `## Preconditions` | Yes | Required initial state |
+| `## Main Flow` | Yes | Happy path steps |
+| `## Alternative Flows` | No | Valid variations |
+| `## Exceptions` | No | What happens when something fails |
+| `## Postconditions` | Yes | Final state |
+| `## Applied Rules` | No | BR-*, BP-*, XP-* that are validated |
+| `## Executed Commands` | No | CMD-* that are invoked |
 
 ### Business Rule (BR/BP)
 
-| Sección | Requerida | Descripción |
-|---------|-----------|-------------|
-| `## Declaración` | Sí | Descripción clara con wiki-links |
-| `## Por qué existe` | Sí | Justificación de negocio |
-| `## Cuándo aplica` | Sí | Condiciones de activación |
-| `## Qué pasa si se incumple` | Sí | Consecuencias |
-| `## Parámetros` | Solo BP | Valores configurables |
-| `## Formalización` | No | Patrón EARS |
-| `## Ejemplos` | Sí | Casos válidos e inválidos |
+| Section | Required | Description |
+|---------|----------|-------------|
+| `## Statement` | Yes | Clear description with wiki-links |
+| `## Why It Exists` | Yes | Business justification |
+| `## When It Applies` | Yes | Activation conditions |
+| `## What Happens on Violation` | Yes | Consequences |
+| `## Parameters` | BP only | Configurable values |
+| `## Formalization` | No | EARS pattern |
+| `## Examples` | Yes | Valid and invalid cases |
 
 ### Cross-Policy (XP)
 
-| Sección | Requerida | Descripción |
-|---------|-----------|-------------|
-| `## Propósito` | Sí | Por qué es transversal |
-| `## Declaración` | Sí | Qué hace la política |
-| `## Formalización EARS` | Sí | BEFORE/AFTER pattern |
-| `## Ejemplos` | Sí | Verificación exitosa/fallida |
-| `## Comportamiento Estándar` | Sí | BEFORE, AFTER, Rechazo, Rollback |
-| `## Implementación` | No | Código de referencia |
+| Section | Required | Description |
+|---------|----------|-------------|
+| `## Purpose` | Yes | Why it is cross-cutting |
+| `## Statement` | Yes | What the policy does |
+| `## EARS Formalization` | Yes | BEFORE/AFTER pattern |
+| `## Examples` | Yes | Successful/failed verification |
+| `## Standard Behavior` | Yes | BEFORE, AFTER, Rejection, Rollback |
+| `## Implementation` | No | Reference code |
 
 ### UI View
 
-| Sección | Requerida | Descripción |
-|---------|-----------|-------------|
-| `## Descripción` | Sí | Propósito de la vista |
-| `## Layout` | Sí | Wireframe ASCII o imagen |
-| `## Componentes Utilizados` | Sí | Lista de componentes |
-| `## Estados` | Sí* | loading, empty, error, success |
-| `## Comportamiento` | Sí | Interacciones y navegación |
+| Section | Required | Description |
+|---------|----------|-------------|
+| `## Purpose` | Yes | Purpose of the view |
+| `## Layout` | Yes | ASCII wireframe or image |
+| `## Components` | Yes | List of components used |
+| `## States` | Yes* | loading, empty, error, success |
+| `## Behavior` | Yes | Interactions and navigation |
 
-> *Estados: Incluir solo los **aplicables** a la vista. Una vista sin datos puede omitir `empty`. Una vista estática puede omitir `loading`.
+> *States: Include only those **applicable** to the view. A view with no data can omit `empty`. A static view can omit `loading`.
 
 ### Requirement (REQ)
 
-| Sección | Requerida | Descripción |
-|---------|-----------|-------------|
-| `## Descripción` | Sí | Qué debe cumplirse |
-| `## Criterios de Aceptación` | Sí | Lista de condiciones verificables |
-| `## Trazabilidad` | Sí | Links a UC-*, BR-*, CMD-* que implementan |
+| Section | Required | Description |
+|---------|----------|-------------|
+| `## Description` | Yes | What must be fulfilled |
+| `## Acceptance Criteria` | Yes | List of verifiable conditions |
+| `## Traceability` | Yes | Links to UC-*, BR-*, CMD-* that implement it |
 
 ### Objective (OBJ)
 
-| Sección | Requerida | Descripción |
-|---------|-----------|-------------|
-| `## Actor` | Sí | Quién tiene este objetivo |
-| `## Objetivo` | Sí | "Como X, quiero Y, para Z" |
-| `## Criterios de éxito` | Sí | Cómo sabe el usuario que lo logró |
-| `## Casos de uso relacionados` | No | Links a UC-* |
+| Section | Required | Description |
+|---------|----------|-------------|
+| `## Actor` | Yes | Who has this objective |
+| `## Objective` | Yes | "As X, I want Y, so that Z" |
+| `## Success Criteria` | Yes | How the user knows they achieved it |
+| `## Related Use Cases` | No | Links to UC-* |
 
 ---
 
 ## Wiki-Link Syntax
 
 ```markdown
-[[Reto]]                       # Link to entity
-[[Sesión|sesiones]]            # Link with display alias
-[[BR-RETO-001]]                # Link to rule
-[[CMD-001-CreateChallenge]]    # Link to command
-[[UC-001-CrearReto]]           # Link to use case
-[[XP-CREDITOS-001]]            # Link to cross-policy
+[[Order]]                      # Link to entity
+[[Product|products]]           # Link with display alias
+[[BR-ORDER-001]]               # Link to rule
+[[CMD-001-PlaceOrder]]         # Link to command
+[[UC-001-PlaceOrder]]          # Link to use case
+[[XP-BILLING-001]]             # Link to cross-policy
 ```
 
 ---
@@ -440,15 +441,15 @@ status: draft
 
 ### Domain Entities in Text
 
-- **Always capitalize** domain entities: `El Usuario crea un Reto`
-- First mention → wiki-link: `[[Reto]]`
-- Plurals with alias: `[[Sesión|Sesiones]]`
-- In code → lowercase: `const reto = await createReto()`
+- **Always capitalize** domain entities: `The Customer places an Order`
+- First mention → wiki-link: `[[Order]]`
+- Plurals with alias: `[[Product|Products]]`
+- In code → lowercase: `const order = await placeOrder()`
 
 ### File Names
 
-- Entities: `PascalCase.md` (e.g., `Persona Sintética.md`)
-- Everything else: Use prefix pattern (e.g., `CMD-001-CreateChallenge.md`)
+- Entities: `PascalCase.md` (e.g., `Order.md`, `CartItem.md`)
+- Everything else: Use prefix pattern (e.g., `CMD-001-PlaceOrder.md`)
 
 ---
 
